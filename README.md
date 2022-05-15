@@ -2,10 +2,10 @@
 Web aplikacija koja omogućava da pronađete željeni film i isti gledate sa podešenim prevodom.
 
 # Sistemi bazirani na znanju
-[Specifikacija projekta](https://docs.google.com/document/d/13aGeEoK-gUN0zRUV3aFMgi_D_Zd76NPKR3Guwiu3iQU/edit?usp=sharing) - [pdf](https://drive.google.com/file/d/1HzTh89qBO0-M4EMN9Uy9XT96szCyjwOi/view?usp=sharing)
+[Specifikacija projekta](https://docs.google.com/document/d/13aGeEoK-gUN0zRUV3aFMgi_D_Zd76NPKR3Guwiu3iQU/edit?usp=sharing) - [pdf](https://drive.google.com/file/d/1mV0mBfcUGWQb8MrRCzdyEthSPmmOk6oX/view?usp=sharing)
 
 Preporuka filma bazirana na:
-  - osobinama korisnika (pol, godine, omiljeni žanr)
+  - osobinama korisnika (pol, godine, omiljena radnja)
   - istoriji pogledanih filmova
   - istoriji ocjenjenih filmova
   - listi želja
@@ -16,13 +16,15 @@ Preporuka filma bazirana na:
   1. Administrator
   * Pregled i pretraga filmova, korisnika
   * Pregled i brisanje komentara i ocjena datih od strane korisnika
+  * Banovanje korisnika, čiji su komentari prijavljeni kao nedolični, na određeni vremenski period
   * Dodavanje novih filmova (download link (yts.mx), link za titl (titlovi.com), imdb link)
   * Izmjena postojećih filmova
   2. Registrovani korisnik
   * Prijava
   * Pregled profila i izmjena korisničkih informacija
   * Pregled i izmjena pogledanih i ocjenjenih filmova
-  * Ocjenjivanje pogledanih filmova
+  * Ocjenjivanje i komentarisanje pogledanih filmova
+  * Prijava neprikladnog komentara
   * Pregled i pretraga svih dostupnih filmova
   * Dobijanje preporuke za gledanje od strane sistema 
      * osnovna preporuka - [SBNZ](#sistemi-bazirani-na-znanju "Sistemi bazirani na znanju")
