@@ -1,1 +1,16 @@
+package com.sbnz.rules;
 
+import com.sbnz.gleficu.model.facts.GenresRecommendByTagsFact;
+import com sbnz.gleficu.model.phases.GenreRecommendByTagsPhase;
+import com sbnz.gleficu.model.RecommendRequest;
+
+rule "Na osnovu omiljenih tagova korisniku se preporucuje zanr akcija"
+    agenda-group "Preporuka zanra"
+    no-loop true
+    when
+        $r: RecommendRequest($id: id) and
+        $g: GenreRecommendByTagsPhase($id, favTag == "hero")
+    then
+        System.out.println("Preporucuje se akcija");
+        insert(new GenresRecommendByTagsFact("Action", $id))
+end
