@@ -2,7 +2,7 @@
 Web aplikacija koja omogućava da pronađete željeni film i isti gledate sa podešenim prevodom.
 
 # Sistemi bazirani na znanju
-[Specifikacija projekta](https://docs.google.com/document/d/13aGeEoK-gUN0zRUV3aFMgi_D_Zd76NPKR3Guwiu3iQU/edit?usp=sharing) - [pdf](https://drive.google.com/file/d/1mV0mBfcUGWQb8MrRCzdyEthSPmmOk6oX/view?usp=sharing)
+[Specifikacija projekta](https://docs.google.com/document/d/13aGeEoK-gUN0zRUV3aFMgi_D_Zd76NPKR3Guwiu3iQU/edit?usp=sharing) - [pdf](https://drive.google.com/file/d/1yQjLVlQDuV4WAOOct50uf6ivvDXjHu0V/view?usp=sharing)
 
 Preporuka filma bazirana na:
   - osobinama korisnika (pol, godine, omiljena radnja)
