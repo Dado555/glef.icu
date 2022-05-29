@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -14,6 +16,11 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table
-public class Admin extends BaseUser{
+public class WatchedMovie extends BaseEntity{
+    @OneToOne
+    @Column(name = "movie", nullable = false)
+    public Movie movie;
 
+    @Column(name = "date", nullable = false)
+    public Long dateWatched;
 }

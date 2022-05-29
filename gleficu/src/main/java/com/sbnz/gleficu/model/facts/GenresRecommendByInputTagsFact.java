@@ -8,8 +8,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class GenresRecommendByTagsFact {
-    // private List<String> possibleGenres;
-    private String genre;
-    private Integer recommendId;
+public class GenresRecommendByInputTagsFact {
+    private List<String> possibleGenres;
 }

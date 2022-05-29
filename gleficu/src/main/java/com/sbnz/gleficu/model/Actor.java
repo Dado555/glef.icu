@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +17,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table
-public class Admin extends BaseUser{
-
+public class Actor extends FilmCrew{
+    @ManyToMany(fetch = FetchType.LAZY)
+    public List<Movie> movies;
 }

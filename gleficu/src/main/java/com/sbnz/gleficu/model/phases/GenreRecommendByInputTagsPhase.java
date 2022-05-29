@@ -8,8 +8,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class GenreRecommendByTagsPhase extends BasePhase{
-    private Integer recommendId;
-    // private List<String> favTags;
-    private String favTag;
+public class GenreRecommendByInputTagsPhase extends BasePhase{
+    private List<String> inputTags;
 }

@@ -5,16 +5,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Table
+@Entity
 public class Movie extends BaseEntity{
-    public Double rating;
-    public List<String> tags;
-    public List<String> genres;
-    public List<String> actors;
+    @Column(name = "criticsRating", nullable = false)
+    public Double criticsRating;
+
+    @ManyToMany
+    public List<Tag> tags;
+
+    @ManyToMany
+    public List<Genre> genres;
+
+    @ManyToMany
+    public List<Actor> actors;
+
+    @Column(name = "language", nullable = false)
     public String language;
+
+    @Column(name = "releaseYear", nullable = false)
     public Integer releaseYear;
-    public String director;
-    public String writer;
+
+    @ManyToOne
+    public Director director;
+
+    @ManyToMany
+    public List<Writer> writer;
 }

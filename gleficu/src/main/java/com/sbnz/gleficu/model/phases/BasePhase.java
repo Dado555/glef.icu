@@ -8,4 +8,5 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public abstract class BasePhase {
     protected Integer userId;
+    protected Integer recommendId;
 }

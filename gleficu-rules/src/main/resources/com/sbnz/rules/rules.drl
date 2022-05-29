@@ -1,7 +1,7 @@
 package com.sbnz.rules;
 
-import com.sbnz.gleficu.model.facts.GenresRecommendByTagsFact;
-import com.sbnz.gleficu.model.phases.GenreRecommendByTagsPhase;
+import com.sbnz.gleficu.model.facts.GenresRecommendByInputTagsFact;
+import com.sbnz.gleficu.model.phases.GenreRecommendByInputTagsPhase;
 import com.sbnz.gleficu.model.RecommendRequest;
 
 rule "Na osnovu omiljenih tagova korisniku se preporucuje zanr akcija"
@@ -9,8 +9,8 @@ rule "Na osnovu omiljenih tagova korisniku se preporucuje zanr akcija"
     no-loop true
     when
         $r: RecommendRequest($id: id) and
-        $g: GenreRecommendByTagsPhase(recommendId == $id, favTag == "hero")
+        $g: GenreRecommendByInputTagsPhase(recommendId == $id, favTag == "hero")
     then
         System.out.println("Preporucuje se akcija");
-        insert(new GenresRecommendByTagsFact("Action", $id));
+        insert(new GenresRecommendByInputTagsFact("Action", $id));
 end

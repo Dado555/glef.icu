@@ -6,15 +6,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class User extends BaseEntity{
+@Table
+@Entity
+public class User extends BaseUser{
+    @Column(name = "years", nullable = false)
     private Integer years;
-    private Gender gender;
-    private List<String> favouriteTags;
 
-    private List<Movie> watched;
-    private List<Movie> rated;
-    private List<Movie> wishlist;
+    @Column(name = "gender", nullable = false)
+    private Gender gender;
+
+    @ManyToMany
+    private List<Tag> favouriteTags;
+
+    @ManyToMany
+    private List<WatchedMovie> watched;
+
+    @ManyToMany
+    private List<RatedMovie> rated;
+
+    @ManyToMany
+    private List<WishlistMovie> wishlist;
 }

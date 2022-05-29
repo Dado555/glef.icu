@@ -1,6 +1,6 @@
 package com.sbnz.gleficu.controller;
 
-import com.sbnz.gleficu.model.facts.GenresRecommendByTagsFact;
+import com.sbnz.gleficu.model.facts.GenresRecommendByInputTagsFact;
 import com.sbnz.gleficu.service.GenreRecommendByTagsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class GenreRecommendByTagsController {
     }
 
     @GetMapping
-    public GenresRecommendByTagsFact recommendByTags() { // @RequestBody GenreRecommendByTagsPhase phase
+    public GenresRecommendByInputTagsFact recommendByTags() { // @RequestBody GenreRecommendByTagsPhase phase
         return genreRecommendByTagsService.recommendByTags();
     }
 }

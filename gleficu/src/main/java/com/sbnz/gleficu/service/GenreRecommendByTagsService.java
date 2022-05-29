@@ -2,15 +2,14 @@ package com.sbnz.gleficu.service;
 
 import com.sbnz.gleficu.model.RecommendRequest;
 import com.sbnz.gleficu.model.User;
-import com.sbnz.gleficu.model.facts.GenresRecommendByTagsFact;
-import com.sbnz.gleficu.model.phases.GenreRecommendByTagsPhase;
+import com.sbnz.gleficu.model.facts.GenresRecommendByInputTagsFact;
+import com.sbnz.gleficu.model.phases.GenreRecommendByInputTagsPhase;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
 
 @Service
 public class GenreRecommendByTagsService {
@@ -22,13 +21,13 @@ public class GenreRecommendByTagsService {
         this.kieContainer = kieContainer;
     }
 
-    public GenresRecommendByTagsFact recommendByTags() {
+    public GenresRecommendByInputTagsFact recommendByTags() {
         RecommendRequest request = new RecommendRequest();
         request.setId(0);
         User user = new User();
         request.setUser(user);
 
-        GenreRecommendByTagsPhase phase = new GenreRecommendByTagsPhase();
+        GenreRecommendByInputTagsPhase phase = new GenreRecommendByInputTagsPhase();
         // phase.setFavTags(Arrays.asList("hero", "combat"));
         phase.setFavTag("hero");
         phase.setRecommendId(request.getId());
@@ -39,7 +38,7 @@ public class GenreRecommendByTagsService {
         kieSession.getAgenda().getAgendaGroup("Preporuka zanra").setFocus();
         kieSession.fireAllRules();
 
-        GenresRecommendByTagsFact fact = (GenresRecommendByTagsFact) kieSession.getObjects(new ClassObjectFilter(GenresRecommendByTagsFact.class))
+        GenresRecommendByInputTagsFact fact = (GenresRecommendByInputTagsFact) kieSession.getObjects(new ClassObjectFilter(GenresRecommendByInputTagsFact.class))
                 .stream().findFirst().orElse(null);
         kieSession.delete(factHandle);
         kieSession.dispose();
