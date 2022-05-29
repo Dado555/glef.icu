@@ -9,6 +9,6 @@ import lombok.Setter;
 import java.util.Set;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class GenresFilterByTagsFact {
+public class GenresFilterByInputTagsFact {
     private Set<Genre> possibleGenres;
 }

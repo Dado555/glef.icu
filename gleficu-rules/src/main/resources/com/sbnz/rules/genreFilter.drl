@@ -44,25 +44,30 @@ rule "Na osnovu unesenih tagova filtrira se lista zanrova"
         )
         
     then
-        System.out.println("Preporucuju se zanrovi..");
-        if(!$possibleGenres.isEmpty()) {
-            System.out.println($possibleGenres.iterator().next());
-        }
-        insert(new GenresFilterByTagsFact($possibleGenres));
+        System.out.println("(Uneseni tagovi) Filtriranje zanrova..");
+        insert(new GenresFilterByInputTagsFact($possibleGenres));
 end
 
-/*
+
 rule "Na osnovu omiljenih tagova korisnika filtrira se lista zanrova"
     agenda-group "Lista zanrova na osnovu omiljenih tagova"
     no-loop true
     when
-        $r: RecommendRequest($id: id) and
-        $g: GenresFilterByTagsPhase(recommendId == $id, $favouriteTags : tags, $genres : genres) and
-        $tag: Tag() from $favouriteTags
-        $possibleGenres: List() from accumulate(
-            $genre: Genre($tags: tags)
-        ) 
-    then
+        $r: RecommendRequest($id: id)
+        $g: GenresFilterByTagsPhase(recommendId == $id, $favouriteTags : tags, $genres : genres)
 
+        accumulate (
+            $tagInput: Tag($inTagid: id) from $favouriteTags;
+            $tagsInput: collectSet($inTagid)
+        )
+
+        accumulate (
+                $genre: Genre($tags: tags) from $genres
+                and Tag($genreTag: id, id memberOf $tagsInput) from $tags;
+                $possibleGenres: collectSet($genre)
+        )
+    then
+        System.out.println("(Omiljeni tagovi) Filtriranje zanrova..");
+        insert(new GenresFilterByFavTagsFact($possibleGenres));
 end
-*/
+

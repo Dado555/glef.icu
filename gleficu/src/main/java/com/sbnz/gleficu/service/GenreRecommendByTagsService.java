@@ -3,7 +3,8 @@ package com.sbnz.gleficu.service;
 import com.sbnz.gleficu.model.Genre;
 import com.sbnz.gleficu.model.RecommendRequest;
 import com.sbnz.gleficu.model.User;
-import com.sbnz.gleficu.model.facts.GenresFilterByTagsFact;
+import com.sbnz.gleficu.model.facts.GenresFilterByFavTagsFact;
+import com.sbnz.gleficu.model.facts.GenresFilterByInputTagsFact;
 import com.sbnz.gleficu.model.phases.GenresFilterByTagsPhase;
 import com.sbnz.gleficu.repository.GenreRepo;
 import com.sbnz.gleficu.repository.RequestRepo;
@@ -15,6 +16,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,21 +56,42 @@ public class GenreRecommendByTagsService {
         kieSession.getAgenda().getAgendaGroup("Lista zanrova na osnovu unesenih tagova").setFocus();
         kieSession.fireAllRules();
 
-        Collection<GenresFilterByTagsFact> facts = (Collection<GenresFilterByTagsFact>)
-                kieSession.getObjects(new ClassObjectFilter(GenresFilterByTagsFact.class));
+        Collection<GenresFilterByInputTagsFact> facts = (Collection<GenresFilterByInputTagsFact>)
+                kieSession.getObjects(new ClassObjectFilter(GenresFilterByInputTagsFact.class));
+
+        kieSession.delete(factHandle);
 
         GenresFilterByTagsPhase phase2 = new GenresFilterByTagsPhase();
         User user = this.userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         phase2.setTags(user.getFavouriteTags());
+        phase2.setRecommendId(request.getId());
 
-        for (GenresFilterByTagsFact fact : facts) {
+        List<Genre> phase2Genres = new ArrayList<>();
+        for (GenresFilterByInputTagsFact fact : facts) {
             for (Genre g : fact.getPossibleGenres()) {
+                phase2Genres.add(g);
                 System.out.println(g.getGenre().toString());
             }
             System.out.println(fact.getPossibleGenres().size());
         }
-//        phase2.setGenres();
-        kieSession.delete(factHandle);
+        phase2.setGenres(phase2Genres);
+
+        FactHandle factHandle2 = kieSession.insert(phase2);
+        kieSession.getAgenda().getAgendaGroup("Lista zanrova na osnovu omiljenih tagova").setFocus();
+        kieSession.fireAllRules();
+
+        Collection<GenresFilterByFavTagsFact> facts2 = (Collection<GenresFilterByFavTagsFact>)
+                kieSession.getObjects(new ClassObjectFilter(GenresFilterByFavTagsFact.class));
+
+        kieSession.delete(factHandle2);
+
+        for (GenresFilterByFavTagsFact fact : facts2) {
+            for (Genre g : fact.getPossibleGenres()) {
+                phase2Genres.add(g);
+                System.out.println(g.getGenre().toString());
+            }
+            System.out.println(fact.getPossibleGenres().size());
+        }
 
         kieSession.dispose();
         return facts.size();
