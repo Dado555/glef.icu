@@ -1,0 +1,68 @@
+package com.sbnz.rules;
+
+import java.util.List;
+import java.util.Set;
+
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+rule "Na osnovu unesenih tagova filtrira se lista zanrova"
+    agenda-group "Lista zanrova na osnovu unesenih tagova"
+    no-loop true
+    when
+        $r: RecommendRequest($id: id)
+        $g: GenresFilterByTagsPhase(recommendId == $id, $inputTags : tags, $genres : genres)
+        
+        /*
+        // $tagInput: Tag() from $inputTags
+        $possibleGenres: Set() from accumulate (
+            //$tagsInput: Set() from accumulate (
+            //    $tagg: tag from $inputTags,
+            //    collectSet($tagg)
+            //)
+            //$tagInput: Tag() from $inputTags and
+            $genre: taginput: Tag() from $inputTags and Genre($tags: tags, tagInput memberOf $tags) from $genres; // $tagInput memberOf $tags
+            collectSet($genre)
+        )
+        */
+
+        accumulate (
+            $tagInput: Tag($inTagid: id) from $inputTags;
+            $tagsInput: collectSet($inTagid)
+        )
+
+        accumulate (
+                //$tagsInput: Set() from accumulate (
+                //    $tagg: tag from $inputTags,
+                //    collectSet($tagg)
+                //)
+                $genre: Genre($tags: tags) from $genres
+                and Tag($genreTag: id, id memberOf $tagsInput) from $tags; // $tagInput memberOf $tags
+                $possibleGenres: collectSet($genre)
+        )
+        
+    then
+        System.out.println("Preporucuju se zanrovi..");
+        if(!$possibleGenres.isEmpty()) {
+            System.out.println($possibleGenres.iterator().next());
+        }
+        insert(new GenresFilterByTagsFact($possibleGenres));
+end
+
+/*
+rule "Na osnovu omiljenih tagova korisnika filtrira se lista zanrova"
+    agenda-group "Lista zanrova na osnovu omiljenih tagova"
+    no-loop true
+    when
+        $r: RecommendRequest($id: id) and
+        $g: GenresFilterByTagsPhase(recommendId == $id, $favouriteTags : tags, $genres : genres) and
+        $tag: Tag() from $favouriteTags
+        $possibleGenres: List() from accumulate(
+            $genre: Genre($tags: tags)
+        ) 
+    then
+
+end
+*/

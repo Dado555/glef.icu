@@ -13,8 +13,8 @@ import java.util.List;
 @Table(name = "request")
 @Entity
 public class RecommendRequest extends BaseEntity{
-    @ManyToOne
-    private User user;
+    @Column(name = "userId", nullable = false)
+    private Integer userId;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Tag> inputTags;

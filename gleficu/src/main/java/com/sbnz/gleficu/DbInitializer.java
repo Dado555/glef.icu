@@ -114,9 +114,10 @@ public class DbInitializer implements ApplicationRunner {
         User u1 = new User("mail", "pass", 22, Gender.MALE, Arrays.asList(t1, t4),
                 Arrays.asList(wm1), Arrays.asList(rm1), Arrays.asList(wsh2));
 
-        userRepo.saveAll(Arrays.asList(u1));
+        // userRepo.saveAll(Arrays.asList(u1));
+        u1 = userRepo.save(u1);
 
-        RecommendRequest request = new RecommendRequest(u1, Arrays.asList(t2, t5), AgeRange.YOUNG);
+        RecommendRequest request = new RecommendRequest(u1.getId(), Arrays.asList(t2, t5), AgeRange.YOUNG);
 
         requestRepo.saveAll(Arrays.asList(request));
     }
