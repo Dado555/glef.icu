@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name = "tag")
 public class Tag extends BaseEntity{
     @Column(name = "tag", nullable = false)
     public MovieTag tag;

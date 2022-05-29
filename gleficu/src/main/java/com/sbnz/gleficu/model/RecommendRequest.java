@@ -10,17 +10,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@Table
+@Table(name = "request")
 @Entity
 public class RecommendRequest extends BaseEntity{
     @ManyToOne
     private User user;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Tag> inputTags;
-
-    @ManyToMany
-    private List<Movie> allMovies;
 
     @Column(name = "ageRange", nullable = false)
     private AgeRange ageRange;

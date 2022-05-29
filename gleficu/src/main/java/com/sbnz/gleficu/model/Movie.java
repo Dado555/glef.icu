@@ -1,5 +1,6 @@
 package com.sbnz.gleficu.model;
 
+import com.sbnz.gleficu.model.enums.MovieLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@Table
+@Table(name = "movie")
 @Entity
 public class Movie extends BaseEntity{
     @Column(name = "criticsRating", nullable = false)
@@ -22,17 +23,17 @@ public class Movie extends BaseEntity{
     public List<Genre> genres;
 
     @ManyToMany
-    public List<Actor> actors;
+    public List<FilmCrew> actors;
 
     @Column(name = "language", nullable = false)
-    public String language;
+    public MovieLanguage language;
 
     @Column(name = "releaseYear", nullable = false)
     public Integer releaseYear;
 
     @ManyToOne
-    public Director director;
+    public FilmCrew director;
 
     @ManyToMany
-    public List<Writer> writer;
+    public List<FilmCrew> writer;
 }

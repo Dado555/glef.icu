@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@Table
+@Table(name = "customer")
 @Entity
 public class User extends BaseUser{
     @Column(name = "years", nullable = false)
@@ -33,4 +33,15 @@ public class User extends BaseUser{
 
     @ManyToMany
     private List<WishlistMovie> wishlist;
+
+    public User(String email, String password, Integer years, Gender gender, List<Tag> favouriteTags,
+                List<WatchedMovie> watched, List<RatedMovie> rated, List<WishlistMovie> wishlist) {
+        super(email, password);
+        this.years = years;
+        this.gender = gender;
+        this.favouriteTags = favouriteTags;
+        this.watched = watched;
+        this.wishlist = wishlist;
+        this.rated = rated;
+    }
 }

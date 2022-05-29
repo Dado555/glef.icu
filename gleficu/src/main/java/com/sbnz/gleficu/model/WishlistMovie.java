@@ -15,10 +15,9 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name = "wishlistMovie")
 public class WishlistMovie extends BaseEntity{
     @OneToOne
-    @Column(name = "movie", nullable = false)
     public Movie movie;
 
     @Column(name = "date", nullable = false)
