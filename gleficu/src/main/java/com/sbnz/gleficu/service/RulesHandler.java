@@ -4,11 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -58,14 +54,6 @@ public class RulesHandler {
 
     private void mvnRefresh() throws MavenInvocationException {
         InvocationRequest request = new DefaultInvocationRequest();
-
-//        RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
-//        Map<String, String> systemProperties = runtimeBean.getSystemProperties();
-//        Set<String> keys = systemProperties.keySet();
-//        for (String key : keys) {
-//            String value = systemProperties.get(key);
-//            System.out.printf("[%s] = %s.\n", key, value);
-//        }
 
         request.setPomFile(new File(this.rulesPomPath));
         request.setGoals(Arrays.asList("clean", "install"));

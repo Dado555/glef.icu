@@ -7,14 +7,18 @@ import com.sbnz.gleficu.model.enums.*;
 global java.util.List list;
 
     rule "Korisnik starosna dob_2"
+        agenda-group "Postavljanje starosne dobi"
+        no-loop true
         when
             $user: User(years >= "50", years < "100")
         then
-            list.add("OLD");
-            modify ($user) { setAgeRange(AgeRange.OLD) };
+            list.add("OLDER");
+            modify ($user) { setAgeRange(AgeRange.OLDER) };
     end
 
     rule "Korisnik starosna dob_1"
+        agenda-group "Postavljanje starosne dobi"
+        no-loop true
         when
             $user: User(years >= "25", years < "50")
         then
@@ -23,6 +27,8 @@ global java.util.List list;
     end
 
     rule "Korisnik starosna dob_0"
+        agenda-group "Postavljanje starosne dobi"
+        no-loop true
         when
             $user: User(years >= "17", years < "25")
         then

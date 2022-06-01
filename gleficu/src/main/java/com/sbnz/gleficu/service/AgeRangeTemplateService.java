@@ -19,14 +19,9 @@ public class AgeRangeTemplateService {
         this.rulesHandler = rulesHandler;
     }
 
-    public void createAgeRange(List<AgeRangeTemplate> ageRangeTemplateList) throws MavenInvocationException, IOException {
+    public void createAgeRange(List<AgeRangeTemplate> ageRangeTemplateList) {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream templateResource = classLoader.getResourceAsStream("templates/ageTemplate.drt");
-//        System.out.println(templateResource);
-
-//        AgeRangeTemplate ageRangeTemplate = new AgeRangeTemplate(17, 25, "YOUNG");
-//        AgeRangeTemplate ageRangeTemplate2 = new AgeRangeTemplate(25, 50, "MIDDLE");
-//        AgeRangeTemplate ageRangeTemplate3 = new AgeRangeTemplate(50, 100, "OLD");
 
         ObjectDataCompiler objectDataCompiler = new ObjectDataCompiler();
 

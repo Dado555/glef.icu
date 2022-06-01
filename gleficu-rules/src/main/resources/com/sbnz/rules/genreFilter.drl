@@ -79,7 +79,7 @@ rule "Filtriranje zanrova na osnovu starosne dobi i pola"
     agenda-group "Filter zanrova pol i dob"
     no-loop
     when
-
+        
     then
 
 end

@@ -119,31 +119,6 @@
 	</dependencies>
 
 	<build>
-		<!--
-		<resources>
-			<resource>
-				<directory>
-
-				</directory>
-			</resource>
-		</resources>
-		-->
-
-<!--		<pluginManagement>-->
-<!--			<plugins>-->
-<!--				<plugin>-->
-<!--					<groupId>org.apache.maven.plugins</groupId>-->
-<!--					<artifactId>maven-dependency-plugin</artifactId>-->
-<!--&lt;!&ndash;					<version>2.0</version>&ndash;&gt;-->
-<!--				</plugin>-->
-<!--				<plugin>-->
-<!--					<groupId>org.apache.maven.plugins</groupId>-->
-<!--					<artifactId>maven-assembly-plugin</artifactId>-->
-<!--&lt;!&ndash;					<version>2.2-beta-2</version>&ndash;&gt;-->
-<!--				</plugin>-->
-<!--			</plugins>-->
-<!--		</pluginManagement>-->
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
