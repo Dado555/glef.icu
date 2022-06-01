@@ -1,0 +1,33 @@
+package com.sbnz.templates;
+import java.util.Set;
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+global java.util.List list;
+
+    rule "Korisnik starosna dob_2"
+        when
+            $user: User(years >= "50", years < "100")
+        then
+            list.add("OLD");
+            modify ($user) { setAgeRange(AgeRange.OLD) };
+    end
+
+    rule "Korisnik starosna dob_1"
+        when
+            $user: User(years >= "25", years < "50")
+        then
+            list.add("MIDDLE");
+            modify ($user) { setAgeRange(AgeRange.MIDDLE) };
+    end
+
+    rule "Korisnik starosna dob_0"
+        when
+            $user: User(years >= "17", years < "25")
+        then
+            list.add("YOUNG");
+            modify ($user) { setAgeRange(AgeRange.YOUNG) };
+    end
+
+

@@ -1,5 +1,6 @@
 package com.sbnz.gleficu.model;
 
+import com.sbnz.gleficu.model.enums.AgeRange;
 import com.sbnz.gleficu.model.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,9 @@ public class User extends BaseUser{
 
     @Column(name = "gender", nullable = false)
     private Gender gender;
+
+    @Column(name="ageRange")
+    private AgeRange ageRange;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> favouriteTags;

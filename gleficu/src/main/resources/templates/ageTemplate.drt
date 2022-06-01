@@ -1,0 +1,26 @@
+template header
+minAge
+maxAge
+name
+    
+package com.sbnz.templates;
+
+import java.util.Set;
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+global java.util.List list;
+
+template "ages"
+
+    rule "Korisnik starosna dob_@{row.rowNumber}"
+        when
+            $user: User(years >= "@{minAge}", years < "@{maxAge}")
+        then
+            list.add("@{name}");
+            modify ($user) { setAgeRange(AgeRange.@{name}) };
+    end
+
+end template
+
