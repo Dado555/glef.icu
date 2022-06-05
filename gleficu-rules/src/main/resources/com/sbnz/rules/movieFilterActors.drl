@@ -12,7 +12,19 @@ rule "Filter filmova po glavnim glumcima"
     agenda-group "Filter filmova po filmskoj ekipi"
     no-loop true
     when
+        $phase: MovieFilterByFilmCrewPhase($actors: actors, $movies: movies)
 
+        accumulate (
+            FilmCrew($id: id) from $actors;
+            $actorsIn: collectSet($id)
+        )
+
+        accumulate (
+            $retMovie: Movie($movieId: id, $movieActors: actors) from $movies 
+            and FilmCrew($id: id, id memberOf $actorsIn) from $movieActors;
+            $retMovies: collectSet($retMovie)
+        )
     then
-
+        System.out.println("(glumci) Filtriranje filmova..");
+        insert(new MoviesFilterFilmCrewFact($retMovies));
 end

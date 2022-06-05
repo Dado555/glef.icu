@@ -12,7 +12,20 @@ rule "Filter filmova po piscima"
     agenda-group "Filter filmova po filmskoj ekipi"
     no-loop true
     when
+        $phase: MovieFilterByFilmCrewPhase($writers: writers, $movies: movies)
 
+        accumulate (
+            FilmCrew($id: id) from $writers;
+            $writersIn: collectSet($id)
+        )
+
+        accumulate (
+            $retMovie: Movie($movieId: id, $movieWriters: writer) from $movies 
+            and FilmCrew($id: id, id memberOf $writersIn) from $movieWriters;
+            $retMovies: collectSet($retMovie)
+        )
     then
+        System.out.println("(pisci) Filtriranje filmova..");
+        insert(new MoviesFilterFilmCrewFact($retMovies));
 
 end

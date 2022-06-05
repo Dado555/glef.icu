@@ -12,7 +12,14 @@ rule "Filter filmova po ocjeni sa imdb"
     agenda-group "Filter filmova godine i ocjena"
     no-loop true
     when
+        $phase: MovieFilterByYearRatingPhase($movies: movies, $ratingLimit: ratingLimit)
 
+        accumulate (
+            $retMovie: Movie($movieId: id, $rating: criticsRating, criticsRating >= $ratingLimit) from $movies;
+            $retMovies: collectSet($retMovie)
+        )
     then
+        System.out.println("(rejting) Filtriranje filmova..");
+        insert(new MoviesFilterYearRatingFact($retMovies));
 
 end
