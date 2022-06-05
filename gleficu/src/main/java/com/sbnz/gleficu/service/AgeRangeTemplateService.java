@@ -1,6 +1,6 @@
 package com.sbnz.gleficu.service;
 
-import com.sbnz.gleficu.model.AgeRangeTemplate;
+import com.sbnz.gleficu.model.phases.AgeRangeTemplate;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.drools.template.ObjectDataCompiler;
 import org.springframework.beans.factory.annotation.Autowired;

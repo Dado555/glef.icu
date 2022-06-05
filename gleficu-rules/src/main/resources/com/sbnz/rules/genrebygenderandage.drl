@@ -1,0 +1,140 @@
+package com.sbnz.templates;
+import java.util.Set;
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+    rule "Raspodjela zanrova_5"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 13, 14, 15, 16];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+    rule "Raspodjela zanrova_4"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 13, 14, 15, 16];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+    rule "Raspodjela zanrova_3"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 7, 8, 9, 10, 11, 12];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+    rule "Raspodjela zanrova_2"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 7, 8, 9, 10, 11, 12];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+    rule "Raspodjela zanrova_1"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+    rule "Raspodjela zanrova_0"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+            accumulate (
+                $byAgeItem: Integer() from [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $byAgeList: collectSet($byAgeItem)
+            )
+            accumulate (
+                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderList: collectSet($byGenderItem)
+            )
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+

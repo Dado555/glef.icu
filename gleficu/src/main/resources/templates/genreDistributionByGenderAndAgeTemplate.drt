@@ -1,0 +1,41 @@
+template header
+byAge
+byGender
+
+package com.sbnz.templates;
+
+import java.util.Set;
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+template "genreDistribution"
+
+    rule "Raspodjela zanrova_@{row.rowNumber}"
+        agenda-group "Filter zanrova po polu i godinama"
+        no-loop true
+        when
+            $g: GenresFilterAGPhase($genres: genres)
+
+            accumulate (
+                $byAgeItem: Integer() from @{byAge};
+                $byAgeList: collectSet($byAgeItem)
+            )
+
+            accumulate (
+                $byGenderItem: Integer() from @{byGender};
+                $byGenderList: collectSet($byGenderItem)
+            )
+
+            accumulate(
+                $genre: Genre($id: id, id memberOf $byAgeList, id memberOf $byGenderList) from $genres;
+                $retGenres: collectSet($genre)
+            )
+
+        then
+            System.out.println("Filter zanrova po polu i godinama");
+            insert(new GenresFilterByAgeAndGenderFact($retGenres));
+    end
+
+end template

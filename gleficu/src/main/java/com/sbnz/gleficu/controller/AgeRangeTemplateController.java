@@ -1,12 +1,10 @@
 package com.sbnz.gleficu.controller;
 
-import com.sbnz.gleficu.model.AgeRangeTemplate;
+import com.sbnz.gleficu.model.phases.AgeRangeTemplate;
 import com.sbnz.gleficu.service.AgeRangeTemplateService;
-import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,7 +18,7 @@ public class AgeRangeTemplateController {
     }
 
     @PostMapping()
-    public void recommendByTags(@RequestBody List<AgeRangeTemplate> ageRangeTemplates) throws MavenInvocationException, IOException {
+    public void createAgeRangeTemplate(@RequestBody List<AgeRangeTemplate> ageRangeTemplates) {
         ageRangeTemplateService.createAgeRange(ageRangeTemplates);
     }
 }
