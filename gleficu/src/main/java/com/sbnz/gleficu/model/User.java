@@ -26,23 +26,10 @@ public class User extends BaseUser{
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> favouriteTags;
 
-    @ManyToMany
-    private List<WatchedMovie> watched;
-
-    @ManyToMany
-    private List<RatedMovie> rated;
-
-    @ManyToMany
-    private List<WishlistMovie> wishlist;
-
-    public User(String email, String password, Integer years, Gender gender, List<Tag> favouriteTags,
-                List<WatchedMovie> watched, List<RatedMovie> rated, List<WishlistMovie> wishlist) {
+    public User(String email, String password, Integer years, Gender gender, List<Tag> favouriteTags) {
         super(email, password);
         this.years = years;
         this.gender = gender;
         this.favouriteTags = favouriteTags;
-        this.watched = watched;
-        this.wishlist = wishlist;
-        this.rated = rated;
     }
 }

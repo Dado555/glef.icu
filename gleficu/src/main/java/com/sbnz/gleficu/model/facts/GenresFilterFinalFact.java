@@ -1,4 +1,4 @@
-package com.sbnz.gleficu.model.phases;
+package com.sbnz.gleficu.model.facts;
 
 import com.sbnz.gleficu.model.Genre;
 import lombok.AllArgsConstructor;
@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenresFilterAGPhase {
-    List<Genre> genres;
+public class GenresFilterFinalFact {
+    Set<Genre> genres;
+    Double percentage;
 }

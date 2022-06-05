@@ -1,0 +1,28 @@
+package com.sbnz.rules;
+
+import java.util.List;
+import java.util.Set;
+
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+rule "Filtriranje zanrova na osnovu liste ocjenjenih filmova"
+agenda-group "Filter zanrova liste korisnickih filmova"
+    no-loop true
+    salience 3
+    when
+        $g: GenresFilterRatedWatchedWishlistPhase($genres: genres, $genresRated: genresRated)
+
+        accumulate (
+                $genre: Genre($id: id) from $genres
+                and RatedMoviePhase(genreId == $id, rating >= 3) from $genresRated;
+                $possibleGenres: collectSet($genre)
+        )
+
+    then
+        System.out.println("(Korisnicka ocjena filma) Filtriranje zanrova..");
+        insert(new GenresFilterByRatedWatchedWishlist($possibleGenres));
+
+end

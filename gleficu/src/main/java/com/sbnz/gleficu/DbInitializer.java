@@ -93,29 +93,28 @@ public class DbInitializer implements ApplicationRunner {
 
         movieRepo.saveAll(Arrays.asList(m1, m2, m3));
 
-        RatedMovie rm1 = new RatedMovie(m1, 8.0, -1L);
-        RatedMovie rm2 = new RatedMovie(m2, 7.0, -1L);
-        RatedMovie rm3 = new RatedMovie(m3, 9.0, -1L);
-
-        ratedMovieRepo.saveAll(Arrays.asList(rm1, rm2, rm3));
-
-        WatchedMovie wm1 = new WatchedMovie(m1, -1L);
-        WatchedMovie wm2 = new WatchedMovie(m2, -1L);
-        WatchedMovie wm3 = new WatchedMovie(m3, -1L);
-
-        watchedMovieRepo.saveAll(Arrays.asList(wm1, wm2, wm3));
-
-        WishlistMovie wsh1 = new WishlistMovie(m1, -1L);
-        WishlistMovie wsh2 = new WishlistMovie(m2, -1L);
-        WishlistMovie wsh3 = new WishlistMovie(m3, -1L);
-
-        wishlistMovieRepo.saveAll(Arrays.asList(wsh1, wsh2, wsh3));
-
-        User u1 = new User("mail", "pass", 22, Gender.MALE, Arrays.asList(t1, t4),
-                Arrays.asList(wm1), Arrays.asList(rm1), Arrays.asList(wsh2));
+        User u1 = new User("mail", "pass", 22, Gender.MALE, Arrays.asList(t1, t4));
 
         // userRepo.saveAll(Arrays.asList(u1));
         u1 = userRepo.save(u1);
+
+        RatedMovie rm1 = new RatedMovie(m1, u1, 8.0, -1L);
+        RatedMovie rm2 = new RatedMovie(m2, u1, 7.0, -1L);
+        RatedMovie rm3 = new RatedMovie(m3, u1, 9.0, -1L);
+
+        ratedMovieRepo.saveAll(Arrays.asList(rm1, rm2, rm3));
+
+        WatchedMovie wm1 = new WatchedMovie(m1, u1, -1L);
+        WatchedMovie wm2 = new WatchedMovie(m2, u1, -1L);
+        WatchedMovie wm3 = new WatchedMovie(m3, u1, -1L);
+
+        watchedMovieRepo.saveAll(Arrays.asList(wm1, wm2, wm3));
+
+        WishlistMovie wsh1 = new WishlistMovie(m1, u1, -1L);
+        WishlistMovie wsh2 = new WishlistMovie(m2, u1, -1L);
+        WishlistMovie wsh3 = new WishlistMovie(m3, u1, -1L);
+
+        wishlistMovieRepo.saveAll(Arrays.asList(wsh1, wsh2, wsh3));
 
         RecommendRequest request = new RecommendRequest(u1.getId(), Arrays.asList(t2, t5), AgeRange.YOUNG);
 

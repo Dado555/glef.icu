@@ -16,7 +16,8 @@ template "genreDistribution"
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
 
             accumulate (
                 $byAgeItem: Integer() from @{byAge};
@@ -34,7 +35,7 @@ template "genreDistribution"
             )
 
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 

@@ -1,0 +1,192 @@
+package com.sbnz.rules;
+
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+rule "Presjek zanrova na osnovu prethodno filtriranih - sva 3"
+    agenda-group "Finalno zanrovi"
+    no-loop true
+    salience (($agNum + $rwwNum + $tagsNum) + ($allThree.size() * 10000))
+    when 
+        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
+        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
+        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+
+        // Number($agNum: intValue) from accumulate (
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agNum: count($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agList: collectSet($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwNum: sum($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwList: collectSet($id)
+        )
+
+        // Number($tagsNum: intValue) from accumulate (
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsNum: count($id)
+        )
+
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsList: collectSet($id)
+        )
+
+        accumulate(
+            $retGenre: Genre($id: id, id memberOf $rwwList, id memberOf $tagsList) from $agGenres,
+            $allThree: collectSet($retGenre)
+        )
+    then
+        System.out.println("(SVA 3) Finalno filtriranje zanrova..");
+        insert(new GenresFilterFinalFact((Set<Genre>)$allThree, 100.0));
+
+end
+
+rule "Presjek zanrova na osnovu prethodno filtriranih - 2 od 3"
+    agenda-group "Finalno zanrovi"
+    no-loop true
+    salience (($agNum + $rwwNum + $tagsNum) + (($fromTwo1.size() + $fromTwo2.size() + $fromTwo3.size())  * 100))
+    when 
+        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
+        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
+        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+
+        // Number($agNum: intValue) from accumulate (
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agNum: count($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agList: collectSet($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwNum: sum($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwList: collectSet($id)
+        )
+
+        // Number($tagsNum: intValue) from accumulate (
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsNum: count($id)
+        )
+
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsList: collectSet($id)
+        )
+
+        $fromTwo1: Set() from accumulate(
+            $g1: Genre($id: id, id memberOf $rwwList || id memberOf $tagsList) from $agGenres,
+            collectSet($g1)
+        )
+
+        $fromTwo2: Set() from accumulate(
+            $g2: Genre($id: id, id memberOf $agList || id memberOf $tagsList, $fromTwo1 not contains id) from $rwwGenres,
+            collectSet($g2)
+        )
+
+        $fromTwo3: Set() from accumulate(
+            $g3: Genre($id: id, id memberOf $agList || id memberOf $rwwList, $fromTwo1 not contains id, $fromTwo2 not contains id) from $tagsGenres,
+            collectSet($g3)
+        )
+    then
+        Set<Genre> merged = new HashSet<Genre>();
+        merged.addAll($fromTwo1);
+        merged.addAll($fromTwo2);
+        merged.addAll($fromTwo3);
+        System.out.println("(2 od 3) Finalno filtriranje zanrova..");
+        insert(new GenresFilterFinalFact(merged, 70.0));
+end
+
+
+rule "Presjek zanrova na osnovu prethodno filtriranih - 1 od 3"
+    agenda-group "Finalno zanrovi"
+    no-loop true
+    salience (($agNum + $rwwNum + $tagsNum) + ($fromOne1.size() + $fromOne2.size() + $fromOne3.size()))
+    when 
+        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
+        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
+        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+
+        // Number($agNum: intValue) from accumulate (
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agNum: count($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $agGenres;
+            $agList: collectSet($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwNum: sum($id)
+        )
+
+        accumulate (
+            Genre($id: id) from $rwwGenres;
+            $rwwList: collectSet($id)
+        )
+
+        // Number($tagsNum: intValue) from accumulate (
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsNum: count($id)
+        )
+
+        accumulate(
+            Genre($id: id) from $tagsGenres;
+            $tagsList: collectSet($id)
+        )
+
+        $fromOne1: Set() from accumulate(
+            $g1: Genre($id: id, $rwwList not contains id, $tagsList not contains id) from $agGenres,
+            collectSet($g1)
+        )
+
+        $fromOne2: Set() from accumulate(
+            $g2: Genre($id: id, $agList not contains id, $tagsList not contains id) from $rwwGenres,
+            collectSet($g2)
+        )
+
+        $fromOne3: Set() from accumulate(
+            $g3: Genre($id: id, $agList not contains id, $rwwList not contains id) from $tagsGenres,
+            collectSet($g3)
+        )
+        
+    then
+        Set<Genre> merged = new HashSet<Genre>();
+        merged.addAll($fromOne1);
+        merged.addAll($fromOne2);
+        merged.addAll($fromOne3);
+        System.out.println("(1 od 3) Finalno filtriranje zanrova..");
+        insert(new GenresFilterFinalFact(merged, 50.0));
+
+end

@@ -18,6 +18,7 @@ template "ages"
         when
             $user: User(years >= "@{minAge}", years < "@{maxAge}")
         then
+            System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.@{name}) };
     end
 

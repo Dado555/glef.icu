@@ -9,13 +9,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 13, 14, 15, 16];
+                $byAgeItem: Integer() from [0, 2, 8, 20, 27, 26];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderItem: Integer() from [3, 5, 8, 20, 17, 15];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -23,7 +24,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 
@@ -31,13 +32,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 13, 14, 15, 16];
+                $byAgeItem: Integer() from [0, 2, 8, 20, 27, 26];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderItem: Integer() from [0, 2, 10, 21, 14, 25, 27, 26];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -45,7 +47,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 
@@ -53,13 +55,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 7, 8, 9, 10, 11, 12];
+                $byAgeItem: Integer() from [0, 2, 25, 17, 6, 5, 9, 3];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderItem: Integer() from [3, 5, 8, 20, 17, 15];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -67,7 +70,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 
@@ -75,13 +78,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 7, 8, 9, 10, 11, 12];
+                $byAgeItem: Integer() from [0, 2, 25, 17, 6, 5, 9, 3];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderItem: Integer() from [0, 2, 10, 21, 14, 25, 27, 26];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -89,7 +93,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 
@@ -97,13 +101,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $byAgeItem: Integer() from [0, 2, 3, 10, 21, 14, 25, 17, 6];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [12, 10, 13, 14, 8, 17];
+                $byGenderItem: Integer() from [3, 5, 8, 20, 17, 15];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -111,7 +116,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 
@@ -119,13 +124,14 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Filter zanrova po polu i godinama"
         no-loop true
         when
-            $g: GenresFilterAGPhase($genres: genres)
+            $user: User($ageRange: ageRange, $gender: gender) and
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
             accumulate (
-                $byAgeItem: Integer() from [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $byAgeItem: Integer() from [0, 2, 3, 10, 21, 14, 25, 17, 6];
                 $byAgeList: collectSet($byAgeItem)
             )
             accumulate (
-                $byGenderItem: Integer() from [1, 2, 4, 5, 6, 7, 15, 16];
+                $byGenderItem: Integer() from [0, 2, 10, 21, 14, 25, 27, 26];
                 $byGenderList: collectSet($byGenderItem)
             )
             accumulate(
@@ -133,7 +139,7 @@ import com.sbnz.gleficu.model.enums.*;
                 $retGenres: collectSet($genre)
             )
         then
-            System.out.println("Filter zanrova po polu i godinama");
+            System.out.println("Filter zanrova po polu i godinama - pol: " + $gender.toString() + ", dob: " + $ageRange.toString());
             insert(new GenresFilterByAgeAndGenderFact($retGenres));
     end
 

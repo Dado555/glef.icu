@@ -1,0 +1,18 @@
+package com.sbnz.rules;
+
+import java.util.List;
+import java.util.Set;
+
+import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.*;
+import com.sbnz.gleficu.model.enums.*;
+
+rule "Filter filmova po glavnim glumcima"
+    agenda-group "Filter filmova po filmskoj ekipi"
+    no-loop true
+    when
+
+    then
+
+end

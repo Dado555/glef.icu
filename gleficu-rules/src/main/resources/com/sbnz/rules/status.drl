@@ -10,6 +10,7 @@ import com.sbnz.gleficu.model.enums.*;
         when
             $user: User(years >= "50", years < "100")
         then
+            System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.OLDER) };
     end
 
@@ -19,6 +20,7 @@ import com.sbnz.gleficu.model.enums.*;
         when
             $user: User(years >= "25", years < "50")
         then
+            System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.MIDDLE) };
     end
 
@@ -28,6 +30,7 @@ import com.sbnz.gleficu.model.enums.*;
         when
             $user: User(years >= "17", years < "25")
         then
+            System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.YOUNG) };
     end
 
