@@ -1,14 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify'
-import routes from "@/routes";
+import Vue from "vue";
+import VueRouter from "vue-router";
+import routes from "./routes";
+import App from "./App.vue";
+import "@/assets/css/styles.css";
+import api from "./services/api";
 
-import "@/assets/css/styles.css"
-
-Vue.config.productionTip = false
+Vue.prototype.$http = api;
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
 
 new Vue({
-  vuetify,
+  render: (h) => h(App),
   router: routes,
-  render: h => h(App)
-}).$mount('#app')
+}).$mount("#app");

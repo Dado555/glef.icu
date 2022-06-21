@@ -1,28 +1,25 @@
 <template>
   <div id="app">
-    <router-view/>
+    <div class="flex justify-between border-b border-gray-500">
+      <Navbar />
+      <Searchbar />
+    </div>
+
+    <router-view />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Navbar from "./components/header/Navbar";
+import Searchbar from "./components/header/Searchbar";
 
-nav {
-  padding: 30px;
+export default {
+  name: "App",
+  components: {
+    Navbar,
+    Searchbar,
+  },
+};
+</script>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+<style></style>
