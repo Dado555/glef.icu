@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container mx-auto flex mt-20 border-b border-gray-600 pb-2">
-      <img :src="posterPath" alt="" class="w-64 md:w-full" />
+      <img :src="posterPath" alt=""  />
       <div class="ml-24">
         <h1 class="text-4xl font-semibold">{{ this.movie.title }}</h1>
         <span class="text-gray-500 text-sm flex">
@@ -67,6 +67,14 @@
       </div>
     </div>
 
+    <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
+      <p style="font-size: x-large">Comment (1)</p>
+    </div>
+    <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
+      <comment class="message" />
+    </div>
+    <add-comment/>
+
     <Cast :casts="movie.credits.cast" />
     <Images
       :images="movie.images.backdrops"
@@ -84,9 +92,13 @@
 import Cast from "./Cast";
 import Images from "./Images";
 import MediaModel from "../models/MediaModel";
+import AddComment from "@/components/comments/AddComment";
+import Comment from "@/components/comments/Comment";
 
 export default {
   components: {
+    Comment,
+    AddComment,
     Cast,
     Images,
     MediaModel,

@@ -4,7 +4,7 @@
       Cast
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8">
       <div class="mr-2" :key="index" v-for="(cast, index) in casts">
         <img
           :src="castProfileImage(cast)"

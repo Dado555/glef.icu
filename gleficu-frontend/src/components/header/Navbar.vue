@@ -15,6 +15,11 @@
           Actors
         </router-link>
       </li>
+      <li>
+        <router-link to="/users" class="ml-5">
+          Users
+        </router-link>
+      </li>
 <!--      <li>-->
 <!--        <router-link to="/profile" class="ml-5">-->
 <!--          Profile-->
