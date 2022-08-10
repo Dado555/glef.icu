@@ -1,4 +1,5 @@
-package com.sbnz.gleficu.controller;
+package com.sbnz.gleficu.controller;import org.kie.api.builder.KieScanner;
+
 
 import com.sbnz.gleficu.service.GenreRecommendByTagsService;
 import org.springframework.beans.factory.annotation.Autowired;

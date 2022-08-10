@@ -19,28 +19,50 @@
       class="absolute bg-white py-2 rounded-lg w-48 right-0 mr-3 shadow-xl"
     >
       <a
+        v-if="loggedIn === true"
+        @click="redirect('profile')"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
         >Account Setting
       </a>
-      <a
-        class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
-        >Support
-      </a>
+<!--      <a-->
+<!--        v-if="loggedIn === true"-->
+<!--        class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"-->
+<!--        >Support-->
+<!--      </a>-->
       <a
         @click.prevent="logout"
-        href=""
+        v-if="loggedIn === true"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
         >Logout
+      </a>
+      <a v-if="loggedIn === false"
+         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
+         @click="redirect('login')">
+        Login
       </a>
     </div>
   </div>
 </template>
 
 <script>
+import {authService} from "@/services/authService"
+
 export default {
+  mounted() {
+    if(authService.userLoggedIn()) {
+      this.loggedIn = true;
+      this.roles = authService.getRoles();
+    }
+
+    this.$root.$on("loginSuccess", (roles) => {
+      this.loggedIn = true;
+      this.roles = roles;
+    })
+  },
+
   created() {
     const handleEscape = (e) => {
-      if (e.key == "Esc" || e.key == "Escape") {
+      if (e.key === "Esc" || e.key === "Escape") {
         this.isOpen = false;
       }
     };
@@ -54,12 +76,20 @@ export default {
   data() {
     return {
       isOpen: false,
+      loggedIn: true,
+      roles: ""
     };
   },
 
   methods: {
     logout() {
-      this.$store.dispatch("setUserLoggedIn", false);
+      authService.removeJwt();
+      this.loggedIn = false;
+      this.roles = "";
+      this.$emit('logout');
+    },
+    redirect(name) {
+      this.$router.push({ name }).catch(() => {});
     },
   },
 };

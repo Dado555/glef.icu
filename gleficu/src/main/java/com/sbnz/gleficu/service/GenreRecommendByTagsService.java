@@ -20,7 +20,7 @@ import java.util.*;
 @Service
 public class GenreRecommendByTagsService {
 
-    private final KieContainer kieContainer;
+    private final KieSession kieSession;
 
     private final RequestRepo requestRepo;
 
@@ -35,10 +35,10 @@ public class GenreRecommendByTagsService {
     private final WishlistMovieRepo wishlistMovieRepo;
 
     @Autowired
-    public GenreRecommendByTagsService(KieContainer kieContainer, RequestRepo requestRepo, GenreRepo genreRepo,
+    public GenreRecommendByTagsService(KieSession kieSession, RequestRepo requestRepo, GenreRepo genreRepo,
                                        UserRepo userRepo, RatedMovieRepo ratedMovieRepo,
                                        WatchedMovieRepo watchedMovieRepo, WishlistMovieRepo wishlistMovieRepo) {
-        this.kieContainer = kieContainer;
+        this.kieSession = kieSession;
         this.requestRepo = requestRepo;
         this.genreRepo = genreRepo;
         this.userRepo = userRepo;
@@ -60,7 +60,6 @@ public class GenreRecommendByTagsService {
         List<Genre> genres = genreRepo.findAll();
         phase.setGenres(genres);
 
-        KieSession kieSession = kieContainer.newKieSession();
         kieSession.insert(request);
         FactHandle factHandle = kieSession.insert(phase);
         kieSession.getAgenda().getAgendaGroup("Lista zanrova na osnovu unesenih tagova").setFocus();
@@ -106,7 +105,7 @@ public class GenreRecommendByTagsService {
         }
 
         // Postavljanje AgeRange
-        kieSession = kieContainer.newKieSession();
+        // kieSession = KieContainer.newKieSession();
         kieSession.insert(user);
         kieSession.getAgenda().getAgendaGroup("Postavljanje starosne dobi").setFocus();
         kieSession.fireAllRules();
@@ -126,7 +125,7 @@ public class GenreRecommendByTagsService {
         } else
             phase3.setAgeRange(user.getAgeRange());
 
-        kieSession = kieContainer.newKieSession();
+        // kieSession = kieContainer.newKieSession();
         kieSession.insert(user);
         FactHandle factHandle3 = kieSession.insert(phase3);
         kieSession.getAgenda().getAgendaGroup("Filter zanrova po polu i godinama").setFocus();
@@ -155,7 +154,7 @@ public class GenreRecommendByTagsService {
         phase4.setGenresWatched(watchedMovieRepo.findAllByUserId(user.getId()));
         phase4.setGenresWishlist(wishlistMovieRepo.findAllByUserId(user.getId()));
 
-        kieSession = kieContainer.newKieSession();
+        // kieSession = kieContainer.newKieSession();
         FactHandle factHandle4 = kieSession.insert(phase4);
         kieSession.getAgenda().getAgendaGroup("Filter zanrova liste korisnickih filmova").setFocus();
         kieSession.fireAllRules();
@@ -176,7 +175,7 @@ public class GenreRecommendByTagsService {
         }
 
         // 4. all combined -> final list of genres
-        kieSession = kieContainer.newKieSession();
+        // kieSession = kieContainer.newKieSession();
         GenresFilterByAgeAndGenderFact agFact = facts3.stream().findFirst().orElseThrow(() ->
                 new RuntimeException("Fact not found"));
         kieSession.insert(agFact);

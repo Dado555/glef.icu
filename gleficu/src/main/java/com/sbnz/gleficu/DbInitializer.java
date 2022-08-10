@@ -93,7 +93,7 @@ public class DbInitializer implements ApplicationRunner {
 
         movieRepo.saveAll(Arrays.asList(m1, m2, m3));
 
-        User u1 = new User("mail", "pass", 22, Gender.MALE, Arrays.asList(t1, t4));
+        User u1 = new User("mail", "pass", 22, "korisnik", Gender.MALE, Arrays.asList(t1, t4));
 
         // userRepo.saveAll(Arrays.asList(u1));
         u1 = userRepo.save(u1);

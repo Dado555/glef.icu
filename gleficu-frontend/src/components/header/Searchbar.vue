@@ -39,7 +39,7 @@
       </ul>
     </div>
 
-    <account-drop-down/>
+    <account-drop-down @logout="logout"/>
   </div>
 </template>
 
@@ -59,6 +59,10 @@ export default {
     this.keyboardEvents();
   },
   methods: {
+    logout() {
+      this.$emit('logout')
+    },
+
     debounceSearch(event) {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(() => {

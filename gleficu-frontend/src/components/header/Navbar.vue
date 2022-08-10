@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <router-link to="/">
-      <img src="@/assets/images/logo.png" alt="" />
+      <img src="@/assets/images/logo.png" alt="" style="cursor: pointer"/>
     </router-link>
 
     <ul class="flex mt-5">

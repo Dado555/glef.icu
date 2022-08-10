@@ -13,11 +13,13 @@
     "autoprefixer": "^9.8.6",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
+    "jwt-decode": "^3.1.2",
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
     "vue-carousel-3d": "^1.0.1",
+    "vue-mq": "^1.0.1",
     "vue-router": "^3.4.9",
     "vuex": "^3.6.2"
   },
