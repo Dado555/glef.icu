@@ -1,12 +1,18 @@
 <template>
   <div class="container mx-auto px-4 py-16">
-    <h2 class="text-yellow-500 text-lg font-semibold">
-      All users
-    </h2>
+    <app-tabs class="w-12/12 lg:w-12/12 mx-auto mb-16" :tabList="tabList" :users="users" :variant="'vertical'">
+      <template/>
+<!--      <template v-slot:tabPanel-1> Content 1 </template>-->
+<!--      <template v-slot:tabPanel-2> Content 2 </template>-->
+<!--      <template v-slot:tabPanel-3> Content 3 </template>-->
+    </app-tabs>
+<!--    <h2 class="text-yellow-500 text-lg font-semibold">-->
+<!--      All users-->
+<!--    </h2>-->
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <UserItem :key="user.id" v-for="user in this.users" :user="user" />
-    </div>
+<!--    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">-->
+<!--      <UserItem :key="user.id" v-for="user in this.users" :user="user" />-->
+<!--    </div>-->
 
     <div class="text-center mt-5">
       <a href="" v-on:click.prevent="previous()">
@@ -20,7 +26,8 @@
 </template>
 
 <script>
-import UserItem from "@/components/items/UserItem";
+// import UserItem from "@/components/items/UserItem";
+import AppTabs from "@/components/users/AppTabs";
 
 let currentPage = 1;
 
@@ -30,11 +37,13 @@ export default {
   data() {
     return {
       users: [],
+      tabList: ["All users", "Ban user", "Banned users"]
     };
   },
 
   components: {
-    UserItem,
+    // UserItem,
+    AppTabs
   },
 
   mounted() {
