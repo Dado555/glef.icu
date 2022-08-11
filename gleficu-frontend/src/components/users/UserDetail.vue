@@ -77,19 +77,27 @@
       </div>
     </div>
     <!--  -->
-    <div class="credits border-b border-gray-800">
-      <div class="container mx-auto px-4 py-16">
-        <h2 class="text-4xl font-semibold">Credits</h2>
-        <ul class="list-disc leading-loose pl-5 mt-8">
-          <li :key="cast.id" v-for="cast in castMovies">
-            <strong>{{ castDetails(cast) }} </strong>
-            <router-link :to="`/movie/${cast.id}`" class="hover:underline">
-              {{ cast.title }}
-            </router-link>
-            as {{ cast.character }}
-          </li>
-        </ul>
-      </div>
+<!--    <div class="credits border-b border-gray-800">-->
+<!--      <div class="container mx-auto px-4 py-16">-->
+<!--        <h2 class="text-4xl font-semibold">Credits</h2>-->
+<!--        <ul class="list-disc leading-loose pl-5 mt-8">-->
+<!--          <li :key="cast.id" v-for="cast in castMovies">-->
+<!--            <strong>{{ castDetails(cast) }} </strong>-->
+<!--            <router-link :to="`/movie/${cast.id}`" class="hover:underline">-->
+<!--              {{ cast.title }}-->
+<!--            </router-link>-->
+<!--            as {{ cast.character }}-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
+      <p style="font-size: x-large">Inappropriate comments (0)</p>
+    </div>
+    <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
+      <comment class="message" />
+      <button class="px-4 py-1.5 rounded-lg text-blue-600 bg-white shadow-xl">Ban user</button>
     </div>
 
     <!--  -->

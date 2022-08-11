@@ -27,26 +27,22 @@
         />
       </li>
     </ul>
-    <template v-for="(tab, index) in tabList">
-<!--      <div-->
-<!--          :key="index"-->
-<!--          v-if="index + 1 === activeTab"-->
-<!--          class="flex-grow bg-white rounded-lg shadow-xl p-4"-->
-<!--      >-->
-<!--        <slot :name="`tabPanel-${index + 1}`" />-->
-        <div :key="index" v-if="index + 1 === activeTab" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+    <template v-for="(tab, index) in tabList" >
+      <div :key="index" v-if="index + 1 === activeTab">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           <UserItem :key="user.id" v-for="user in users" :user="user" />
+          <slot :name="`tabPanel-${index + 1}`" />
         </div>
 
-<!--        <div class="text-center mt-5">-->
-<!--          <a href="" v-on:click.prevent="previous()">-->
-<!--            Previous-->
-<!--          </a>-->
-<!--          <a href="" v-on:click.prevent="next()" class="ml-5">-->
-<!--            Next-->
-<!--          </a>-->
-<!--        </div>-->
-<!--      </div>-->
+        <div class="text-center mt-5">
+          <a href="" v-on:click.prevent="previous()">
+            Previous
+          </a>
+          <a href="" v-on:click.prevent="next()" class="ml-5">
+            Next
+          </a>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -54,17 +50,12 @@
 <script>
 import UserItem from "@/components/items/UserItem";
 
+let currentPage = 1;
+
 export default {
   name: "AppTabs",
+
   props: {
-    tabList: {
-      type: Array,
-      required: true,
-    },
-    users: {
-      type: Array,
-      required: true
-    },
     variant: {
       type: String,
       required: false,
@@ -72,13 +63,57 @@ export default {
       validator: (value) => ["horizontal", "vertical"].includes(value),
     },
   },
+
   data() {
     return {
       activeTab: 1,
+      tabList: ["All users", "Ban user", "Banned users"],
+      users: [],
     };
   },
+
   components: {
     UserItem
-  }
+  },
+
+  mounted() {
+    this.fetchUsers(currentPage);
+    // this.scroll();
+  },
+
+  methods: {
+    async fetchUsers(page) {
+      try {
+        const response = await this.$http.get(
+            "https://api.themoviedb.org/3/person/popular?page=" + page
+        );
+        this.users = response.data.results;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+            document.documentElement.scrollTop + window.innerHeight ===
+            document.documentElement.offsetHeight;
+
+        if (bottomOfWindow) {
+          currentPage += 1;
+          this.fetchUsers((currentPage += 1));
+        }
+      };
+    },
+
+    next() {
+      currentPage += 1;
+      this.fetchUsers(currentPage);
+    },
+    previous() {
+      currentPage -= 1;
+      this.fetchUsers(currentPage);
+    },
+  },
 };
 </script>

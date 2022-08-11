@@ -8,6 +8,7 @@
 <!--        {{ knownFor }}-->
 <!--      </p>-->
     </router-link>
+    <button class="px-4 py-1.5 rounded-lg text-blue-600 bg-white shadow-xl">Ban user</button>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ export default {
     user: {
       required: true,
     },
+    // canUserBeBanned: true
   },
 }
 </script>
