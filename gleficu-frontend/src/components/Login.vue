@@ -1,23 +1,78 @@
 <template>
-  <div class="login-box">
-    <h2>Login</h2>
-    <form>
-      <div class="user-box">
-        <input type="text" name="" required v-model="loginInfo.email">
-        <label>Username</label>
+  <div :class="{'flex space-x-4': variant === 'horizontal',}">
+    <ul
+        class="list-none p-1.5 rounded-lg text-center overflow-auto whitespace-nowrap"
+        :class="{'flex items-center mb-6': variant === 'vertical',}">
+      <li
+          v-for="(tab, index) in tabList"
+          :key="index"
+          class="w-full px-4 py-1.5 rounded-lg"
+          :class="{
+          'bg-yellow-500 shadow-xl': index + 1 === activeTab,
+          'text-white': index + 1 !== activeTab,
+        }"
+      >
+        <label
+            :for="`${_uid}${index}`"
+            v-text="tab"
+            class="cursor-pointer block"
+        />
+        <input
+            :id="`${_uid}${index}`"
+            type="radio"
+            :name="`${_uid}-tab`"
+            :value="index + 1"
+            v-model="activeTab"
+            class="hidden"
+        />
+      </li>
+    </ul>
+    <template v-for="(tab, index) in tabList" >
+      <div :key="index" v-if="activeTab === 1">
+        <div class="login-box">
+          <h2>Login</h2>
+          <form>
+            <div class="user-box">
+              <input type="text" name="" required v-model="loginInfo.email">
+              <label>Username</label>
+            </div>
+            <div class="user-box">
+              <input type="password" name="" required v-model="loginInfo.password">
+              <label>Password</label>
+            </div>
+            <a href="#" @click="login">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              Submit
+            </a>
+          </form>
+        </div>
       </div>
-      <div class="user-box">
-        <input type="password" name="" required v-model="loginInfo.password">
-        <label>Password</label>
+      <div :key="index+1" v-if="activeTab === 2">
+        <div class="login-box">
+          <h2>Register</h2>
+          <form>
+            <div class="user-box">
+              <input type="text" name="" required v-model="registerInfo.email">
+              <label>Username</label>
+            </div>
+            <div class="user-box">
+              <input type="password" name="" required v-model="registerInfo.password">
+              <label>Password</label>
+            </div>
+            <a href="#" @click="login">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              Submit
+            </a>
+          </form>
+        </div>
       </div>
-      <a href="#" @click="login">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        Submit
-      </a>
-    </form>
+    </template>
   </div>
 </template>
 
@@ -34,8 +89,22 @@ export default {
         email: "",
         password: "",
       },
+      registerInfo: {
+        email: "",
+        password: ""
+      },
       text: "Wrong username/password combination.",
+      activeTab: 1,
+      tabList: ["Login", "Register"],
     };
+  },
+  props: {
+    variant: {
+      type: String,
+      required: false,
+      default: () => "vertical",
+      validator: (value) => ["horizontal", "vertical"].includes(value),
+    },
   },
   methods: {
     login() {
