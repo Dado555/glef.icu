@@ -64,11 +64,18 @@
             <span class="ml-3">Favourite</span>
           </a>
         </div>
+
+        <div class="mt-5" style="padding-left: 50px">
+          <a @click.prevent="openEditMovie" target="blank" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-6">
+            <i class="ti-pencil"></i>
+            <span class="ml-3">Edit Movie</span>
+          </a>
+        </div>
       </div>
     </div>
 
     <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
-      <p style="font-size: x-large">Comment (1)</p>
+      <h2 class="text-3xl font-semibold mb-5">Comment (1)</h2>
     </div>
     <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
       <comment class="message" />
@@ -85,6 +92,10 @@
       :mediaURL="mediaURL"
       :isVideo="this.isVideo"
     />
+
+    <EditMovieModal
+      v-model="editMovie"
+    />
   </div>
 </template>
 
@@ -94,9 +105,11 @@ import Images from "./Images";
 import MediaModel from "../models/MediaModel";
 import AddComment from "@/components/comments/AddComment";
 import Comment from "@/components/comments/Comment";
+import EditMovieModal from "@/components/movies/EditMovieModal";
 
 export default {
   components: {
+    EditMovieModal,
     Comment,
     AddComment,
     Cast,
@@ -114,6 +127,7 @@ export default {
         },
       },
       modelOpen: false,
+      editMovie: false,
       isVideo: false,
       mediaURL: "",
     };
@@ -143,6 +157,9 @@ export default {
     openImageModel() {
       this.isVideo = false;
       this.modelOpen = true;
+    },
+    openEditMovie() {
+      this.editMovie = true;
     },
     youtubeVideo() {
       if (!this.movie.videos) return;

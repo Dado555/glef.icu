@@ -8,7 +8,7 @@
           :key="index"
           class="w-full px-4 py-1.5 rounded-lg"
           :class="{
-          'text-blue-600 bg-white shadow-xl': index + 1 === activeTab,
+          'bg-yellow-500 shadow-xl': index + 1 === activeTab,
           'text-white': index + 1 !== activeTab,
         }"
       >

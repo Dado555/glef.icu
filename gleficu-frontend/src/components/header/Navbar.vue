@@ -11,6 +11,11 @@
         </router-link>
       </li>
       <li>
+        <router-link to="/add-movie" class="ml-5">
+          Add New Movie
+        </router-link>
+      </li>
+      <li>
         <router-link to="/actors" class="ml-5">
           Actors
         </router-link>

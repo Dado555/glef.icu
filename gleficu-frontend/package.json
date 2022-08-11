@@ -14,14 +14,18 @@
     "awesome-vue-star-rating": "^1.0.9",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.9",
+    "json-pretty-html": "^1.1.6",
     "jwt-decode": "^3.1.2",
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
     "vue-carousel-3d": "^1.0.1",
+    "vue-form-wizard": "^0.8.4",
     "vue-mq": "^1.0.1",
     "vue-router": "^3.4.9",
+    "vue-themify-icons": "^1.0.0",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

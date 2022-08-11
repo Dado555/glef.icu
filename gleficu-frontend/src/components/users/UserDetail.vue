@@ -97,7 +97,7 @@
     </div>
     <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
       <comment class="message" />
-      <button class="px-4 py-1.5 rounded-lg text-blue-600 bg-white shadow-xl">Ban user</button>
+      <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl">Ban user</button>
     </div>
 
     <!--  -->
