@@ -14,19 +14,24 @@
       />
       <p>I found this article helpful</p>
       <div class="comment__flex-btn">
+        <button @click.prevent="openReportComment" class="update rounded bg-red-900 text-black cursor-auto">Report</button>
         <button class="update rounded bg-yellow-500 text-black cursor-auto">Update</button>
         <button class="del rounded bg-yellow-500 text-black cursor-auto">Delete</button>
       </div>
     </div>
+
+    <ReportCommentModal v-model="reportComment"/>
   </div>
 </template>
 
 <script>
 import AwesomeVueStarRating from "awesome-vue-star-rating";
+import ReportCommentModal from "@/components/comments/ReportCommentModal";
 
 export default {
   name: "Comment",
   components: {
+    ReportCommentModal,
     AwesomeVueStarRating
   },
   data() {
@@ -59,6 +64,12 @@ export default {
       starSize: "lg", //[xs,lg,1x,2x,3x,4x,5x,6x,7x,8x,9x,10x],
       maxStars: 5,
       disabled: false,
+      reportComment: false
+    }
+  },
+  methods: {
+    openReportComment() {
+      this.reportComment = true;
     }
   }
 }
