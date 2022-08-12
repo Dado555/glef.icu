@@ -64,6 +64,13 @@
           {{ this.user.biography }}
         </p>
 
+        <div class="mt-5">
+          <a href="#" style="margin-left: 0" class="rounded bg-red-500 px-5 py-3 inline-flex text-black ml-5" @click.prevent="openEditProfile">
+            <img src="@/assets/images/Pencil-icon.png" alt=""/>
+            <span class="ml-3">Edit Profile Settings</span>
+          </a>
+        </div>
+
 <!--        <h4 class="mt-12 font-semibold">Known For</h4>-->
 
 <!--        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">-->
@@ -96,7 +103,7 @@
       <p style="font-size: x-large">Inappropriate comments (0)</p>
     </div>
     <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
-      <comment class="message" />
+      <Comment class="message" />
       <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl">Ban user</button>
     </div>
 
@@ -104,6 +111,7 @@
 
     <WishlistMovies/>
 
+    <EditProfileModal v-model="editProfile"/>
     <!--  -->
   </div>
 </template>
@@ -111,15 +119,19 @@
 <script>
 import WatchedMovies from "@/components/users/WatchedMovies";
 import WishlistMovies from "@/components/users/WishlistMovies";
+import EditProfileModal from "@/components/users/EditProfileModal";
+import Comment from "@/components/comments/Comment";
+
 export default {
   name: "UserDetail",
-  components: {WishlistMovies, WatchedMovies},
+  components: {Comment, EditProfileModal, WishlistMovies, WatchedMovies},
   data() {
     return {
       socialDetails: [],
       user: {},
       knownFor: [],
       castMovies: {},
+      editProfile: false
     };
   },
 
@@ -165,6 +177,10 @@ export default {
     castDetails(cast) {
       return parseInt(cast.release_date) + " .";
     },
+
+    openEditProfile() {
+      this.editProfile = true;
+    }
   },
 }
 </script>
