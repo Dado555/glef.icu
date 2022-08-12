@@ -64,16 +64,16 @@
           {{ this.user.biography }}
         </p>
 
-        <h4 class="mt-12 font-semibold">Known For</h4>
+<!--        <h4 class="mt-12 font-semibold">Known For</h4>-->
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
-          <div :key="movie.id" v-for="movie in this.knownFor">
-            <router-link :to="`/movie/${movie.id}`" class="text-gray-400 text-sm leading-normal hover:text-white">
-              <img :src="movieImage(movie)" alt="poster" class="mt-1 hover:opacity-75 transition ease-in-out duration-150"/>
-              {{ movie.name }}
-            </router-link>
-          </div>
-        </div>
+<!--        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">-->
+<!--          <div :key="movie.id" v-for="movie in this.knownFor">-->
+<!--            <router-link :to="`/movie/${movie.id}`" class="text-gray-400 text-sm leading-normal hover:text-white">-->
+<!--              <img :src="movieImage(movie)" alt="poster" class="mt-1 hover:opacity-75 transition ease-in-out duration-150"/>-->
+<!--              {{ movie.name }}-->
+<!--            </router-link>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
     </div>
     <!--  -->
@@ -100,13 +100,20 @@
       <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl">Ban user</button>
     </div>
 
+    <WatchedMovies/>
+
+    <WishlistMovies/>
+
     <!--  -->
   </div>
 </template>
 
 <script>
+import WatchedMovies from "@/components/users/WatchedMovies";
+import WishlistMovies from "@/components/users/WishlistMovies";
 export default {
   name: "UserDetail",
+  components: {WishlistMovies, WatchedMovies},
   data() {
     return {
       socialDetails: [],

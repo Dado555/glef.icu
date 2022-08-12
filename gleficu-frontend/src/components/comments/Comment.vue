@@ -14,7 +14,7 @@
       />
       <p>I found this article helpful</p>
       <div class="comment__flex-btn">
-        <button @click.prevent="openReportComment" class="update rounded bg-red-900 text-black cursor-auto">Report</button>
+        <button @click.prevent="openReportComment" class="update rounded bg-red-700 text-black cursor-auto">Report</button>
         <button class="update rounded bg-yellow-500 text-black cursor-auto">Update</button>
         <button class="del rounded bg-yellow-500 text-black cursor-auto">Delete</button>
       </div>

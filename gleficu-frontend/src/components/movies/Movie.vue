@@ -5,10 +5,7 @@
       <div class="ml-24">
         <h1 class="text-4xl font-semibold">{{ this.movie.title }}</h1>
         <span class="text-gray-500 text-sm flex">
-          <svg
-            class="fill-current text-yellow-500 w-4 h-4 mr-1"
-            viewBox="0 0 24 24"
-          >
+          <svg class="fill-current text-yellow-500 w-4 h-4 mr-1" viewBox="0 0 24 24">
             <g data-name="Layer 2">
               <path
                 d="M17.56 21a1 1 0 01-.46-.11L12 18.22l-5.1 2.67a1 1 0 01-1.45-1.06l1-5.63-4.12-4a1 1 0 01-.25-1 1 1 0 01.81-.68l5.7-.83 2.51-5.13a1 1 0 011.8 0l2.54 5.12 5.7.83a1 1 0 01.81.68 1 1 0 01-.25 1l-4.12 4 1 5.63a1 1 0 01-.4 1 1 1 0 01-.62.18z"
@@ -41,11 +38,12 @@
           </div>
         </div>
         <div class="mt-5">
-          <a
-            @click.prevent="openYouTubeModel"
-            target="blank"
-            class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black cursor-auto"
-          >
+          <a href="#" class="rounded bg-red-700 px-5 py-3 inline-flex text-black ml-5" @click.prevent="openEditMovie">
+            <img src="@/assets/images/Pencil-icon.png" alt=""/>
+            <span class="ml-3">Edit Movie</span>
+          </a>
+
+          <a @click.prevent="openYouTubeModel" target="blank" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black cursor-pointer ml-5">
             <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none" />
               <path
@@ -56,19 +54,14 @@
             <span class="ml-3">Play Trailer</span>
           </a>
 
-          <a
-            href="#"
-            class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5"
-          >
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
             <img src="@/assets/images/heart-white.png" alt="" />
-            <span class="ml-3">Favourite</span>
+            <span class="ml-3">Wishlist</span>
           </a>
-        </div>
 
-        <div class="mt-5" style="padding-left: 50px">
-          <a @click.prevent="openEditMovie" target="blank" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-6">
-            <i class="ti-pencil"></i>
-            <span class="ml-3">Edit Movie</span>
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
+            <img src="@/assets/images/check-mark.png" alt="" />
+            <span class="ml-3">Mark Watched</span>
           </a>
         </div>
       </div>

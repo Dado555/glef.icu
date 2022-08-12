@@ -22,8 +22,11 @@
         v-if="loggedIn === true"
         @click="redirect('profile')"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
-        >Account Setting
+        >Account Settings
       </a>
+<!--      Redirect to -->
+<!--      /user/:id   -->
+
 <!--      <a-->
 <!--        v-if="loggedIn === true"-->
 <!--        class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"-->
