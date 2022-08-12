@@ -30,7 +30,13 @@
           Merge M&S
         </router-link>
       </li>
-<!--      <li>-->
+      <li>
+        <router-link to="/recommend-movie" class="ml-5">
+          Recommend Me Movie
+        </router-link>
+      </li>
+
+      <!--      <li>-->
 <!--        <router-link to="/profile" class="ml-5">-->
 <!--          Profile-->
 <!--        </router-link>-->

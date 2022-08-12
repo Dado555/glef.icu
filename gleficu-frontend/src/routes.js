@@ -7,6 +7,7 @@ import Users from "@/components/users/Users";
 import UserDetail from "@/components/users/UserDetail";
 import NewMoviePage from "@/components/movies/createMovie/NewMoviePage";
 import Attachment from "@/components/mergeMovieAndSubtitle/Attachment";
+import RecommendMeMovie from "@/components/users/RecommendMeMovie";
 
 // const roles = { USER, ADMIN.. };
 
@@ -79,6 +80,12 @@ let router = new VueRouter({
         authorities: [],
       },
     },
+    {
+      path: "/recommend-movie",
+      name: "recommendMovie",
+      component: RecommendMeMovie,
+      meta: {}
+    }
   ],
 });
 

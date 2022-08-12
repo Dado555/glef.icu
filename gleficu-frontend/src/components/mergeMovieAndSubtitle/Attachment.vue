@@ -1,7 +1,7 @@
 <template>
   <div id="mergeMovie" class="container mx-auto">
-    <h1 style="font-size: x-large; color: whitesmoke; margin-left: 36%" slot="title">Merge Movie And Subtitle</h1>
-    <h2 style="font-size: large; margin-left: 32%" slot="title">movie and subtitle must be downloaded locally first</h2>
+    <h1 style="font-size: x-large; color: whitesmoke; margin-left: 40%" slot="title">Merge Movie And Subtitle</h1>
+    <h2 style="font-size: large; margin-left: 35%" slot="title">movie and subtitle must be downloaded locally first</h2>
 
     <vue-dropzone
         ref="myVueDropzone"
@@ -147,7 +147,7 @@
               </g>
             </svg>
           </figure>
-          Drop Or Add Files Here
+          <span id="dropSpan" style="margin-left: 65px">Drop Or Add Files Here</span>
           <p class="separator"/>
           <button id="mergeMovieBtn" type="button">Browse</button>
         </div>
@@ -296,7 +296,7 @@ export default {
   z-index: -9;
 }
 #mergeFigure {
-  margin-left: 20px;
+  margin-left: 80px;
 }
 
 .dropzone-container {
@@ -330,7 +330,7 @@ a {
   letter-spacing: 0.4px;
   padding: 12px 30px;
   border-radius: 4px;
-  margin-left: 20px;
+  margin-left: 80px;
   margin-top: 40px;
 }
 .separator {
@@ -341,10 +341,10 @@ a {
   position: absolute;
   content: "";
   height: 1px;
-  width: 200px;
+  width: 170px;
   background: #d8d8d8;
   top: 50%;
-  left: 9%;
+  left: 15%;
   transform: translate(-50%, -50%);
 }
 span {
