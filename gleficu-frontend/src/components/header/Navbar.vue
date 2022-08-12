@@ -25,6 +25,11 @@
           Users
         </router-link>
       </li>
+      <li>
+        <router-link to="/merge-movie" class="ml-5">
+          Merge M&S
+        </router-link>
+      </li>
 <!--      <li>-->
 <!--        <router-link to="/profile" class="ml-5">-->
 <!--          Profile-->

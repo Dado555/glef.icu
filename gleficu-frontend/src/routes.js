@@ -6,6 +6,7 @@ import ActorDetail from "./components/actors/ActorDetail";
 import Users from "@/components/users/Users";
 import UserDetail from "@/components/users/UserDetail";
 import NewMoviePage from "@/components/movies/createMovie/NewMoviePage";
+import Attachment from "@/components/mergeMovieAndSubtitle/Attachment";
 
 // const roles = { USER, ADMIN.. };
 
@@ -34,6 +35,12 @@ let router = new VueRouter({
       path: "/add-movie",
       name: "addMovie",
       component: NewMoviePage,
+      meta: {}
+    },
+    {
+      path: "/merge-movie",
+      name: "mergeMovie",
+      component: Attachment,
       meta: {}
     },
     {
