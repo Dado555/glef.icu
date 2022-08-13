@@ -1,0 +1,16 @@
+.idea/
+
+# file types
+*.o
+*.a
+*.so
+*.exe
+*.test
+*.prof
+*.db
+*.DS_Store
+
+# folders
+vendor
+node_modules
+tmp
