@@ -33,7 +33,7 @@ Vue.filter("removeUnderscore", (param) => {
 // Configure axios to always include JWT when sending a request
 axios.interceptors.request.use(
     (config) => {
-      let jwt = localStorage.getItem("jwt");
+      let jwt = localStorage.getItem("id_token");
       if (jwt) {
         if (config.headers) {
           config.headers.Authorization = `Bearer ${jwt}`;
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
   const { authenticated, authorities } = to.meta;
 
   if (authenticated) {
-    let jwt = localStorage.getItem("jwt");
+    let jwt = localStorage.getItem("id_token");
     if (jwt) {
       let decodedToken = jwt_decode(jwt);
       if (authorities.some((element) => decodedToken.roles.includes(element))) {

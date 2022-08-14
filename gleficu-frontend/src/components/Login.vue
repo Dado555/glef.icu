@@ -6,9 +6,10 @@
       <li
           v-for="(tab, index) in tabList"
           :key="index"
+          style="color: whitesmoke;"
           class="w-full px-4 py-1.5 rounded-lg"
           :class="{
-          'bg-yellow-500 shadow-xl': index + 1 === activeTab,
+          'bg-blue-500 shadow-xl': index + 1 === activeTab,
           'text-white': index + 1 !== activeTab,
         }"
       >
@@ -40,7 +41,7 @@
               <input type="password" name="" required v-model="loginInfo.password">
               <label>Password</label>
             </div>
-            <a href="#" @click="login">
+            <a href="#" @click="login()">
               <span></span>
               <span></span>
               <span></span>
@@ -62,7 +63,7 @@
               <input type="password" name="" required v-model="registerInfo.password">
               <label>Password</label>
             </div>
-            <a href="#" @click="login">
+            <a href="#" @click="register()">
               <span></span>
               <span></span>
               <span></span>
@@ -77,8 +78,7 @@
 </template>
 
 <script>
-// import {authService} from "../services/authService";
-// import jwtDecode from "jwt-decode";
+import {authService} from "@/services/authService";
 
 export default {
   name: "Login",
@@ -89,6 +89,7 @@ export default {
         email: "",
         password: "",
       },
+      error: '',
       registerInfo: {
         email: "",
         password: ""
@@ -108,7 +109,11 @@ export default {
   },
   methods: {
     login() {
-      this.$emit('login');
+      let credentials = {
+        username: this.loginInfo.email,
+        password: this.loginInfo.password
+      }
+      authService.login(this, credentials, '/home')
       // authService
       //     .login(this.loginInfo)
       //     .then((response) => {
@@ -122,6 +127,13 @@ export default {
       //       else this.text = "Wrong username/password combination.";
       //     });
     },
+    register() {
+      let credentials = {
+        username: this.registerInfo.email,
+        password: this.registerInfo.password
+      }
+      authService.signup(this, credentials, '/home')
+    }
   },
 };
 </script>

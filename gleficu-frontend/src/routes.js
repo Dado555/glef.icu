@@ -11,11 +11,22 @@ import RecommendMeMovie from "@/components/users/RecommendMeMovie";
 
 // const roles = { USER, ADMIN.. };
 
+// import { authService } from "./services/authService"
+import Login from "@/components/Login";
+
+// function requireAuth (to, from, next) {
+//   if (!authService.isAuthenticated()) {
+//     this.$router.replace('/login')
+//   } else {
+//     next()
+//   }
+// }
+
 let router = new VueRouter({
   mode: "history",
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: Home,
       meta: {
@@ -85,7 +96,18 @@ let router = new VueRouter({
       name: "recommendMovie",
       component: RecommendMeMovie,
       meta: {}
-    }
+    },
+    {
+      path: '/',
+      name: 'login',
+      component: Login
+    },
+    // {
+    //   path: '/userinfo',
+    //   name: 'userinfo',
+    //   component: UserInfo,
+    //   beforeEnter: requireAuth
+    // }
   ],
 });
 

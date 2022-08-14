@@ -6,12 +6,12 @@
 
     <ul class="flex mt-5">
       <li>
-        <router-link to="/" class="ml-5">
+        <router-link to="/home" class="ml-5">
           Movies
         </router-link>
       </li>
       <li>
-        <router-link to="/add-movie" class="ml-5">
+        <router-link v-if="isAuthenticated()" to="/add-movie" class="ml-5">
           Add New Movie
         </router-link>
       </li>
@@ -21,17 +21,17 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/users" class="ml-5">
+        <router-link v-if="isAuthenticated()" to="/users" class="ml-5">
           Users
         </router-link>
       </li>
       <li>
-        <router-link to="/merge-movie" class="ml-5">
+        <router-link v-if="isAuthenticated()" to="/merge-movie" class="ml-5">
           Merge M&S
         </router-link>
       </li>
       <li>
-        <router-link to="/recommend-movie" class="ml-5">
+        <router-link v-if="isAuthenticated()" to="/recommend-movie" class="ml-5">
           Recommend Me Movie
         </router-link>
       </li>
@@ -46,7 +46,18 @@
 </template>
 
 <script>
-export default {};
+import { authService } from '@/services/authService'
+
+export default {
+  methods: {
+    logout() {
+      authService.logout(this)
+    },
+    isAuthenticated() {
+      return authService.isAuthenticated()
+    }
+  }
+};
 </script>
 
 <style></style>

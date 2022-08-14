@@ -52,15 +52,15 @@ import {authService} from "@/services/authService"
 
 export default {
   mounted() {
-    if(authService.userLoggedIn()) {
+    if(authService.isAuthenticated()) {
       this.loggedIn = true;
-      this.roles = authService.getRoles();
+      // this.roles = authService.getRoles();
     }
 
-    this.$root.$on("loginSuccess", (roles) => {
-      this.loggedIn = true;
-      this.roles = roles;
-    })
+    // this.$root.$on("loginSuccess", (roles) => {
+    //   this.loggedIn = true;
+    //   this.roles = roles;
+    // })
   },
 
   created() {
@@ -86,7 +86,7 @@ export default {
 
   methods: {
     logout() {
-      authService.removeJwt();
+      authService.logout(this);
       this.loggedIn = false;
       this.roles = "";
       this.$emit('logout');

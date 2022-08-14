@@ -1,40 +1,56 @@
-import jwtDecode from "jwt-decode";
-const axios = require("axios");
+const API_URL = 'http://localhost:3000/api/user/'
+const LOGIN_URL = API_URL + 'login'
+const SIGNUP_URL = API_URL + 'signup'
 
 class AuthService {
-    login(payload) {
-        return axios.post(
-            `${process.env.VUE_APP_BASE_PATH}/users/login`,
-            payload
-        );
+    login (context, credentials, redirect) {
+        context.$http.post(LOGIN_URL, credentials).then(response => {
+            console.log(response);
+            localStorage.setItem('id_token', response.data.id_token)
+            localStorage.setItem('username', credentials.username)
+            if (redirect) {
+                context.$router.replace(redirect)
+            } else {
+                this.$emit('login');
+            }
+        }, response => {
+            context.error = response.statusText
+        })
     }
 
-    setToken(jwt) {
-        localStorage.setItem("jwt", jwt);
+    signup (context, credentials, redirect) {
+        context.$http.post(SIGNUP_URL, credentials).then(response => {
+            console.log(response);
+            localStorage.setItem('id_token', response.data.id_token)
+            localStorage.setItem('username', credentials.username)
+            if (redirect) {
+                context.$router.replace(redirect)
+            } else {
+                this.$emit('login');
+            }
+        }, response => {
+            context.error = response.statusText
+        })
     }
 
-    getRoles() {
-        let jwt = localStorage.getItem("jwt");
+    logout (context) {
+        localStorage.removeItem('id_token')
+        localStorage.removeItem('username')
+        context.$router.replace('/')
+    }
+
+    isAuthenticated () {
+        let jwt = localStorage.getItem('id_token')
         if (jwt) {
-            let token = jwtDecode(jwt);
-            return token.roles;
-        } else return "";
+            return true
+        }
+        return false
     }
 
-    userLoggedIn() {
-        return localStorage.getItem("jwt") !== null;
-    }
-
-    removeJwt() {
-        localStorage.removeItem("jwt");
-    }
-
-    userId() {
-        let jwt = localStorage.getItem("jwt");
-        if (jwt) {
-            let token = jwtDecode(jwt);
-            return token.userId;
-        } else return -1;
+    getAuthHeader () {
+        return {
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+        }
     }
 }
 

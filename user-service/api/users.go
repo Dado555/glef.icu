@@ -44,7 +44,12 @@ func (api *API) UserLogin(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+//func enableCors(w *http.ResponseWriter) {
+//	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+//}
+
 func (api *API) UserSignup(w http.ResponseWriter, req *http.Request) {
+	//enableCors(&w)
 
 	decoder := json.NewDecoder(req.Body)
 	jsonData := UserJSON{}
