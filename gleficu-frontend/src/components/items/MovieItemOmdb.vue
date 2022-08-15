@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <img :src="movie.Poster" class="hover:opacity-75 tansition easy-in-out duration-150"/>
+  <div id="movieItem" class="container mx-auto">
+    <img :src="movie.Poster" style="padding-left: 40%" class="hover:opacity-75 tansition easy-in-out duration-150" alt="No Image"/>
 
     <h3>{{ movie.Title }}</h3>
 
-    <div class="flex">
+    <div class="flex" style="padding-left: 45%">
       <svg class="fill-current text-yellow-500 w-4 h-4 mt-1" viewBox="0 0 24 24">
         <g data-name="Layer 2">
           <path
@@ -16,9 +16,18 @@
       <span class="ml-2">{{ movie.ImdbRating * 10 }}% | {{ movie.Released }} </span>
       <br />
     </div>
-    <span class="text-sm text-gray-500">
-      {{ movie.Genre }}
-    </span>
+
+    <div class="flex" style="padding-left: 45%">
+      <span class="text-sm text-gray-500">
+        {{ movie.Genre }}
+      </span>
+    </div>
+
+    <el-button @click="saveMovie()"
+               style="background-color: rgba(245, 158, 11); margin-top: 20px; margin-bottom: 150px;
+               border-color: rgba(245, 158, 11);color: white;">
+      Save movie
+    </el-button>
   </div>
 </template>
 
@@ -29,10 +38,50 @@ export default {
     movie: {
       required: true,
     },
+  },
+  methods: {
+    saveMovie() {
+
+    }
   }
 }
 </script>
 
 <style scoped>
+#movieItem {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  /*color: #2c3e50;*/
+  color: whitesmoke;
+  margin-top: 60px;
+}
 
+body {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  margin: 0;
+}
+
+pre {
+  overflow: auto;
+}
+pre .string {
+  color: #885800;
+}
+pre .number {
+  color: blue;
+}
+pre .boolean {
+  color: magenta;
+}
+pre .null {
+  color: red;
+}
+pre .key {
+  color: green;
+}
 </style>

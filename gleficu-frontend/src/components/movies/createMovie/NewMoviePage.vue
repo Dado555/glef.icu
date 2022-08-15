@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       finalModel: {},
-      activeTab: 1,
+      activeTab: 2,
       tabList: ["Insert links", "Find by title"],
     };
   },

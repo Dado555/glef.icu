@@ -19,18 +19,21 @@
         Result movie
       </h2>
 
-      <movie-item-omdb movie=""/>
+      <movie-item-omdb v-if="submitClicked" :movie="this.movieOmdb"/>
     </div>
   </div>
 </template>
 
 <script>
 import MovieItemOmdb from "@/components/items/MovieItemOmdb";
+import {movieService} from "@/services/movieService";
 export default {
   name: "NewMovieInputTitle",
   components: {MovieItemOmdb},
   data() {
     return {
+      movieOmdb: null,
+      submitClicked: false,
       model: {
         title: '',
         year: '',
@@ -59,7 +62,11 @@ export default {
       })
     },
     submit() {
-
+      movieService.getByTitle({title: this.model.title, year: this.model.year}).then((response) => {
+        this.movieOmdb = response.data;
+        console.log(this.movieOmdb);
+        this.submitClicked = true;
+      });
     }
   }
 }

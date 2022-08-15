@@ -1,11 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"github.com/Dado555/glef.icu/scrape-movie-service/service"
+	routes2 "github.com/Dado555/glef.icu/scrape-movie-service/routes"
+	"github.com/rs/cors"
+	"net/http"
 )
 
 func main() {
-	movie := service.FindByTitle("Harry Potter", "0000")
-	fmt.Println(movie)
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{http.MethodPost, http.MethodConnect, http.MethodGet, http.MethodDelete,
+			http.MethodHead, http.MethodOptions, http.MethodPut, http.MethodTrace},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: false,
+	})
+
+	routes := routes2.CreateRoutes()
+	handler := corsHandler.Handler(routes)
+	err := http.ListenAndServe(":3001", handler)
+	if err != nil {
+		panic(err)
+		return
+	}
 }
