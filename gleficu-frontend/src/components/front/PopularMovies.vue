@@ -9,7 +9,6 @@
         :key="movie.id"
         v-for="movie in movies"
         :movie="movie"
-        :genres="genres"
       />
     </div>
   </div>
@@ -17,6 +16,7 @@
 
 <script>
 import MovieItem from "../items/MovieItem";
+import {movieService} from "@/services/movieService";
 
 export default {
   components: {
@@ -27,27 +27,34 @@ export default {
     return {
       movies: [],
       genres: [],
+      page: 1,
+      size: 20
     };
   },
   async mounted() {
-    this.fetchGenres();
-    try {
-      const response = await this.$http.get("/movie/popular");
-      this.movies = response.data.results;
-    } catch (error) {
-      console.log(error);
-    }
+    this.getMovies()
+    // this.getAllMovies();
   },
 
   methods: {
-    async fetchGenres() {
-      try {
-        const response = await this.$http.get("/genre/movie/list");
-        this.genres = response.data.genres;
-      } catch (error) {
-        console.log(error);
+    getMovies() {
+      let params = {
+        page: this.page,
+        size: this.size
       }
+
+      movieService.getMovies(params).then((response) => {
+        console.log(response);
+        let page = response.data;
+        this.movies = page.movies;
+      });
     },
+    getAllMovies() {
+      movieService.getAllMovies().then((response) => {
+        console.log(response);
+        this.movies = response.data.movies;
+      })
+    }
   },
 };
 </script>

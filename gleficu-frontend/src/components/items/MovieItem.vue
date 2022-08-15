@@ -1,8 +1,8 @@
 <template>
   <div>
-    <router-link :to="`/movie/${movie.id}`">
+    <router-link :to="`/movie/${movie.imdbID}`">
       <img
-        :src="posterPath"
+        :src="movie.poster"
         class="hover:opacity-75 tansition easy-in-out duration-150"
       />
     </router-link>
@@ -19,13 +19,11 @@
           />
         </g></svg
       ><span class="ml-2"
-        >{{ movie.vote_average * 10 }}% | {{ movie.release_date }} </span
+        >{{ movie.imdbRating * 10 }}% | {{ movie.released }} </span
       ><br />
     </div>
     <span class="text-sm text-gray-500">
-      <span :key="genre" v-for="(genre, index) in movie.genre_ids">
-        {{ genreTypeName(genre, index) }}
-      </span>
+      {{ movie.genre }}
     </span>
   </div>
 </template>
@@ -36,29 +34,9 @@ export default {
     movie: {
       required: true,
     },
-    genres: {
-      required: true,
-    },
-  },
-
-  computed: {
-    posterPath() {
-      return "https://image.tmdb.org/t/p/w500/" + this.movie.poster_path;
-    },
   },
 
   methods: {
-    genreTypeName(genraId, index) {
-      for (const item of this.genres) {
-        if (item.id === genraId) {
-          if (this.movie.genre_ids.length - 1 === index) {
-            return item.name;
-          } else {
-            return item.name + ",";
-          }
-        }
-      }
-    },
   },
 };
 </script>

@@ -15,6 +15,8 @@ func CreateRoutes(api *api.API) *mux.Router {
 	u := a.PathPrefix("/movie").Subrouter()
 	u.HandleFunc("/getByTitle", api.FindMovieByTitle).Methods("POST")
 	u.HandleFunc("/saveMovie", api.SaveMovie).Methods("POST")
+	u.HandleFunc("/getMovies", api.GetMovies).Methods("GET")
+	u.HandleFunc("/getAllMovies", api.GetAllMovies).Methods("GET")
 
 	return muxRouter
 }
