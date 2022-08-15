@@ -24,6 +24,7 @@ var MovieVar = models.Movie{
 	Plot:       "",
 	Language:   "",
 	Country:    "",
+	Poster:     "",
 	ImdbRating: "",
 	Metascore:  "",
 	ImdbVotes:  "",
@@ -78,6 +79,7 @@ func FindByTitle(movieName string, movieYear string) models.Movie {
 		fmt.Printf("\nDirector: %s\n", MovieVar.Director)
 		fmt.Printf("Writer: %s\n", MovieVar.Writer)
 		fmt.Printf("Stars: %s\n", MovieVar.Actors)
+		fmt.Printf("\nPoster: %s\n", MovieVar.Poster)
 		fmt.Printf("\nImdb Page: http://www.imdb.com/title/%s\n", MovieVar.ImdbID)
 	} else {
 		fmt.Printf("%s\n", MovieVar.Error)

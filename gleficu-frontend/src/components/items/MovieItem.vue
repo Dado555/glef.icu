@@ -50,8 +50,8 @@ export default {
   methods: {
     genreTypeName(genraId, index) {
       for (const item of this.genres) {
-        if (item.id == genraId) {
-          if (this.movie.genre_ids.length - 1 == index) {
+        if (item.id === genraId) {
+          if (this.movie.genre_ids.length - 1 === index) {
             return item.name;
           } else {
             return item.name + ",";

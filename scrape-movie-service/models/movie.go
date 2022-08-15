@@ -15,6 +15,7 @@ type Movie struct {
 	Plot       string
 	Language   string
 	Country    string
+	Poster     string
 	ImdbRating string
 	Metascore  string
 	ImdbVotes  string
