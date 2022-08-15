@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {movieService} from "@/services/movieService";
+
 export default {
   name: "MovieItemOmdb",
   props: {
@@ -41,7 +43,19 @@ export default {
   },
   methods: {
     saveMovie() {
-
+      movieService.saveMovie(this.movie).then((response) => {
+        console.log(response);
+        console.log("MOVIE SAVED");
+        this.open();
+      });
+    },
+    open() {
+      this.$toast.open({
+        message: "Movie saved successfully!",
+        type: "success",
+        duration: 3000,
+        dismissible: true
+      })
     }
   }
 }

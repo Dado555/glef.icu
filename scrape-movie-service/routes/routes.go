@@ -5,7 +5,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func CreateRoutes() *mux.Router {
+func CreateRoutes(api *api.API) *mux.Router {
 	muxRouter := mux.NewRouter()
 
 	// api
@@ -14,6 +14,7 @@ func CreateRoutes() *mux.Router {
 	// users
 	u := a.PathPrefix("/movie").Subrouter()
 	u.HandleFunc("/getByTitle", api.FindMovieByTitle).Methods("POST")
+	u.HandleFunc("/saveMovie", api.SaveMovie).Methods("POST")
 
 	return muxRouter
 }

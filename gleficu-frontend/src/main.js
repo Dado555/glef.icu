@@ -6,6 +6,7 @@ import "@/assets/css/styles.css";
 import "@/assets/css/elementui.css"
 import "@/assets/css/themifyicons.css"
 import api from "./services/api";
+import VueToast from 'vue-toast-notification';
 
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -20,6 +21,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(Element, { locale })
 Vue.use(FormWizard);
+Vue.use(VueToast);
 
 Vue.filter("capitalize", function (param) {
   if (!param) return "N/A";
