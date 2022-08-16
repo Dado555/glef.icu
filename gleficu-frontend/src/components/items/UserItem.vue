@@ -7,8 +7,8 @@
 <!--      <p class="text-gray-400">-->
 <!--        {{ knownFor }}-->
 <!--      </p>-->
+      <button class="px-4 py-1.5 rounded-lg bg-red-500  bg-white shadow-xl">Can be banned</button>
     </router-link>
-    <button class="px-4 py-1.5 rounded-lg bg-yellow-500  bg-white shadow-xl">Ban user</button>
   </div>
 </template>
 

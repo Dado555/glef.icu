@@ -1,10 +1,10 @@
 package models
 
 import (
+	"github.com/golang-jwt/jwt"
 	"github.com/jinzhu/gorm"
 	// postgres db driver
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,7 +12,21 @@ type User struct {
 	gorm.Model `json:"-"`
 	Username   string `gorm:"not null;unique" json:"username"`
 	Password   string `gorm:"not null" json:"-"`
-	UUID       string `gorm:"not null;unique" json:"uuid"`
+	RoleID     uint   `gorm:"not null" json:"roleId"`
+	Banned     bool   `gorm:"not null" json:"banned"`
+}
+
+type JwtClaims struct {
+	jwt.StandardClaims
+	Role     string `json:"role"`
+	Username string `json:"username"`
+}
+
+type UserDTO struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	RoleId   uint   `json:"role"`
+	Banned   bool   `json:"banned"`
 }
 
 type UserManager struct {
@@ -31,11 +45,9 @@ func NewUserManager(db *DB) (*UserManager, error) {
 // AddUser - Creates a user and hashes the password
 func (state *UserManager) AddUser(username, password string) *User {
 	passwordHash := state.HashPassword(password)
-	guid := uuid.NewV4()
 	user := &User{
 		Username: username,
 		Password: passwordHash,
-		UUID:     guid.String(),
 	}
 	state.db.Create(&user)
 	return user
@@ -48,10 +60,10 @@ func (state *UserManager) FindUser(username string) *User {
 	return &user
 }
 
-// FindUserByUUID - return User by uuid
-func (state *UserManager) FindUserByUUID(uuid string) *User {
+// FindUserByID - return User by id
+func (state *UserManager) FindUserByID(id uint) *User {
 	user := User{}
-	state.db.Where("uuid=?", uuid).Find(&user)
+	state.db.Where("id=?", id).Find(&user)
 	return &user
 }
 
@@ -78,4 +90,18 @@ func (state *UserManager) CheckPassword(hashedPassword, password string) bool {
 		return false
 	}
 	return true
+}
+
+func (state *UserManager) UpdateUser(user *User) {
+	state.db.Save(user)
+}
+
+func (state *UserManager) GetAllUsers() ([]User, error) {
+	var users []User
+	dbRes := state.db.Find(&users)
+	return users, dbRes.Error
+}
+
+func UserToUserDTO(user *User) UserDTO {
+	return UserDTO{ID: user.ID, Username: user.Username, RoleId: user.RoleID, Banned: user.Banned}
 }

@@ -34,7 +34,8 @@ func (api *API) UserLogin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	jsonToken := auth.GetJSONToken(user)
+	role, _ := api.roles.FindRoleById(user.RoleID)
+	jsonToken := auth.GetJSONToken(user, role.Name)
 
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write([]byte(jsonToken))
@@ -67,7 +68,8 @@ func (api *API) UserSignup(w http.ResponseWriter, req *http.Request) {
 
 	user := api.users.AddUser(jsonData.Username, jsonData.Password)
 
-	jsonToken := auth.GetJSONToken(user)
+	role, _ := api.roles.FindRoleById(user.RoleID)
+	jsonToken := auth.GetJSONToken(user, role.Name)
 
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write([]byte(jsonToken))
@@ -79,7 +81,7 @@ func (api *API) UserSignup(w http.ResponseWriter, req *http.Request) {
 
 func (api *API) GetUserFromContext(req *http.Request) *models.User {
 	userClaims := auth.GetUserClaimsFromContext(req)
-	user := api.users.FindUserByUUID(userClaims["uuid"].(string))
+	user := api.users.FindUserByID(userClaims["id"].(uint))
 	return user
 }
 
@@ -93,4 +95,26 @@ func (api *API) UserInfo(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "Could not get user info", http.StatusBadRequest)
 		return
 	}
+}
+
+func (api *API) AdminAuthorize(w http.ResponseWriter, req *http.Request) {
+	authorize(w, req, "ADMIN")
+}
+
+func (api *API) UserAuthorize(w http.ResponseWriter, req *http.Request) {
+	authorize(w, req, "USER")
+}
+
+func authorize(w http.ResponseWriter, req *http.Request, role string) {
+	w.Header().Set("Content-Type", "application/json")
+	token, err := auth.ExtractJWT(req)
+	if err != nil || !token.Valid {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+	if token.Claims.(*models.JwtClaims).Role != role {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }

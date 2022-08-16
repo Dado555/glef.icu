@@ -95,18 +95,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           <div :key="movie.id" v-for="movie in this.knownFor">
-            <router-link
-              :to="`/movie/${movie.id}`"
-              class="text-gray-400 text-sm leading-normal hover:text-white"
-            >
               <img
                 :src="movieImage(movie)"
                 alt="poster"
                 class="mt-1 hover:opacity-75 transition ease-in-out duration-150"
               />
-
               {{ movie.name }}
-            </router-link>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"github.com/Dado555/glef.icu/user-service/models"
 	jwtMiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
@@ -22,18 +23,36 @@ var JwtMiddleware = jwtMiddleware.New(jwtMiddleware.Options{
 })
 
 // GetToken create a jwt token with user claims
-func GetToken(user *models.User) string {
+func GetToken(user *models.User, roleName string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["uuid"] = user.UUID
+	claims["sub"] = user.Username
+	claims["userId"] = user.ID
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	claims["iat"] = time.Now().Unix()
+	claims["role"] = roleName
 	signedToken, _ := token.SignedString(signingKey)
 	return signedToken
 }
 
+func ExtractJWT(request *http.Request) (*jwt.Token, error) {
+	authorizationHeader := request.Header.Get("Authorization")
+	if len(authorizationHeader) == 0 {
+		return nil, errors.New("no Authorization header found")
+	}
+
+	tokenString := authorizationHeader[7:]
+	token, err := jwt.ParseWithClaims(tokenString, &models.JwtClaims{},
+		func(t *jwt.Token) (interface{}, error) {
+			return signingKey, nil
+		})
+
+	return token, err
+}
+
 // GetJSONToken create a JSON token string
-func GetJSONToken(user *models.User) string {
-	token := GetToken(user)
+func GetJSONToken(user *models.User, roleName string) string {
+	token := GetToken(user, roleName)
 	jsonToken := "{\"id_token\": \"" + token + "\"}"
 	return jsonToken
 }

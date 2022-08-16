@@ -23,5 +23,12 @@ func CreateRoutes(api *api.API) *mux.Router {
 		negroni.Wrap(http.HandlerFunc(api.UserInfo)),
 	))
 
+	// admin
+	// u.HandleFunc("/ban/{username}", api.BanUser).Methods("GET")
+
+	// other services
+	// u.HandleFunc("/adminAuthorize", api.AuthorizeAdmin).Methods("GET")
+	// u.HandleFunc("/userAuthorize", api.AuthorizeUser).Methods("GET")
+
 	return muxRouter
 }
