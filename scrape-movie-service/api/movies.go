@@ -147,3 +147,18 @@ func (api *API) WatchMagnet(w http.ResponseWriter, req *http.Request) {
 	//fmt.Println(subtitlePath)
 	downloadPlay.HandleWatchTorrentMagnet(jsonData.MagnetLink)
 }
+
+func (api *API) SearchMovies(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	queryParams := request.URL.Query()
+
+	fmt.Println(queryParams)
+	title := queryParams.Get("title")
+	movies := api.movies.SearchMovies(title)
+
+	err := json.NewEncoder(w).Encode(movies)
+	if err != nil {
+		http.Error(w, "Could not return movies list", http.StatusBadRequest)
+		return
+	}
+}

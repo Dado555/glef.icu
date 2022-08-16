@@ -24,13 +24,13 @@
 
     <div class="absolute mt-12 rounded bg-gray-600 w-60 z-50">
       <ul class="mt-3" v-if="showSearchResult">
-        <li :key="index" v-for="(movie, index) in searchResult">
+        <li :key="movie.imdbID" v-for="movie in searchResult">
           <router-link
-            :to="`/movie/${movie.id}`"
+            :to="`/movie/${movie.imdbID}`"
             @click.native="showSearchResult = false"
             class="flex items-center border-b border-gray-500 p-1"
           >
-            <img :src="posterPath(movie.poster_path)" alt="" class="w-10" />
+            <img :src="movie.poster" alt="" class="w-10" />
             <span class="ml-3">{{ movie.title }}</span>
           </router-link>
         </li>
@@ -40,12 +40,13 @@
       </ul>
     </div>
 
-    <account-drop-down @logout="logout"/>
+    <account-drop-down/>
   </div>
 </template>
 
 <script>
 import AccountDropDown from "@/components/header/AccountDropDown";
+import {movieService} from "@/services/movieService";
 
 export default {
   components: {AccountDropDown},
@@ -60,10 +61,6 @@ export default {
     this.keyboardEvents();
   },
   methods: {
-    logout() {
-      this.$emit('logout')
-    },
-
     debounceSearch(event) {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(() => {
@@ -77,16 +74,25 @@ export default {
 
     async fetchSearch(term) {
       try {
-        const response = await this.$http.get("/search/movie?query=" + term);
-        this.searchResult = response.data.results;
-        this.showSearchResult = response.data.results ? true : false;
+        let searchTerm = {
+          title: term
+        }
+        movieService.searchMovies(searchTerm).then((response) => {
+          console.log(response);
+          console.log(response.data);
+          this.searchResult = response.data;
+          this.showSearchResult = response.data ? true : false
+        });
+        // const response = await this.$http.get("/search/movie?query=" + term);
+        // this.searchResult = response.data.results;
+        // this.showSearchResult = response.data.results ? true : false;
       } catch (error) {
         console.log(error);
       }
     },
 
     handleFocus() {
-      if (this.searchTerm != "") {
+      if (this.searchTerm !== "") {
         this.showSearchResult = true;
       }
     },
@@ -100,23 +106,16 @@ export default {
       });
 
       window.addEventListener("keypress", (e) => {
-        if (e.keyCode == "47") {
+        if (e.keyCode === "47") {
           e.preventDefault();
           windowObj.$refs.searchBox.focus();
         }
       });
       window.addEventListener("keydown", (e) => {
-        if (e.key == "Escape") {
+        if (e.key === "Escape") {
           this.showSearchResult = false;
         }
       });
-    },
-    posterPath(poster_path) {
-      if (poster_path) {
-        return "https://image.tmdb.org/t/p/w500/" + poster_path;
-      } else {
-        return "https://via.placeholder.com/50x75";
-      }
     },
   },
 };

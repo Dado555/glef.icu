@@ -156,3 +156,9 @@ func (state *MovieManager) GetMovies(page uint64, size uint64) []models.MovieDb 
 	state.db.Find(&movies).Offset(int(page * size)).Limit(int(size))
 	return movies
 }
+
+func (state *MovieManager) SearchMovies(title string) []models.MovieDb {
+	var movies []models.MovieDb
+	state.db.Where("LOWER(title) LIKE ?", "%"+title+"%").Find(&movies)
+	return movies
+}
