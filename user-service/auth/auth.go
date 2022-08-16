@@ -26,11 +26,10 @@ var JwtMiddleware = jwtMiddleware.New(jwtMiddleware.Options{
 func GetToken(user *models.User, roleName string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["sub"] = user.Username
-	claims["userId"] = user.ID
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	claims["iat"] = time.Now().Unix()
-	claims["role"] = roleName
+	claims["username"] = user.Username
+	claims["authority"] = roleName
 	signedToken, _ := token.SignedString(signingKey)
 	return signedToken
 }

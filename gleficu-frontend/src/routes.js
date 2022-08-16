@@ -47,13 +47,19 @@ let router = new VueRouter({
       path: "/add-movie",
       name: "addMovie",
       component: NewMoviePage,
-      meta: {}
+      meta: {
+        authenticated: true,
+        authorities: ["ADMIN"],
+      }
     },
     {
       path: "/merge-movie",
       name: "mergeMovie",
       component: Attachment,
-      meta: {}
+      meta: {
+        authenticated: true,
+        authorities: ["USER"],
+      }
     },
     {
       path: "/actors",
@@ -78,8 +84,8 @@ let router = new VueRouter({
       name: "users",
       component: Users,
       meta: {
-        authenticated: false,
-        authorities: []
+        authenticated: true,
+        authorities: ["ADMIN"],
       }
     },
     {
@@ -87,15 +93,18 @@ let router = new VueRouter({
       name: "user",
       component: UserDetail,
       meta: {
-        authenticated: false,
-        authorities: [],
+        authenticated: true,
+        authorities: ["ADMIN","USER"],
       },
     },
     {
       path: "/recommend-movie",
       name: "recommendMovie",
       component: RecommendMeMovie,
-      meta: {}
+      meta: {
+        authenticated: true,
+        authorities: ["USER"],
+      }
     },
     {
       path: '/',

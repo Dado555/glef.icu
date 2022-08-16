@@ -86,10 +86,10 @@ export default {
 
   methods: {
     logout() {
-      authService.logout(this);
       this.loggedIn = false;
       this.roles = "";
-      this.$emit('logout');
+      this.$store.dispatch("setLogoutUser");
+      this.$router.push({ name: "login" }).catch(() => {});
     },
     redirect(name) {
       this.$router.push({ name }).catch(() => {});

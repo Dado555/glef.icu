@@ -7,14 +7,13 @@ import "@/assets/css/elementui.css"
 import "@/assets/css/themifyicons.css"
 import api from "./services/api";
 import VueToast from 'vue-toast-notification';
-
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 
 import Element from 'element-ui'
 import FormWizard from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import locale from 'element-ui/lib/locale/lang/en'
+import store from "./store";
 
 Vue.prototype.$http = api;
 Vue.config.productionTip = false;
@@ -53,16 +52,11 @@ router.beforeEach((to, from, next) => {
   const { authenticated, authorities } = to.meta;
 
   if (authenticated) {
-    let jwt = localStorage.getItem("id_token");
-    if (jwt) {
-      let decodedToken = jwt_decode(jwt);
-      if (authorities.some((element) => decodedToken.roles.includes(element))) {
-        next();
-      } else {
-        next({ name: "Login" });
-      }
+    let userAuthority = store.state.user.authority;
+    if (authorities.some((element) => element === userAuthority)) {
+      next();
     } else {
-      next({ name: "Login" });
+      next({ name: "login" });
     }
   } else {
     next();
@@ -70,6 +64,7 @@ router.beforeEach((to, from, next) => {
 });
 
 new Vue({
-  render: (h) => h(App),
   router: router,
+  store,
+  render: (h) => h(App),
 }).$mount("#app");

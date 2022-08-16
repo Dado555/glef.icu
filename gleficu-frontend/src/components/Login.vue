@@ -79,6 +79,7 @@
 
 <script>
 import {authService} from "@/services/authService";
+import jwtDecode from "jwt-decode";
 
 export default {
   name: "Login",
@@ -113,26 +114,33 @@ export default {
         username: this.loginInfo.email,
         password: this.loginInfo.password
       }
-      authService.login(this, credentials, '/home')
-      // authService
-      //     .login(this.loginInfo)
-      //     .then((response) => {
-      //       let decodedToken = jwtDecode(response.data.jwt);
-      //       authService.setToken(response.data.jwt);
-      //       this.$root.$emit("loginSuccess", decodedToken.roles);
-      //       this.$router.push({ name: "Home" });
-      //     })
-      //     .catch((error) => {
-      //       if (error.response) this.text = error.response.data.message;
-      //       else this.text = "Wrong username/password combination.";
-      //     });
+      authService.login(credentials).then(response => {
+        console.log(response);
+        this.loginAction(response, "/home", this);
+      }, response => {
+        this.error = response.statusText
+      })
     },
     register() {
       let credentials = {
         username: this.registerInfo.email,
         password: this.registerInfo.password
       }
-      authService.signup(this, credentials, '/home')
+      authService.signup(credentials).then(response => {
+        console.log(response);
+        this.loginAction(response, "/home", this);
+      }, response => {
+        this.error = response.statusText
+      })
+    },
+    loginAction(response, redirect, context) {
+      let token = response.data.id_token;
+      let decoded = jwtDecode(token);
+      this.$store.dispatch("setUserLoggedIn", {username: decoded.username,
+        authority: decoded.authority, token: token})
+      if (redirect) {
+        context.$router.replace(redirect)
+      }
     }
   },
 };

@@ -28,3 +28,14 @@ func (state *RoleManager) FindRoleById(id uint) (*Role, error) {
 	state.db.Where("id=?", id).Find(&role)
 	return &role, nil
 }
+
+func (state *RoleManager) InitDatabase() {
+	roles := []Role{
+		{Name: "ADMIN"},
+		{Name: "USER"},
+	}
+
+	for _, role := range roles {
+		state.db.Create(&role)
+	}
+}

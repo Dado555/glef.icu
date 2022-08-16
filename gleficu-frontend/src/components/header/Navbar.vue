@@ -11,7 +11,7 @@
         </router-link>
       </li>
       <li>
-        <router-link v-if="isAuthenticated()" to="/add-movie" class="ml-5">
+        <router-link v-if="isAdmin()" to="/add-movie" class="ml-5">
           Add New Movie
         </router-link>
       </li>
@@ -21,17 +21,17 @@
         </router-link>
       </li>
       <li>
-        <router-link v-if="isAuthenticated()" to="/users" class="ml-5">
+        <router-link v-if="isAdmin()" to="/users" class="ml-5">
           Users
         </router-link>
       </li>
       <li>
-        <router-link v-if="isAuthenticated()" to="/merge-movie" class="ml-5">
+        <router-link v-if="isUser()" to="/merge-movie" class="ml-5">
           Merge M&S
         </router-link>
       </li>
       <li>
-        <router-link v-if="isAuthenticated()" to="/recommend-movie" class="ml-5">
+        <router-link v-if="isUser()" to="/recommend-movie" class="ml-5">
           Recommend Me Movie
         </router-link>
       </li>
@@ -53,8 +53,11 @@ export default {
     logout() {
       authService.logout(this)
     },
-    isAuthenticated() {
-      return authService.isAuthenticated()
+    isAdmin() {
+      return authService.isAdmin()
+    },
+    isUser() {
+      return authService.isUser()
     }
   }
 };

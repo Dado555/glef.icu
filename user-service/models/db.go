@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type DB struct {
@@ -19,4 +20,12 @@ func NewPostgresDatabase(dataSource string) *DB {
 	}
 
 	return &DB{db}
+}
+
+func HashPassword(password string) string {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		panic("Could not hash the password!")
+	}
+	return string(hash)
 }

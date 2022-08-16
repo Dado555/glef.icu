@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/Dado555/glef.icu/user-service/auth"
 	"github.com/Dado555/glef.icu/user-service/models"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
@@ -112,9 +113,49 @@ func authorize(w http.ResponseWriter, req *http.Request, role string) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
-	if token.Claims.(*models.JwtClaims).Role != role {
+	if token.Claims.(*models.JwtClaims).Authority != role {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func (api *API) BanUser(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(req)
+	username := params["username"]
+
+	user := api.users.FindUser(username)
+	if user == nil {
+		http.Error(w, "Could not get user", http.StatusBadRequest)
+	} else {
+		if user.ID == 1 {
+			http.Error(w, "Cannot ban admin", http.StatusBadRequest)
+		} else {
+			user.Banned = true
+			api.users.UpdateUser(user)
+		}
+	}
+}
+
+func (api *API) GetUsernameFromJWT(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	token, err := auth.ExtractJWT(req)
+	if err != nil || !token.Valid {
+		w.WriteHeader(http.StatusForbidden)
+		err := json.NewEncoder(w).Encode(models.UserJWTExtract{Username: "", Role: ""})
+		if err != nil {
+			http.Error(w, "Could not encode user info from token", http.StatusBadRequest)
+			return
+		}
+	} else {
+		w.WriteHeader(http.StatusOK)
+		username := token.Claims.(*models.JwtClaims).Username
+		role := token.Claims.(*models.JwtClaims).Authority
+		err := json.NewEncoder(w).Encode(models.UserJWTExtract{Username: username, Role: role})
+		if err != nil {
+			http.Error(w, "Could not encode user info from token", http.StatusBadRequest)
+			return
+		}
+	}
 }

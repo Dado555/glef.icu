@@ -18,8 +18,8 @@ type User struct {
 
 type JwtClaims struct {
 	jwt.StandardClaims
-	Role     string `json:"role"`
-	Username string `json:"username"`
+	Authority string `json:"authority"`
+	Username  string `json:"username"`
 }
 
 type UserDTO struct {
@@ -27,6 +27,11 @@ type UserDTO struct {
 	Username string `json:"username"`
 	RoleId   uint   `json:"role"`
 	Banned   bool   `json:"banned"`
+}
+
+type UserJWTExtract struct {
+	Username string `json:"username"`
+	Role     string `json:"role"`
 }
 
 type UserManager struct {
@@ -104,4 +109,19 @@ func (state *UserManager) GetAllUsers() ([]User, error) {
 
 func UserToUserDTO(user *User) UserDTO {
 	return UserDTO{ID: user.ID, Username: user.Username, RoleId: user.RoleID, Banned: user.Banned}
+}
+
+func (state *UserManager) InitDatabase() {
+	users := []User{
+		{
+			Username: "admin", Password: HashPassword("admin"), RoleID: 1, Banned: false,
+		},
+		{
+			Username: "user", Password: HashPassword("user"), RoleID: 2, Banned: false,
+		},
+	}
+
+	for _, user := range users {
+		state.db.Create(&user)
+	}
 }

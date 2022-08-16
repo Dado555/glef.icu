@@ -22,8 +22,10 @@ func main() {
 
 	db := models.NewPostgresDatabase(connStr)
 	api := api2.CreateAPI(db)
-	routes := routes2.CreateRoutes(api)
+	// first run
+	// api.DbInit()
 
+	routes := routes2.CreateRoutes(api)
 	handler := corsHandler.Handler(routes)
 	err := http.ListenAndServe(":3000", handler)
 	if err != nil {
