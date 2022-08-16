@@ -6,7 +6,7 @@
 
     <ul class="flex mt-5">
       <li>
-        <router-link to="/home" class="ml-5">
+        <router-link to="/" class="ml-5">
           Movies
         </router-link>
       </li>

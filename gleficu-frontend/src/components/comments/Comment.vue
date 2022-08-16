@@ -5,7 +5,7 @@
       <br/>
       <AwesomeVueStarRating
           :star="this.star"
-          :disabled="this.disabled"
+          :disabled="!isUser()"
           :maxstars="this.maxStars"
           :starsize="this.starSize"
           :hasresults="this.hasResults"
@@ -14,9 +14,9 @@
       />
       <p>I found this article helpful</p>
       <div class="comment__flex-btn">
-        <button @click.prevent="openReportComment" class="update rounded bg-red-700 text-black cursor-auto">Report</button>
-        <button class="update rounded bg-yellow-500 text-black cursor-auto">Update</button>
-        <button class="del rounded bg-yellow-500 text-black cursor-auto">Delete</button>
+        <button @click.prevent="openReportComment" class="update rounded bg-red-700 text-black cursor-auto" v-if="isUser()">Report</button>
+        <button class="update rounded bg-yellow-500 text-black cursor-auto" v-if="isUser()">Update</button>
+        <button class="del rounded bg-yellow-500 text-black cursor-auto" v-if="isUser()">Delete</button>
       </div>
     </div>
 
@@ -27,6 +27,7 @@
 <script>
 import AwesomeVueStarRating from "awesome-vue-star-rating";
 import ReportCommentModal from "@/components/comments/ReportCommentModal";
+import {authService} from "@/services/authService";
 
 export default {
   name: "Comment",
@@ -70,6 +71,12 @@ export default {
   methods: {
     openReportComment() {
       this.reportComment = true;
+    },
+    isAdmin() {
+      return authService.isAdmin()
+    },
+    isUser() {
+      return authService.isUser()
     }
   }
 }

@@ -5,6 +5,8 @@ const GET_MOVIE_BY_TITLE = API_URL + 'getByTitle'
 const SAVE_MOVIE = API_URL + "saveMovie"
 const GET_MOVIES_PARAMS = API_URL + "getMovies"
 const GET_ALL_MOVIES = API_URL + "getAllMovies"
+const GET_MOVIE_BY_IMDB_ID = API_URL + "getByImdbId"
+const WATCH_MAGNET = API_URL + "watchMagnet"
 
 class MovieService {
     getByTitle(movie) {
@@ -42,6 +44,18 @@ class MovieService {
                 Authorization: "Bearer " + localStorage.getItem("id_token"),
             },
         });
+    }
+
+    getMovieByImdbId(imdbId) {
+        return axios.get(GET_MOVIE_BY_IMDB_ID + `/${imdbId}`, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("id_token"),
+            },
+        })
+    }
+
+    watchMagnet(watchLive) {
+        return axios.post(WATCH_MAGNET, watchLive)
     }
 }
 

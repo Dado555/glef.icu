@@ -17,6 +17,8 @@ func CreateRoutes(api *api.API) *mux.Router {
 	u.HandleFunc("/saveMovie", api.SaveMovie).Methods("POST")
 	u.HandleFunc("/getMovies", api.GetMovies).Methods("GET")
 	u.HandleFunc("/getAllMovies", api.GetAllMovies).Methods("GET")
+	u.HandleFunc("/getByImdbId/{imdbId}", api.GetMovieByImdbId).Methods("GET")
+	u.HandleFunc("/watchMagnet", api.WatchMagnet).Methods("POST")
 
 	return muxRouter
 }

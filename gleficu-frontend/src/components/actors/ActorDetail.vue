@@ -94,7 +94,7 @@
         <h4 class="mt-12 font-semibold">Known For</h4>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
-          <div :key="movie.id" v-for="movie in this.knownFor">
+          <div :key="movie.id+Math.ceil(Math.random()*100000)" v-for="movie in this.knownFor">
               <img
                 :src="movieImage(movie)"
                 alt="poster"
@@ -110,7 +110,7 @@
       <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Credits</h2>
         <ul class="list-disc leading-loose pl-5 mt-8">
-          <li :key="cast.id" v-for="cast in castMovies">
+          <li :key="cast.id+Math.ceil(Math.random()*100000)" v-for="cast in castMovies">
             <strong>{{ castDetails(cast) }} </strong>
             <router-link :to="`/movie/${cast.id}`" class="hover:underline">
               {{ cast.title }}

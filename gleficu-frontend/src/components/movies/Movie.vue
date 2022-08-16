@@ -17,7 +17,7 @@
 
           <span :key="index" v-for="(item, index) in movie.genres" class="ml-1">
             {{ item.name }}
-            <span v-if="movie.genres.length - 1 != index">,</span>
+            <span v-if="movie.genres.length - 1 !== index">,</span>
           </span>
         </span>
         <p class="mt-5">
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="mt-5">
-          <a href="#" class="rounded bg-red-700 px-5 py-3 inline-flex text-black ml-5" @click.prevent="openEditMovie">
+          <a href="#" class="rounded bg-red-700 px-5 py-3 inline-flex text-black ml-5" v-if="isAdmin()" @click.prevent="openEditMovie">
             <img src="@/assets/images/Pencil-icon.png" alt=""/>
             <span class="ml-3">Edit Movie</span>
           </a>
@@ -54,30 +54,45 @@
             <span class="ml-3">Play Trailer</span>
           </a>
 
-          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="isUser()">
             <img src="@/assets/images/heart-white.png" alt="" />
             <span class="ml-3">Wishlist</span>
           </a>
 
-          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="isUser()">
             <img src="@/assets/images/check-mark.png" alt="" />
             <span class="ml-3">Mark Watched</span>
+          </a>
+
+          <a v-if="movieDb" @click.prevent="watchMagnet()" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
+            <img src="@/assets/images/eye.png" alt="" />
+            <span class="ml-3">Watch Now!</span>
+          </a>
+
+          <a v-if="movieDb" :href="movieDb.torrentLinks" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" style="margin-top: 20px">
+            <img src="@/assets/images/torrent-file.png" alt="" />
+            <span class="ml-3">Download magnet</span>
+          </a>
+
+          <a v-if="movieDb" :href="movieDb.titleLinks" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" style="margin-top: 20px">
+            <img src="@/assets/images/subtitles2.png" alt="" />
+            <span class="ml-3">Download subtitle</span>
           </a>
         </div>
       </div>
     </div>
 
     <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
-      <h2 class="text-3xl font-semibold mb-5">Comment (1)</h2>
+      <h2 class="text-3xl font-semibold mb-5">Comments (1)</h2>
     </div>
     <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
       <comment class="message" />
     </div>
-    <add-comment/>
+    <add-comment v-if="isUser()"/>
 
-    <Cast :casts="movie.credits.cast" />
+    <Cast :casts="movie.credits.cast.slice(0, 30)" />
     <Images
-      :images="movie.images.backdrops"
+      :images="movie.images.backdrops.slice(0, 20)"
       v-on:on-image-click="showImageModel"
     />
     <MediaModel
@@ -99,6 +114,8 @@ import MediaModel from "../models/MediaModel";
 import AddComment from "@/components/comments/AddComment";
 import Comment from "@/components/comments/Comment";
 import EditMovieModal from "@/components/movies/EditMovieModal";
+import {authService} from "@/services/authService";
+import {movieService} from "@/services/movieService";
 
 export default {
   components: {
@@ -119,6 +136,7 @@ export default {
           backdrops: {},
         },
       },
+      movieDb: null,
       modelOpen: false,
       editMovie: false,
       isVideo: false,
@@ -165,12 +183,37 @@ export default {
       this.isVideo = false;
       this.modelOpen = true;
     },
+    isAdmin() {
+      return authService.isAdmin()
+    },
+    isUser() {
+      return authService.isUser()
+    },
+    getMovieDb(imdbId) {
+      movieService.getMovieByImdbId(imdbId).then((response)=> {
+        this.movieDb = response.data;
+        console.log(response.data);
+      })
+    },
+    watchMagnet() {
+      let watchLive = {
+        magnetLink: this.movieDb.torrentLinks,
+        subtitleLink: this.movieDb.titleLinks
+      }
+      movieService.watchMagnet(watchLive).then((response) =>  {
+        console.log(response);
+      })
+    }
   },
   computed: {
     posterPath() {
       return "https://image.tmdb.org/t/p/w500/" + this.movie.poster_path;
     },
   },
+  mounted() {
+    console.log("IMDB ID: " + this.$route.params.id);
+    this.getMovieDb(this.$route.params.id);
+  }
 };
 </script>
 

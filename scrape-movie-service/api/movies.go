@@ -3,8 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Dado555/glef.icu/scrape-movie-service/downloadPlay"
 	"github.com/Dado555/glef.icu/scrape-movie-service/models"
 	"github.com/Dado555/glef.icu/scrape-movie-service/service"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
@@ -103,4 +105,45 @@ func (api *API) GetAllMovies(w http.ResponseWriter, request *http.Request) {
 		http.Error(w, "Could not return movies list", http.StatusBadRequest)
 		return
 	}
+}
+
+func (api *API) GetMovieByImdbId(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(req)
+	imdbId := params["imdbId"]
+
+	movie := api.movies.FindMovieByImdbID(imdbId)
+	if movie == nil {
+		http.Error(w, "Could not find movie", http.StatusBadRequest)
+		return
+	}
+
+	err := json.NewEncoder(w).Encode(movie)
+	if err != nil {
+		http.Error(w, "Could not return movie", http.StatusBadRequest)
+		return
+	}
+}
+
+type WatchLive struct {
+	MagnetLink   string `json:"magnetLink"`
+	SubtitleLink string `json:"subtitleLink"`
+}
+
+func (api *API) WatchMagnet(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	decoder := json.NewDecoder(req.Body)
+	jsonData := WatchLive{}
+	err := decoder.Decode(&jsonData)
+
+	if err != nil || jsonData.MagnetLink == "" { // || jsonData.subtitleLink == ""
+		http.Error(w, "Missing magnet link or subtitle link", http.StatusBadRequest)
+		return
+	}
+
+	//folderName := DownloadSubtitle()
+	//subtitlePath := getSubtitleFilePath(folderName)
+	//fmt.Println(subtitlePath)
+	downloadPlay.HandleWatchTorrentMagnet(jsonData.MagnetLink)
 }

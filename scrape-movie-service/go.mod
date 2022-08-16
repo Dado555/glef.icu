@@ -5,6 +5,9 @@ go 1.19
 require (
 	github.com/PuerkitoBio/goquery v1.6.1 // indirect
 	github.com/andybalholm/cascadia v1.1.0 // indirect
+	github.com/artdarek/go-unzip v1.0.0 // indirect
+	github.com/cavaliercoder/grab v3.0.1+incompatible // indirect
+	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/deflix-tv/imdb2torrent v0.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/jinzhu/gorm v1.9.16 // indirect

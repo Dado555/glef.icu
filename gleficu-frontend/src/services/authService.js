@@ -34,27 +34,39 @@ class AuthService {
     }
 
     isAdmin() {
-        let username = this.getJwtField("username")
-        let role = this.getJwtField("authority")
-        if (username && role === "ADMIN")
-            return true;
-        return false;
+        try {
+            let username = this.getJwtField("username")
+            let role = this.getJwtField("authority")
+            if (username && role === "ADMIN")
+                return true;
+            return false;
+        } catch (error) {
+            return false;
+        }
     }
 
     isUser() {
-        let username = this.getJwtField("username")
-        let role = this.getJwtField("authority")
-        if (username && role === "USER")
-            return true;
-        return false;
+        try{
+            let username = this.getJwtField("username")
+            let role = this.getJwtField("authority")
+            if (username && role === "USER")
+                return true;
+            return false;
+        } catch (error) {
+            return false;
+        }
     }
 
     isUnregistered() {
-        let username = this.getJwtField("username")
-        let role = this.getJwtField("authority")
-        if (!username && !role || ( role !== "ADMIN" && role !== "USER"))
+        try {
+            let username = this.getJwtField("username")
+            let role = this.getJwtField("authority")
+            if (!username && (!role || ( role !== "ADMIN" && role !== "USER")))
+                return true;
+            return false;
+        } catch (error) {
             return true;
-        return false;
+        }
     }
 
     getAuthHeader () {
