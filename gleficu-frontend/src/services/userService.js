@@ -5,6 +5,7 @@ const SEARCH_USERS = API_URL + 'searchUsers'
 const GET_BY_USERNAME = API_URL + 'username'
 const GET_BY_ID = API_URL + 'id'
 const GET_USERS_PAGE = API_URL + 'getUsersPage'
+const UPDATE_USER = API_URL + 'updateUser'
 
 class UserService {
     searchUsers(searchTerm) {
@@ -41,6 +42,14 @@ class UserService {
 
         return axios.get(GET_USERS_PAGE, {
             params: newParams,
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("id_token"),
+            },
+        });
+    }
+
+    updateUser(userId, payload) {
+        return axios.put(UPDATE_USER + `/${userId}`, payload, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("id_token"),
             },

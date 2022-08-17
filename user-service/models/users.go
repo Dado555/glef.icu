@@ -37,6 +37,12 @@ type UserDTO struct {
 	FavouriteTags string `json:"favouriteTags"`
 }
 
+type UserUpdateDTO struct {
+	Gender        string `json:"gender"`
+	Age           uint   `json:"age"`
+	FavouriteTags string `json:"favouriteTags"`
+}
+
 type UsersPage struct {
 	Users *[]UserDTO `json:"users"`
 	// Page
@@ -108,6 +114,14 @@ func (state *UserManager) FindUserByIDDTO(id uint64) *UserDTO {
 // HasUser - User with this username exists?
 func (state *UserManager) HasUser(username string) bool {
 	if err := state.db.Where("username=?", username).Find(&User{}).Error; err != nil {
+		return false
+	}
+	return true
+}
+
+// HasUserId - User with this id exists?
+func (state *UserManager) HasUserId(id uint64) bool {
+	if err := state.db.Where("id=?", id).Find(&User{}).Error; err != nil {
 		return false
 	}
 	return true

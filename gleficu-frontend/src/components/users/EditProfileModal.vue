@@ -84,6 +84,14 @@ export default {
       }
     }
   },
+
+  // update user
+  // let payload = {
+  //   gender: "",
+  //   age: "",
+  //   favouriteTags: ""
+  // }
+
   data() {
     return {
       finalModel: {},

@@ -100,6 +100,15 @@ export default {
       })
     },
   },
+
+  // update movie
+  // let payload = {
+  //   imdbLink: "",
+  //   rottenLink: "",
+  //   torrentLinks: "",
+  //   titleLinks: ""
+  // }
+
   data() {
     return {
       finalModel: {},

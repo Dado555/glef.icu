@@ -25,8 +25,7 @@ func NewMovieManager(db *models.DB) (*MovieManager, error) {
 	return &movieMgr, nil
 }
 
-// AddMovie - Creates a movie
-func (state *MovieManager) AddMovie(movie models.Movie) *models.MovieDb {
+func FindTorrentMagnetAndSubtitleLink(movie models.Movie) (string, string) {
 	// Create new client
 	yts := imdb2torrent.NewYTSclient(imdb2torrent.DefaultYTSclientOpts, imdb2torrent.NewInMemoryCache(), zap.NewNop(), false)
 
@@ -81,7 +80,12 @@ func (state *MovieManager) AddMovie(movie models.Movie) *models.MovieDb {
 		//fmt.Println(subtitles)
 	}
 
-	// etc.
+	return torrentLinks, subtitles
+}
+
+// AddMovie - Creates a movie
+func (state *MovieManager) AddMovie(movie models.Movie) *models.MovieDb {
+	torrentLinks, subtitles := FindTorrentMagnetAndSubtitleLink(movie)
 
 	movieCreate := &models.MovieDb{
 		Type:         movie.Type,
@@ -161,4 +165,8 @@ func (state *MovieManager) SearchMovies(title string) []models.MovieDb {
 	var movies []models.MovieDb
 	state.db.Where("LOWER(title) LIKE ?", "%"+title+"%").Find(&movies)
 	return movies
+}
+
+func (state *MovieManager) UpdateMovie(movie *models.MovieDb) {
+	state.db.Save(movie)
 }

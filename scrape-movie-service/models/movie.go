@@ -58,3 +58,31 @@ type MovieDb struct {
 	TorrentLinks string `json:"torrentLinks"`
 	TitleLinks   string `json:"titleLinks"`
 }
+
+type MovieUpdateDTO struct {
+	ImdbLink     string `json:"imdbLink"`
+	RottenLink   string `json:"rottenLink"`
+	TorrentLinks string `json:"torrentLinks"`
+	TitleLinks   string `json:"titleLinks"`
+}
+
+func UpdateMovieData(original *MovieDb, new *Movie) {
+	original.Title = new.Title
+	original.ImdbID = new.ImdbID
+	original.Language = new.Language
+	original.ImdbVotes = new.ImdbVotes
+	original.Metascore = new.Metascore
+	original.ImdbRating = new.ImdbRating
+	original.Poster = new.Poster
+	original.Country = new.Country
+	original.Plot = new.Plot
+	original.Actors = new.Actors
+	original.Writer = new.Writer
+	original.Director = new.Director
+	original.Genre = new.Genre
+	original.Runtime = new.Runtime
+	original.Released = new.Released
+	original.Rated = new.Rated
+	original.Year = new.Year
+	original.Type = new.Type
+}

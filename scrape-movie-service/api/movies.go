@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"github.com/Dado555/glef.icu/scrape-movie-service/downloadPlay"
 	"github.com/Dado555/glef.icu/scrape-movie-service/models"
+	"github.com/Dado555/glef.icu/scrape-movie-service/repository"
 	"github.com/Dado555/glef.icu/scrape-movie-service/service"
 	"github.com/gorilla/mux"
 	"net/http"
+	"regexp"
 	"strconv"
 )
 
@@ -161,4 +163,53 @@ func (api *API) SearchMovies(w http.ResponseWriter, request *http.Request) {
 		http.Error(w, "Could not return movies list", http.StatusBadRequest)
 		return
 	}
+}
+
+func (api *API) UpdateMovie(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(req)
+	imdbId, _ := params["movieId"]
+
+	if !api.movies.HasMovie(imdbId) {
+		http.Error(w, "Movie does not exist", http.StatusBadRequest)
+		return
+	}
+
+	decoder := json.NewDecoder(req.Body)
+	jsonData := models.MovieUpdateDTO{}
+	err := decoder.Decode(&jsonData)
+
+	if err != nil {
+		http.Error(w, "Update data is wrong", http.StatusBadRequest)
+		return
+	}
+
+	movie := api.movies.FindMovieByImdbID(imdbId)
+	if len(jsonData.ImdbLink) > 10 {
+		// parse link and get imdbID
+		// get movie data with omdb
+		re := regexp.MustCompile("tt\\d{6,9}")
+		match := re.FindStringSubmatch(jsonData.ImdbLink)
+		if match == nil {
+			http.Error(w, "Not valid imdb link", http.StatusBadRequest)
+			return
+		}
+		updateMovie := service.FindByImdbId(match[0])
+		models.UpdateMovieData(movie, &updateMovie)
+		torrentLink, subtitleLink := repository.FindTorrentMagnetAndSubtitleLink(updateMovie)
+		movie.TorrentLinks = torrentLink
+		movie.TitleLinks = subtitleLink
+	}
+	if len(jsonData.RottenLink) > 10 {
+		// rotten link
+	}
+	if len(jsonData.TorrentLinks) > 10 {
+		movie.TorrentLinks = jsonData.TorrentLinks
+	}
+	if len(jsonData.TitleLinks) > 10 {
+		movie.TitleLinks = jsonData.TitleLinks
+	}
+
+	api.movies.UpdateMovie(movie)
 }

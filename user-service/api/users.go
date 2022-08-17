@@ -237,3 +237,37 @@ func (api *API) GetUsersPage(w http.ResponseWriter, request *http.Request) {
 		return
 	}
 }
+
+func (api *API) UpdateUser(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(req)
+	userId, _ := strconv.ParseUint(params["userId"], 10, 64)
+
+	if !api.users.HasUserId(userId) {
+		http.Error(w, "User does not exist", http.StatusBadRequest)
+		return
+	}
+
+	decoder := json.NewDecoder(req.Body)
+	jsonData := models.UserUpdateDTO{}
+	err := decoder.Decode(&jsonData)
+
+	if err != nil {
+		http.Error(w, "Update data is wrong", http.StatusBadRequest)
+		return
+	}
+
+	user := api.users.FindUserByID(userId)
+	if jsonData.Age > 14 {
+		user.Age = jsonData.Age
+	}
+	if jsonData.Gender == "male" || jsonData.Gender == "female" {
+		user.Gender = jsonData.Gender
+	}
+	if len(jsonData.FavouriteTags) > 3 {
+		user.FavouriteTags = jsonData.FavouriteTags
+	}
+
+	api.users.UpdateUser(user)
+}
