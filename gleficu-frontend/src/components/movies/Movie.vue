@@ -103,6 +103,7 @@
 
     <EditMovieModal
       v-model="editMovie"
+      :imdbId="this.$route.params.id"
     />
   </div>
 </template>

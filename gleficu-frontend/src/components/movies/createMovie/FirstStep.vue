@@ -41,7 +41,16 @@ export default {
         //     trigger: 'change'
         //   }],
       }
-    }},
+    }
+  },
+  props: {
+    magnetLink: {
+      required: true,
+    },
+    subtitleLink: {
+      required: true,
+    }
+  },
   methods: {
     validate() {
       return new Promise((resolve, ) => { // reject
@@ -50,10 +59,12 @@ export default {
           resolve(valid);
         });
       })
-
     }
+  },
+  mounted() {
+    this.model.downloadLink = this.magnetLink;
+    this.model.titleLink = this.subtitleLink;
   }
-
 }
 </script>
 

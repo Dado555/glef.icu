@@ -28,7 +28,9 @@
 
               <tab-content title="Movie and title links" icon="ti-video-clapper"
                            :before-change="() => validate('firstStep')" style="color: white">
-                <first-step ref="firstStep" @on-validate="onStepValidate"></first-step>
+                <first-step ref="firstStep" @on-validate="onStepValidate" v-if="this.movieDb"
+                :magnet-link="this.movieDb.torrentLinks" :subtitle-link="this.movieDb.titleLinks">
+                </first-step>
                 <!--        <el-button @click="forceClearError" style="background-color: rgb(32, 160, 255);border-color: rgb(32, 160, 255);color: white;">Try to clear the error</el-button>-->
               </tab-content>
               <tab-content title="Movie sites (IMDb or Rotten Tomatoes)" icon="ti-world"
@@ -61,6 +63,7 @@
 import FirstStep from "@/components/movies/createMovie/FirstStep";
 import SecondStep from "@/components/movies/createMovie/SecondStep";
 import prettyJSON from "@/components/movies/createMovie/prettyJson";
+import {movieService} from "@/services/movieService";
 
 export default {
   name: "EditMovieModal",
@@ -68,6 +71,9 @@ export default {
     value: {
       required: true,
     },
+    imdbId: {
+      required: true,
+    }
   },
   methods: {
     close() {
@@ -86,18 +92,28 @@ export default {
       if (validated) {
         this.finalModel = { ...this.finalModel, ...model };
       }
-    }
+    },
+    getMovieDb(imdbId) {
+      movieService.getMovieByImdbId(imdbId).then((response)=> {
+        this.movieDb = response.data;
+        console.log(response.data);
+      })
+    },
   },
   data() {
     return {
       finalModel: {},
-      activeTabIndex: 0
+      activeTabIndex: 0,
+      movieDb: null
     };
   },
   computed: {
     prettyJSON() {
       return prettyJSON(this.finalModel);
     }
+  },
+  mounted() {
+    this.getMovieDb(this.imdbId);
   },
   components: {
     FirstStep,

@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/Dado555/glef.icu/user-service/auth"
 	"github.com/Dado555/glef.icu/user-service/models"
 	"github.com/gorilla/mux"
@@ -157,5 +158,20 @@ func (api *API) GetUsernameFromJWT(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, "Could not encode user info from token", http.StatusBadRequest)
 			return
 		}
+	}
+}
+
+func (api *API) UserSearch(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	queryParams := req.URL.Query()
+
+	fmt.Println(queryParams)
+	name := queryParams.Get("name")
+	users := api.users.SearchUsers(name)
+
+	err := json.NewEncoder(w).Encode(users)
+	if err != nil {
+		http.Error(w, "Could not return users list", http.StatusBadRequest)
+		return
 	}
 }

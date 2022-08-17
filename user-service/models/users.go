@@ -125,3 +125,13 @@ func (state *UserManager) InitDatabase() {
 		state.db.Create(&user)
 	}
 }
+
+func (state *UserManager) SearchUsers(name string) []UserDTO {
+	var users []User
+	state.db.Where("LOWER(username) LIKE ?", "%"+name+"%").Find(&users)
+	var userDTOs []UserDTO
+	for _, us := range users {
+		userDTOs = append(userDTOs, UserDTO{ID: us.ID, Username: us.Username, RoleId: us.RoleID, Banned: us.Banned})
+	}
+	return userDTOs
+}

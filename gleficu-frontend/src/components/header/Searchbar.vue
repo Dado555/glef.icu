@@ -6,7 +6,7 @@
       class="rounded-full bg-gray-600 px-7 w-50 h-10 mr-3 focus:outline-none focus:outline-shawod"
       placeholder="Search.."
       style="width: 350px"
-      @input="debounceSearch"
+      @input="debounceSearch($event)"
       v-model="searchTerm"
       @focus="handleFocus"
     />
@@ -23,7 +23,7 @@
     </div>
 
     <div class="absolute mt-12 rounded bg-gray-600 w-60 z-50">
-      <ul class="mt-3" v-if="showSearchResult">
+      <ul class="mt-3" v-if="showSearchResult && searchResultType==='movies'">
         <li :key="movie.imdbID" v-for="movie in searchResult">
           <router-link
             :to="`/movie/${movie.imdbID}`"
@@ -32,6 +32,17 @@
           >
             <img :src="movie.poster" alt="" class="w-10" />
             <span class="ml-3">{{ movie.title }}</span>
+          </router-link>
+        </li>
+      </ul>
+      <ul class="mt-3" v-if="showSearchResult && searchResultType==='users'">
+        <li :key="user.id" v-for="user in searchResult">
+          <router-link
+              :to="`/user/${user.id}`"
+              @click.native="showSearchResult = false"
+              class="flex items-center border-b border-gray-500 p-1">
+            <img src="@/assets/images/avatar.jpg" alt="" class="w-10"/>
+            <span class="ml-3">{{ user.username }}</span>
           </router-link>
         </li>
       </ul>
@@ -47,6 +58,7 @@
 <script>
 import AccountDropDown from "@/components/header/AccountDropDown";
 import {movieService} from "@/services/movieService";
+import {userService} from "@/services/userService";
 
 export default {
   components: {AccountDropDown},
@@ -55,6 +67,7 @@ export default {
       searchResult: [],
       searchTerm: "",
       showSearchResult: false,
+      searchResultType: "none",
     };
   },
   mounted() {
@@ -64,8 +77,11 @@ export default {
     debounceSearch(event) {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(() => {
-        if (event.target.value.length > 3) {
-          this.fetchSearch(event.target.value);
+        if (event.target.value.length >= 3) {
+          if(this.$route.name === "home")
+            this.fetchSearch(event.target.value);
+          else if (this.$route.name === "users")
+            this.fetchUsersSearch(event.target.value);
         } else {
           this.showSearchResult = false;
         }
@@ -81,11 +97,27 @@ export default {
           console.log(response);
           console.log(response.data);
           this.searchResult = response.data;
-          this.showSearchResult = response.data ? true : false
+          this.searchResultType = "movies";
+          this.showSearchResult = response.data ? true : false;
         });
         // const response = await this.$http.get("/search/movie?query=" + term);
         // this.searchResult = response.data.results;
         // this.showSearchResult = response.data.results ? true : false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async fetchUsersSearch(term) {
+      try {
+        let searchTerm = {
+          name: term
+        }
+        userService.searchUsers(searchTerm).then((response) => {
+          this.searchResult = response.data;
+          this.searchResultType = "users";
+          this.showSearchResult = response.data ? true : false;
+        });
       } catch (error) {
         console.log(error);
       }
@@ -111,6 +143,7 @@ export default {
           windowObj.$refs.searchBox.focus();
         }
       });
+
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           this.showSearchResult = false;

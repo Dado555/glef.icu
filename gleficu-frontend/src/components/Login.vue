@@ -116,7 +116,7 @@ export default {
       }
       authService.login(credentials).then(response => {
         console.log(response);
-        this.loginAction(response, "/home", this);
+        this.loginAction(response, "/", this);
       }, response => {
         this.error = response.statusText
       })
@@ -128,7 +128,7 @@ export default {
       }
       authService.signup(credentials).then(response => {
         console.log(response);
-        this.loginAction(response, "/home", this);
+        this.loginAction(response, "/", this);
       }, response => {
         this.error = response.statusText
       })

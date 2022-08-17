@@ -29,14 +29,14 @@
       </li>
     </ul>
     <template>
-      <new-movie-input-info :key="1" v-if="activeTab === 1"/>
+<!--      <new-movie-input-info :key="1" v-if="activeTab === 1"/>-->
       <new-movie-input-title :key="2" v-if="activeTab === 2" ref="byTitle" @on-validate="onStepValidate"/>
     </template>
   </div>
 </template>
 
 <script>
-import NewMovieInputInfo from "@/components/movies/createMovie/NewMovieInputInfo";
+// import NewMovieInputInfo from "@/components/movies/createMovie/NewMovieInputInfo";
 import NewMovieInputTitle from "@/components/movies/createMovie/NewMovieInputTitle";
 
 export default {
@@ -45,12 +45,12 @@ export default {
     return {
       finalModel: {},
       activeTab: 2,
-      tabList: ["Insert links", "Find by title"],
+      tabList: ["Find by title"], // "Insert links"
     };
   },
   components: {
     NewMovieInputTitle,
-    NewMovieInputInfo
+    // NewMovieInputInfo
   },
   props: {
     variant: {
