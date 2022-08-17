@@ -14,12 +14,14 @@ export default new Vuex.Store({
   mutations: {
     SET_USER_LOGGED_IN(state, payload) {
       state.isUserLoggedIn = true;
+      state.user.id = payload.userId;
       state.user.username = payload.username;
       state.user.authority = payload.authority;
       localStorage.setItem("id_token", payload.token);
     },
     LOGOUT_USER(state) {
       state.isUserLoggedIn = false;
+      state.user.id = undefined;
       state.user.username = undefined;
       state.user.authority = undefined;
       localStorage.removeItem("id_token");

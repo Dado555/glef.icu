@@ -19,6 +19,9 @@ func CreateRoutes(api *api.API) *mux.Router {
 	u.HandleFunc("/signup", api.UserSignup).Methods("POST")
 	u.HandleFunc("/login", api.UserLogin).Methods("POST")
 	u.HandleFunc("/searchUsers", api.UserSearch).Methods("GET")
+	u.HandleFunc("/username/{username}", api.GetUserByUsername).Methods("GET")
+	u.HandleFunc("/id/{id}", api.GetUserById).Methods("GET")
+	u.HandleFunc("/getUsersPage", api.GetUsersPage).Methods("GET")
 	u.Handle("/info", negroni.New(
 		negroni.HandlerFunc(auth.JwtMiddleware.HandlerWithNext),
 		negroni.Wrap(http.HandlerFunc(api.UserInfo)),

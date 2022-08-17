@@ -7,6 +7,7 @@ import (
 	"github.com/Dado555/glef.icu/user-service/models"
 	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 type UserJSON struct {
@@ -83,7 +84,7 @@ func (api *API) UserSignup(w http.ResponseWriter, req *http.Request) {
 
 func (api *API) GetUserFromContext(req *http.Request) *models.User {
 	userClaims := auth.GetUserClaimsFromContext(req)
-	user := api.users.FindUserByID(userClaims["id"].(uint))
+	user := api.users.FindUserByID(userClaims["id"].(uint64))
 	return user
 }
 
@@ -170,6 +171,67 @@ func (api *API) UserSearch(w http.ResponseWriter, req *http.Request) {
 	users := api.users.SearchUsers(name)
 
 	err := json.NewEncoder(w).Encode(users)
+	if err != nil {
+		http.Error(w, "Could not return users list", http.StatusBadRequest)
+		return
+	}
+}
+
+func (api *API) GetUserById(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(req)
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+
+	user := api.users.FindUserByID(id)
+	if user == nil {
+		http.Error(w, "Could not find user", http.StatusBadRequest)
+		return
+	}
+
+	err := json.NewEncoder(w).Encode(user)
+	if err != nil {
+		http.Error(w, "Could not return user", http.StatusBadRequest)
+		return
+	}
+}
+
+func (api *API) GetUserByUsername(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(req)
+	name := params["username"]
+
+	user := api.users.FindUserDTO(name)
+	if user == nil {
+		http.Error(w, "Could not find user", http.StatusBadRequest)
+		return
+	}
+
+	err := json.NewEncoder(w).Encode(user)
+	if err != nil {
+		http.Error(w, "Could not return user", http.StatusBadRequest)
+		return
+	}
+}
+
+func (api *API) GetUsersPage(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	queryParams := request.URL.Query()
+
+	fmt.Println(queryParams)
+
+	page := queryParams.Get("page")
+	size := queryParams.Get("size")
+
+	pageParsed, _ := strconv.ParseUint(page, 10, 64)
+	sizeParsed, _ := strconv.ParseUint(size, 10, 64)
+
+	users := api.users.GetUsers(pageParsed, sizeParsed)
+
+	usersPage := models.UsersPage{
+		Users: users,
+	}
+
+	err := json.NewEncoder(w).Encode(usersPage)
 	if err != nil {
 		http.Error(w, "Could not return users list", http.StatusBadRequest)
 		return

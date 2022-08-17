@@ -19,8 +19,8 @@
       class="absolute bg-white py-2 rounded-lg w-48 right-0 mr-3 shadow-xl"
     >
       <a
-        v-if="!isUnauthorized()"
-        @click="redirect('profile')"
+        v-if="isUser()"
+        @click="redirectProfile()"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
         >Account Settings
       </a>
@@ -91,11 +91,14 @@ export default {
       this.$store.dispatch("setLogoutUser");
       this.$router.push({ name: "login" }).catch(() => {});
     },
-    redirect(name) {
-      this.$router.push({ name }).catch(() => {});
+    redirectProfile() {
+      this.$router.push('/user/' + this.$store.state.user.id.toString()).catch(() => {});
     },
     isUnauthorized() {
       return authService.isUnregistered()
+    },
+    isUser() {
+      return authService.isUser();
     }
   },
 };

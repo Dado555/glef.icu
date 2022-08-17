@@ -30,6 +30,7 @@ func GetToken(user *models.User, roleName string) string {
 	claims["iat"] = time.Now().Unix()
 	claims["username"] = user.Username
 	claims["authority"] = roleName
+	claims["userId"] = user.ID
 	signedToken, _ := token.SignedString(signingKey)
 	return signedToken
 }

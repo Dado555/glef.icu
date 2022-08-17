@@ -49,6 +49,7 @@
 
 <script>
 import UserItem from "@/components/items/UserItem";
+import {userService} from "@/services/userService";
 
 let currentPage = 1;
 
@@ -69,6 +70,7 @@ export default {
       activeTab: 1,
       tabList: ["All users", "Ban user", "Banned users"],
       users: [],
+      size: 20
     };
   },
 
@@ -77,7 +79,8 @@ export default {
   },
 
   mounted() {
-    this.fetchUsers(currentPage);
+    this.getUsers(currentPage);
+    // this.fetchUsers(currentPage);
     // this.scroll();
   },
 
@@ -93,6 +96,19 @@ export default {
       }
     },
 
+    getUsers() {
+      let params = {
+        page: currentPage,
+        size: this.size
+      }
+
+      userService.getUsersPage(params).then((response) => {
+        console.log(response);
+        let page = response.data;
+        this.users = page.users;
+      });
+    },
+
     scroll() {
       window.onscroll = () => {
         let bottomOfWindow =
@@ -101,18 +117,29 @@ export default {
 
         if (bottomOfWindow) {
           currentPage += 1;
-          this.fetchUsers((currentPage += 1));
+          //this.fetchUsers((currentPage += 1));
+          this.getUsers(currentPage);
         }
       };
     },
 
     next() {
-      currentPage += 1;
-      this.fetchUsers(currentPage);
+      if(this.users.len < 20) {
+        console.log("skip")
+      } else {
+        currentPage += 1;
+        // this.fetchUsers(currentPage);
+        this.getUsers(currentPage);
+      }
     },
     previous() {
-      currentPage -= 1;
-      this.fetchUsers(currentPage);
+      if(currentPage === 1) {
+        console.log("skip")
+      } else {
+        currentPage -= 1;
+        // this.fetchUsers(currentPage);
+        this.getUsers(currentPage);
+      }
     },
   },
 };

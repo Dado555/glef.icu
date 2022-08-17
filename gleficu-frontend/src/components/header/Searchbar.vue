@@ -9,6 +9,7 @@
       @input="debounceSearch($event)"
       v-model="searchTerm"
       @focus="handleFocus"
+      v-if="showSearch()"
     />
     <div class="absolute top-0">
       <svg
@@ -150,6 +151,10 @@ export default {
         }
       });
     },
+
+    showSearch() {
+      return this.$route.name === "home" || this.$route.name === "users"
+    }
   },
 };
 </script>

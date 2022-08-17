@@ -2,7 +2,7 @@
   <div id="app">
     <div class="flex justify-between border-b border-gray-500" v-if="!loginRoute()">
       <Navbar />
-      <Searchbar v-if="searchShow()"/> <!--@logout="logout"-->
+      <Searchbar/> <!--@logout="logout"-->
     </div>
 
     <router-view/> <!--v-if="loggedIn"-->
@@ -34,9 +34,6 @@ export default {
   methods: {
     isAuthenticated() {
       return authService.isAuthenticated()
-    },
-    searchShow() {
-      return this.$route.name === "home" || this.$route.name === "users"
     },
     loginRoute() {
       console.log(this.$route.name)

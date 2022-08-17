@@ -137,7 +137,7 @@ export default {
       let token = response.data.id_token;
       let decoded = jwtDecode(token);
       this.$store.dispatch("setUserLoggedIn", {username: decoded.username,
-        authority: decoded.authority, token: token})
+        authority: decoded.authority, token: token, userId: decoded.userId})
       if (redirect) {
         context.$router.replace(redirect)
       }
