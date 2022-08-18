@@ -37,12 +37,12 @@ func FindTorrentMagnetAndSubtitleLink(movie models.Movie) (string, string) {
 	} else {
 		// Iterate through results and print their magnet URLs
 		for _, torrent := range torrents {
-			fmt.Println()
-			fmt.Println(torrent)
-			fmt.Printf("Found torrent: %v\n\n", torrent.MagnetURL)
+			//fmt.Println()
+			//fmt.Println(torrent)
+			//fmt.Printf("Found torrent: %v\n\n", torrent.MagnetURL)
 			if strings.Contains(torrent.Quality, "720p") || strings.Contains(torrent.Quality, "1080p") {
 				torrentLinks = torrent.MagnetURL
-				fmt.Printf("\nSaved torrent: %v\n\n", torrent.MagnetURL)
+				//fmt.Printf("\nSaved torrent: %v\n\n", torrent.MagnetURL)
 			}
 		}
 	}
@@ -54,7 +54,7 @@ func FindTorrentMagnetAndSubtitleLink(movie models.Movie) (string, string) {
 
 	// Anonymous login will set c.Token when successful
 	if err = c.LogIn("Dado1856", "Teslatesla#555", "eng"); err != nil {
-		fmt.Println("Logged in as user..")
+		//fmt.Println("Logged in as user..")
 	}
 
 	languages := []string{"srp", "hrv", "bos"}

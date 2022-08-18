@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/Dado555/glef.icu/user-movies-service/models"
 	"net/http"
 	"strconv"
@@ -12,7 +11,7 @@ func (api *API) GetWatchlist(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	//fmt.Println(queryParams)
 
 	page := queryParams.Get("page")
 	size := queryParams.Get("size")
@@ -25,7 +24,7 @@ func (api *API) GetWatchlist(w http.ResponseWriter, request *http.Request) {
 	watchlist := api.watchlist.GetWatchlist(pageParsed, sizeParsed, uint(userIdParsed))
 
 	watchlistPage := models.WatchlistPage{
-		Watchlist: watchlist,
+		Watchlist: *watchlist,
 	}
 
 	err := json.NewEncoder(w).Encode(watchlistPage)
@@ -39,7 +38,7 @@ func (api *API) GetWatchlistItem(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	//fmt.Println(queryParams)
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")
@@ -84,7 +83,7 @@ func (api *API) DeleteWatchlistItem(w http.ResponseWriter, request *http.Request
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	//fmt.Println(queryParams)
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")

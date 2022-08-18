@@ -17,7 +17,7 @@ type WishlistItem struct {
 }
 
 type WishlistPage struct {
-	Wishlist *[]WishlistItem `json:"wishlist"`
+	Wishlist []WishlistItem `json:"wishlist"`
 }
 
 type WishlistItemJSON struct {
@@ -45,13 +45,13 @@ func NewWishlistManager(db *DB) (*WishlistManager, error) {
 
 func (state *WishlistManager) GetWishlist(page uint64, size uint64, userId uint) *[]WishlistItem {
 	var wishlist []WishlistItem
-	state.db.Where("user_id=? AND deleted_at=?", userId, nil).Find(&wishlist).Offset(int(page * size)).Limit(int(size))
+	state.db.Where("user_id=?", userId).Find(&wishlist).Offset(int(page * size)).Limit(int(size))
 	return &wishlist
 }
 
 func (state *WishlistManager) FindWishlistItem(userId uint, movieId string) *WishlistItem {
 	wishlistItem := WishlistItem{}
-	state.db.Where("imdb_id=? AND user_id=? AND deleted_at=?", movieId, userId, nil).Find(&wishlistItem)
+	state.db.Where("imdb_id=? AND user_id=?", movieId, userId).Find(&wishlistItem)
 	return &wishlistItem
 }
 

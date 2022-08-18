@@ -18,7 +18,6 @@ class MovieService {
     }
 
     saveMovie(movie) {
-        console.log(movie);
         return axios.post(SAVE_MOVIE, movie, {
             headers: { Authorization: "Bearer " + localStorage.getItem("id_token") }
         })

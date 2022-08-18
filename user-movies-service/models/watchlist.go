@@ -17,7 +17,7 @@ type WatchlistItem struct {
 }
 
 type WatchlistPage struct {
-	Watchlist *[]WatchlistItem `json:"watchlist"`
+	Watchlist []WatchlistItem `json:"watchlist"`
 }
 
 type WatchlistItemJSON struct {
@@ -44,13 +44,13 @@ func NewWatchlistManager(db *DB) (*WatchlistManager, error) {
 
 func (state *WatchlistManager) GetWatchlist(page uint64, size uint64, userId uint) *[]WatchlistItem {
 	var watchlist []WatchlistItem
-	state.db.Where("user_id=? AND deleted_at=?", userId, nil).Find(&watchlist).Offset(int(page * size)).Limit(int(size))
+	state.db.Where("user_id=?", userId).Find(&watchlist).Offset(int(page * size)).Limit(int(size))
 	return &watchlist
 }
 
 func (state *WatchlistManager) FindWatchlistItem(userId uint, movieId string) *WatchlistItem {
 	watchlistItem := WatchlistItem{}
-	state.db.Where("imdb_id=? AND user_id=? AND deleted_at=?", movieId, userId, nil).Find(&watchlistItem)
+	state.db.Where("imdb_id=? AND user_id=?", movieId, userId).Find(&watchlistItem)
 	return &watchlistItem
 }
 

@@ -25,7 +25,7 @@ func getSubtitleFilePath(folderName string) string {
 		if filepath.Ext(file) == ".srt" {
 			subtitlePath = file
 		}
-		fmt.Println(file)
+		// fmt.Println(file)
 	}
 
 	return subtitlePath
@@ -37,11 +37,11 @@ func DownloadSubtitle(subtitleWebPath string) string {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Download saved to", resp.Filename)
-	fmt.Println("Response: ", resp)
+	// fmt.Println("Download saved to", resp.Filename)
+	//fmt.Println("Response: ", resp)
 
 	var folderName = resp.Filename[5 : len(resp.Filename)-4]
-	fmt.Println(folderName)
+	//fmt.Println(folderName)
 	UnzipFile(resp.Filename, "/tmp/"+folderName)
 
 	return folderName

@@ -6,7 +6,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-7 gap-8">
       <MovieItem
-          :key="movie.id"
+          :key="movie.imdbID"
           v-for="movie in movies"
           :movie="movie"
       />
@@ -56,7 +56,7 @@ export default {
       }
       listsService.getWatchlist(params).then((response) => {
         this.movies = response.data.watchlist;
-        console.log(response);
+        // console.log(response);
       });
     },
     next() {

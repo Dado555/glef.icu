@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/Dado555/glef.icu/scrape-movie-service/downloadPlay"
 	"github.com/Dado555/glef.icu/scrape-movie-service/models"
 	"github.com/Dado555/glef.icu/scrape-movie-service/repository"
@@ -73,7 +72,7 @@ func (api *API) GetMovies(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	// fmt.Println(queryParams)
 
 	page := queryParams.Get("page")
 	size := queryParams.Get("size")
@@ -155,7 +154,7 @@ func (api *API) SearchMovies(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	// fmt.Println(queryParams)
 	title := queryParams.Get("title")
 	movies := api.movies.SearchMovies(title)
 

@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/Dado555/glef.icu/user-service/auth"
 	"github.com/Dado555/glef.icu/user-service/models"
 	"github.com/gorilla/mux"
@@ -166,7 +165,7 @@ func (api *API) UserSearch(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := req.URL.Query()
 
-	fmt.Println(queryParams)
+	// fmt.Println(queryParams)
 	name := queryParams.Get("name")
 	users := api.users.SearchUsers(name)
 
@@ -217,7 +216,7 @@ func (api *API) GetUsersPage(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	queryParams := request.URL.Query()
 
-	fmt.Println(queryParams)
+	//fmt.Println(queryParams)
 
 	page := queryParams.Get("page")
 	size := queryParams.Get("size")
