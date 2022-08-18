@@ -34,16 +34,16 @@ Preporuka filma bazirana na:
        * glumac (glavni, sporedni..)
        * radnja (pas daleko od kuće) 
   3. Neregistrovani korisnik
-  * Registracija (aktivacija preko mail-a)
+  * Registracija
   * Pregled i pretraga filmova
-  * Opcije skidanja filmova i gledanja istih sa podešenim prevodom
+  * Opcije skidanja magneta i gledanja filmova (gledanje sa podešenim prevodom?)
   
   ## Arhitektura sistema
-  * User service (autentifikacija i autorizacija) - Go
-  * Movie service (CRUD filmova) - Go
-  * ScrapeMovie service (prikupljanje informacija o filmu) - Go
-  * DownloadMovie service (skidanje filma i namještanje prevoda) - Python
-  * Grading service - Rust
+  * user-service (autentifikacija i autorizacija) - Go
+  * scrape-movie-service (CRUD filmova, prikupljanje informacija o filmu, skidanje magneta i prevoda, gledanje filma) - Go
+  * user-movies-service (manipulacija korisnikovih wishlist i watchlist) - Go
+  * merge-movie-subtitle-service (namještanje prevoda za skinuti film i prevod) - Python
+  * grading-service (komentari i ocjene za film, banovanje korisnika) - Rust
   * RecommendBasic service- Java
   * RecommendAdvanced service - Python (?)
   * Vue klijentska aplikacija
