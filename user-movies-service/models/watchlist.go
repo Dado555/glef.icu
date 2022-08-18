@@ -7,8 +7,13 @@ import (
 
 type WatchlistItem struct {
 	gorm.Model `json:"-"`
-	MovieId    uint `json:"movieId"`
-	UserId     uint `json:"userId"`
+	UserId     uint   `json:"userId"`
+	Title      string `gorm:"not null;" json:"title"`
+	Genre      string `gorm:"not null;" json:"genre"`
+	ImdbID     string `gorm:"not null;" json:"imdbID"`
+	Poster     string `gorm:"not null;" json:"poster"`
+	ImdbRating string `gorm:"not null;" json:"imdbRating"`
+	Released   string `gorm:"not null;" json:"released"`
 }
 
 type WatchlistPage struct {
@@ -16,8 +21,13 @@ type WatchlistPage struct {
 }
 
 type WatchlistItemJSON struct {
-	MovieId uint `json:"movieId"`
-	UserId  uint `json:"userId"`
+	UserId     uint   `json:"userId"`
+	Title      string `gorm:"not null;" json:"title"`
+	Genre      string `gorm:"not null;" json:"genre"`
+	ImdbID     string `gorm:"not null;" json:"imdbID"`
+	Poster     string `gorm:"not null;" json:"poster"`
+	ImdbRating string `gorm:"not null;" json:"imdbRating"`
+	Released   string `gorm:"not null;" json:"released"`
 }
 
 type WatchlistManager struct {
@@ -38,16 +48,21 @@ func (state *WatchlistManager) GetWatchlist(page uint64, size uint64, userId uin
 	return &watchlist
 }
 
-func (state *WatchlistManager) FindWatchlistItem(userId uint, movieId uint) *WatchlistItem {
+func (state *WatchlistManager) FindWatchlistItem(userId uint, movieId string) *WatchlistItem {
 	watchlistItem := WatchlistItem{}
-	state.db.Where("movie_id=? AND user_id=? AND deleted_at=?", movieId, userId, nil).Find(&watchlistItem)
+	state.db.Where("imdb_id=? AND user_id=? AND deleted_at=?", movieId, userId, nil).Find(&watchlistItem)
 	return &watchlistItem
 }
 
 func (state *WatchlistManager) SaveWatchlistItem(watchlistItem *WatchlistItemJSON) *WatchlistItem {
 	watchlistItemCreate := WatchlistItem{
-		MovieId: watchlistItem.MovieId,
-		UserId:  watchlistItem.UserId,
+		UserId:     watchlistItem.UserId,
+		Title:      watchlistItem.Title,
+		Genre:      watchlistItem.Genre,
+		ImdbID:     watchlistItem.ImdbID,
+		Poster:     watchlistItem.Poster,
+		ImdbRating: watchlistItem.ImdbRating,
+		Released:   watchlistItem.Released,
 	}
 	state.db.Create(&watchlistItemCreate)
 	return &watchlistItemCreate

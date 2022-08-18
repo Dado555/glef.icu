@@ -43,11 +43,9 @@ func (api *API) GetWishlistItem(w http.ResponseWriter, request *http.Request) {
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")
-
 	userIdParsed, _ := strconv.ParseUint(userId, 10, 64)
-	movieIdParsed, _ := strconv.ParseUint(movieId, 10, 64)
 
-	wishlistItem := api.wishlist.FindWishlistItem(uint(userIdParsed), uint(movieIdParsed))
+	wishlistItem := api.wishlist.FindWishlistItem(uint(userIdParsed), movieId)
 
 	err := json.NewEncoder(w).Encode(wishlistItem)
 	if err != nil {
@@ -61,13 +59,13 @@ func (api *API) SaveWishlistItem(w http.ResponseWriter, req *http.Request) {
 	jsonData := models.WishlistItemJSON{}
 	err := decoder.Decode(&jsonData)
 
-	if err != nil || jsonData.MovieId <= 0 || jsonData.UserId <= 0 {
+	if err != nil || len(jsonData.ImdbID) < 6 || jsonData.UserId <= 0 {
 		http.Error(w, "Missing MovieId or UserId", http.StatusBadRequest)
 		return
 	}
 
-	wishlistItem := api.wishlist.FindWishlistItem(jsonData.UserId, jsonData.MovieId)
-	if wishlistItem != nil {
+	wishlistItem := api.wishlist.FindWishlistItem(jsonData.UserId, jsonData.ImdbID)
+	if wishlistItem.UserId > 0 {
 		http.Error(w, "Wishlist item for this user and movie already exists", http.StatusBadRequest)
 		return
 	}
@@ -90,10 +88,8 @@ func (api *API) DeleteWishlistItem(w http.ResponseWriter, request *http.Request)
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")
-
 	userIdParsed, _ := strconv.ParseUint(userId, 10, 64)
-	movieIdParsed, _ := strconv.ParseUint(movieId, 10, 64)
 
-	wishlistItem := api.wishlist.FindWishlistItem(uint(userIdParsed), uint(movieIdParsed))
+	wishlistItem := api.wishlist.FindWishlistItem(uint(userIdParsed), movieId)
 	api.wishlist.DeleteWishlistItem(wishlistItem)
 }

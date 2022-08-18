@@ -54,14 +54,24 @@
             <span class="ml-3">Play Trailer</span>
           </a>
 
-          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="isUser()">
+          <a href="#" :class="{ isDisabled: !canWishlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="!userWishlisted" @click.prevent="addToWishlist()">
             <img src="@/assets/images/heart-white.png" alt="" />
-            <span class="ml-3">Wishlist</span>
+            <span class="ml-3">Add to wishlist</span>
           </a>
 
-          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="isUser()">
+          <a href="#" :class="{ isDisabled: !canWishlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWishlisted" @click.prevent="removeFromWishlist()">
+            <img src="@/assets/images/heart-white.png" alt="" />
+            <span class="ml-3">Remove from wishlist</span>
+          </a>
+
+          <a href="#" :class="{ isDisabled: !canWatchlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="!userWatched" @click.prevent="addToWatchlist()">
             <img src="@/assets/images/check-mark.png" alt="" />
-            <span class="ml-3">Mark Watched</span>
+            <span class="ml-3">Add to watched</span>
+          </a>
+
+          <a href="#" :class="{ isDisabled: !canWatchlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWatched" @click.prevent="removeFromWatchlist()">
+            <img src="@/assets/images/check-mark.png" alt="" />
+            <span class="ml-3">Delete from watched</span>
           </a>
 
           <a v-if="movieDb" @click.prevent="watchMagnet()" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5">
@@ -117,6 +127,7 @@ import Comment from "@/components/comments/Comment";
 import EditMovieModal from "@/components/movies/EditMovieModal";
 import {authService} from "@/services/authService";
 import {movieService} from "@/services/movieService";
+import {listsService} from "@/services/listsService";
 
 export default {
   components: {
@@ -142,6 +153,10 @@ export default {
       editMovie: false,
       isVideo: false,
       mediaURL: "",
+      userWatched: undefined,
+      userWishlisted: undefined,
+      canWatchlist: true,
+      canWishlist: true,
     };
   },
 
@@ -197,8 +212,84 @@ export default {
     isAdmin() {
       return authService.isAdmin()
     },
+    userWatchedFunc() {
+      let currMovieId = this.$route.params.id;
+      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      listsService.getWatchlistItem(params).then((response) => {
+        if(response.data.imdbID === currMovieId && authService.isUser())
+          this.userWatched = true;
+      });
+    },
+    userWishlistedFunc() {
+      let currMovieId = this.$route.params.id;
+      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      listsService.getWishlistItem(params).then((response) => {
+        if(response.data.imdbID === currMovieId && authService.isUser())
+          this.userWishlisted = true;
+      });
+    },
     isUser() {
-      return authService.isUser()
+      return authService.isUser();
+    },
+    addToWishlist() {
+      this.canWishlist = false;
+      let payload = {
+        userId: parseInt(this.$store.state.user.id),
+        title: this.movieDb.title,
+        genre: this.movieDb.genre,
+        imdbID: this.movieDb.imdbID,
+        poster: this.movieDb.poster,
+        imdbRating: this.movieDb.imdbRating,
+        released: this.movieDb.released
+      };
+      listsService.saveWishlistItem(payload).then((response) => {
+        if(response.data.imdbID === payload.imdbID){
+          alert("Movie added to wishlist!");
+          this.canWishlist = true;
+          this.userWishlisted = true;
+        }
+      });
+    },
+    addToWatchlist() {
+      this.canWatchlist = false;
+      let payload = {
+        userId: parseInt(this.$store.state.user.id),
+        title: this.movieDb.title,
+        genre: this.movieDb.genre,
+        imdbID: this.movieDb.imdbID,
+        poster: this.movieDb.poster,
+        imdbRating: this.movieDb.imdbRating,
+        released: this.movieDb.released
+      };
+      listsService.saveWatchlistItem(payload).then((response) => {
+        if(response.data.imdbID === payload.imdbID){
+          alert("Movie added to watchlist!");
+          this.canWatchlist = true;
+          this.userWatched = true;
+        }
+      });
+    },
+    removeFromWatchlist() {
+      this.canWatchlist = false;
+      let currMovieId = this.$route.params.id;
+      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      listsService.deleteWatchlistItem(params).then((response) => {
+        if(response.data.imdbID === currMovieId && authService.isUser()) {
+          this.userWatched = false;
+          this.canWatchlist = true;
+        }
+      });
+    },
+    removeFromWishlist() {
+      this.canWishlist = false;
+      let currMovieId = this.$route.params.id;
+      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      listsService.deleteWishlistItem(params).then((response) => {
+        if(response.data.imdbID === currMovieId && authService.isUser()) {
+          this.userWishlisted = false;
+          this.canWishlist = true;
+        }
+      });
     },
     getMovieDb(imdbId) {
       movieService.getMovieByImdbId(imdbId).then((response)=> {
@@ -223,9 +314,15 @@ export default {
   },
   mounted() {
     // console.log("IMDB ID: " + this.$route.params.id);
+    this.userWatchedFunc();
+    this.userWishlistedFunc();
     this.getMovieDb(this.$route.params.id);
   }
 };
 </script>
 
-<style></style>
+<style>
+.isDisabled {
+  pointer-events: none;
+}
+</style>

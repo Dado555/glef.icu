@@ -43,11 +43,9 @@ func (api *API) GetWatchlistItem(w http.ResponseWriter, request *http.Request) {
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")
-
 	userIdParsed, _ := strconv.ParseUint(userId, 10, 64)
-	movieIdParsed, _ := strconv.ParseUint(movieId, 10, 64)
 
-	watchlistItem := api.watchlist.FindWatchlistItem(uint(userIdParsed), uint(movieIdParsed))
+	watchlistItem := api.watchlist.FindWatchlistItem(uint(userIdParsed), movieId)
 
 	err := json.NewEncoder(w).Encode(watchlistItem)
 	if err != nil {
@@ -61,13 +59,13 @@ func (api *API) SaveWatchlistItem(w http.ResponseWriter, req *http.Request) {
 	jsonData := models.WatchlistItemJSON{}
 	err := decoder.Decode(&jsonData)
 
-	if err != nil || jsonData.MovieId <= 0 || jsonData.UserId <= 0 {
+	if err != nil || len(jsonData.ImdbID) < 6 || jsonData.UserId <= 0 {
 		http.Error(w, "Missing MovieId or UserId", http.StatusBadRequest)
 		return
 	}
 
-	watchlistItem := api.watchlist.FindWatchlistItem(jsonData.UserId, jsonData.MovieId)
-	if watchlistItem != nil {
+	watchlistItem := api.watchlist.FindWatchlistItem(jsonData.UserId, jsonData.ImdbID)
+	if watchlistItem.UserId > 0 {
 		http.Error(w, "Watchlist item for this user and movie already exists", http.StatusBadRequest)
 		return
 	}
@@ -90,10 +88,8 @@ func (api *API) DeleteWatchlistItem(w http.ResponseWriter, request *http.Request
 
 	userId := queryParams.Get("userId")
 	movieId := queryParams.Get("movieId")
-
 	userIdParsed, _ := strconv.ParseUint(userId, 10, 64)
-	movieIdParsed, _ := strconv.ParseUint(movieId, 10, 64)
 
-	watchlistItem := api.watchlist.FindWatchlistItem(uint(userIdParsed), uint(movieIdParsed))
+	watchlistItem := api.watchlist.FindWatchlistItem(uint(userIdParsed), movieId)
 	api.watchlist.DeleteWatchlistItem(watchlistItem)
 }

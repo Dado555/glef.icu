@@ -43,9 +43,9 @@
       <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" v-if="adminPrivileges()">Ban user</button>
     </div>
 
-    <WatchedMovies/>
+    <WatchedMovies :user-id="this.$route.params.id"/>
 
-    <WishlistMovies/>
+    <WishlistMovies :user-id="this.$route.params.id"/>
 
     <EditProfileModal v-model="editProfile" :user-id="this.$route.params.id" v-on:updatedUser="refresh()"/>
     <!--  -->
