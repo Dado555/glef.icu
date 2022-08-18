@@ -52,7 +52,7 @@ export default {
         this.actors = response.data.results;
         // this.actors.push(...response.data.results);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 

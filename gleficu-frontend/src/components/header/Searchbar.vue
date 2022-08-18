@@ -95,8 +95,8 @@ export default {
           title: term
         }
         movieService.searchMovies(searchTerm).then((response) => {
-          console.log(response);
-          console.log(response.data);
+          // console.log(response);
+          // console.log(response.data);
           this.searchResult = response.data;
           this.searchResultType = "movies";
           this.showSearchResult = response.data ? true : false;

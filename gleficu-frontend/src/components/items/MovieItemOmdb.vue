@@ -43,11 +43,8 @@ export default {
   },
   methods: {
     saveMovie() {
-      movieService.saveMovie(this.movie).then((response) => {
-        console.log(response);
-        console.log("MOVIE SAVED");
-        this.open();
-      });
+      // console.log(this.movie);
+      this.fetchKeywords(this.movie.ImdbID);
     },
     open() {
       this.$toast.open({
@@ -56,7 +53,20 @@ export default {
         duration: 3000,
         dismissible: true
       })
-    }
+    },
+    async fetchKeywords(movieId) {
+      await this.$http.get("/movie/" + movieId + "/keywords").then((response) => {
+        // console.log("Keywords: ");
+        // console.log(response.data.keywords);
+
+        this.movie.Tags = response.data.keywords;
+        movieService.saveMovie(this.movie).then(() => {
+          // console.log(response);
+          // console.log("MOVIE SAVED");
+          this.open();
+        });
+      });
+    },
   }
 }
 </script>

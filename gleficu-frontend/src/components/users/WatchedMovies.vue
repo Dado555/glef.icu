@@ -57,7 +57,7 @@ export default {
       try {
         const response = await this.$http.get("/genre/movie/list");
         this.genres = response.data.genres;
-        console.log("Genres: " + this.genres.toString());
+        // console.log("Genres: " + this.genres.toString());
       } catch (error) {
         console.log(error);
       }

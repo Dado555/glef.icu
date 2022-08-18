@@ -47,7 +47,7 @@
 
     <WishlistMovies/>
 
-    <EditProfileModal v-model="editProfile"/>
+    <EditProfileModal v-model="editProfile" :user-id="this.$route.params.id" v-on:updatedUser="refresh()"/>
     <!--  -->
   </div>
 </template>
@@ -66,12 +66,13 @@ export default {
   data() {
     return {
       user: {},
-      editProfile: false
+      editProfile: false,
+      userId: -1
     };
   },
 
   mounted() {
-    console.log("User ID: " + this.$route.params.id);
+    // console.log("User ID: " + this.$route.params.id);
     this.getUserDb(this.$route.params.id);
   },
 
@@ -88,13 +89,17 @@ export default {
     getUserDb(id) {
       userService.getById(id).then((response) => {
         this.user = response.data;
-        console.log(response.data);
+        // console.log(response.data);
       })
     },
 
     adminPrivileges() {
       return this.$store.state.user.authority === "ADMIN" && this.user.canBeBanned;
-    }
+    },
+
+    refresh() {
+      this.getUserDb(this.$route.params.id);
+    },
   },
 }
 </script>

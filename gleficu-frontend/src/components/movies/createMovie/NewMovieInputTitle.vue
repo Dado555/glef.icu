@@ -64,7 +64,7 @@ export default {
     submit() {
       movieService.getByTitle({title: this.model.title, year: this.model.year}).then((response) => {
         this.movieOmdb = response.data;
-        console.log(this.movieOmdb);
+        // console.log(this.movieOmdb);
         this.submitClicked = true;
       });
     }

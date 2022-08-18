@@ -36,7 +36,7 @@ export default {
       return authService.isAuthenticated()
     },
     loginRoute() {
-      console.log(this.$route.name)
+      // console.log(this.$route.name)
       return this.$route.name === "login"
       // return this.$route
     }

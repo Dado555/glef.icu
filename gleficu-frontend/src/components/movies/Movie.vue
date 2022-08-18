@@ -149,6 +149,7 @@ export default {
     "$route.params.id": {
       handler() {
         this.fetchMovie(this.$route.params.id);
+        // this.fetchKeywords(this.$route.params.id);
       },
       immediate: true,
     },
@@ -159,6 +160,15 @@ export default {
         "/movie/" + movieId + "?append_to_response=credits,videos,images"
       );
       this.movie = response.data;
+    },
+
+    async fetchKeywords(movieId) {
+      const response = await this.$http.get(
+          "/movie/" + movieId + "/keywords"
+      );
+      this.movieKeywords = response.data;
+      // console.log("Keywords: ");
+      // console.log(this.movieKeywords);
     },
 
     openYouTubeModel() {
@@ -193,7 +203,7 @@ export default {
     getMovieDb(imdbId) {
       movieService.getMovieByImdbId(imdbId).then((response)=> {
         this.movieDb = response.data;
-        console.log(response.data);
+        // console.log(response.data);
       })
     },
     watchMagnet() {
@@ -201,8 +211,8 @@ export default {
         magnetLink: this.movieDb.torrentLinks,
         subtitleLink: this.movieDb.titleLinks
       }
-      movieService.watchMagnet(watchLive).then((response) =>  {
-        console.log(response);
+      movieService.watchMagnet(watchLive).then(() =>  {
+        // console.log(response);
       })
     }
   },
@@ -212,7 +222,7 @@ export default {
     },
   },
   mounted() {
-    console.log("IMDB ID: " + this.$route.params.id);
+    // console.log("IMDB ID: " + this.$route.params.id);
     this.getMovieDb(this.$route.params.id);
   }
 };

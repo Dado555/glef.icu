@@ -103,7 +103,7 @@ export default {
       }
 
       userService.getUsersPage(params).then((response) => {
-        console.log(response);
+        // console.log(response);
         let page = response.data;
         this.users = page.users;
       });

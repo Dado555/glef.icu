@@ -44,14 +44,14 @@ export default {
       }
 
       movieService.getMovies(params).then((response) => {
-        console.log(response);
+        // console.log(response);
         let page = response.data;
         this.movies = page.movies;
       });
     },
     getAllMovies() {
       movieService.getAllMovies().then((response) => {
-        console.log(response);
+        // console.log(response);
         this.movies = response.data.movies;
       })
     }

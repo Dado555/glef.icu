@@ -25,6 +25,7 @@ type Movie struct {
 	ImdbVotes  string
 	ImdbID     string
 	Error      string
+	Tags       []Tag
 }
 
 type MoviePage struct {

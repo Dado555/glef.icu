@@ -7,12 +7,15 @@ import (
 
 type API struct {
 	movies *repository.MovieManager
+	tags   *models.TagManager
 }
 
 func CreateAPI(db *models.DB) *API {
 	movieMgr, _ := repository.NewMovieManager(db)
+	tagMgr, _ := models.NewTagManager(db)
 
 	return &API{
 		movies: movieMgr,
+		tags:   tagMgr,
 	}
 }

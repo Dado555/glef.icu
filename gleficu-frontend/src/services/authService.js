@@ -89,7 +89,7 @@ class AuthService {
 
     getJwtField(fieldName) {
         const jwt = this.decodeJwt();
-        console.log(jwt);
+        // console.log(jwt);
         if (fieldName === "username") return jwt.username;
         else return jwt[fieldName];
     }

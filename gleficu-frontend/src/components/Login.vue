@@ -115,7 +115,7 @@ export default {
         password: this.loginInfo.password
       }
       authService.login(credentials).then(response => {
-        console.log(response);
+        // console.log(response);
         this.loginAction(response, "/", this);
       }, response => {
         this.error = response.statusText
@@ -127,7 +127,7 @@ export default {
         password: this.registerInfo.password
       }
       authService.signup(credentials).then(response => {
-        console.log(response);
+        // console.log(response);
         this.loginAction(response, "/", this);
       }, response => {
         this.error = response.statusText

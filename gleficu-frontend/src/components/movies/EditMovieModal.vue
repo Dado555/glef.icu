@@ -80,7 +80,21 @@ export default {
       this.$emit("input", !this.value);
     },
     onComplete() {
-      alert("Yay. Done!");
+      alert("Updating movie!");
+      // console.log(this.finalModel);
+      // update movie
+      let payload = {
+        imdbLink: this.finalModel.imdb,
+        rottenLink: this.finalModel.rotten,
+        torrentLinks: this.finalModel.downloadLink,
+        titleLinks: this.finalModel.titleLink
+      }
+      // console.log(payload);
+      movieService.updateMovie(this.imdbId, payload).then(() => {
+        alert("Updated movie!");
+      });
+
+      this.close();
     },
     forceClearError() {
       this.$refs.wizard.tabs[this.activeTabIndex].validationError = null;
@@ -96,18 +110,10 @@ export default {
     getMovieDb(imdbId) {
       movieService.getMovieByImdbId(imdbId).then((response)=> {
         this.movieDb = response.data;
-        console.log(response.data);
+        // console.log(response.data);
       })
     },
   },
-
-  // update movie
-  // let payload = {
-  //   imdbLink: "",
-  //   rottenLink: "",
-  //   torrentLinks: "",
-  //   titleLinks: ""
-  // }
 
   data() {
     return {

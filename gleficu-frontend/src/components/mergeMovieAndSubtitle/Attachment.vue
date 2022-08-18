@@ -207,10 +207,10 @@ export default {
   methods: {
     // function called for every file dropped or selected
     fileAdded(file) {
-      console.log("File Dropped => ", file);
+      //console.log("File Dropped => ", file);
 
-      console.log(this.$refs.myVueDropzone.getQueuedFiles());
-      console.log(this.$refs.myVueDropzone.getAcceptedFiles());
+      //console.log(this.$refs.myVueDropzone.getQueuedFiles());
+      //console.log(this.$refs.myVueDropzone.getAcceptedFiles());
       // const reader = new FileReader()
       // reader.readAsDataURL(file)
       //

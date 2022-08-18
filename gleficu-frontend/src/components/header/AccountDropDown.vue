@@ -40,7 +40,7 @@
       </a>
       <a v-if="isUnauthorized()"
          class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
-         @click="redirect('login')">
+         @click="redirectLogin()">
         Login
       </a>
     </div>
@@ -93,6 +93,9 @@ export default {
     },
     redirectProfile() {
       this.$router.push('/user/' + this.$store.state.user.id.toString()).catch(() => {});
+    },
+    redirectLogin() {
+      this.$router.push('/login');
     },
     isUnauthorized() {
       return authService.isUnregistered()

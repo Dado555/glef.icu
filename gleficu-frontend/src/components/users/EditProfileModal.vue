@@ -15,19 +15,6 @@
             <h1 style="font-size: x-large; color: whitesmoke" slot="title">Edit User Profile</h1>
             <h2 style="font-size: large;" slot="title">Define New User Informations</h2>
             <el-form :model="model" :rules="rules" ref="form">
-              <el-row type="flex" class="row-bg" style="margin-top: 30px">
-                <el-col :span="12">
-                  <el-form-item label="Name" prop="name">
-                    <el-input style="width:34em" v-model="model.name"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="Surname" prop="surname">
-                    <el-input style="width:34em" v-model="model.surname"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
               <el-row type="flex" class="row-bg" style="margin-top: 10px">
                 <el-col :span="12">
                   <el-form-item label="Age" prop="age">
@@ -43,13 +30,13 @@
 
               <el-row type="flex" class="row-bg" style="margin-top: 10px;">
                 <el-col :span="24">
-                  <el-form-item label="Favourite tags (separated by comma) " prop="favTag">
+                  <el-form-item label="Favourite tags (separated by comma) " prop="favouriteTag">
                     <el-input style="width:64em" v-model="model.favouriteTag"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
-            <button class="rounded bg-yellow-500 text-black cursor-auto" style="height: 40px;width: 100px;">Submit</button>
+            <button class="rounded bg-yellow-500 text-black cursor-auto" style="height: 40px;width: 100px;" @click="submitUserEdit()">Submit</button>
           </div>
         </div>
       </div>
@@ -58,12 +45,17 @@
 </template>
 
 <script>
+import {userService} from "@/services/userService";
+
 export default {
   name: "EditProfileModal",
   props: {
     value: {
       required: true,
     },
+    userId: {
+      required: true,
+    }
   },
   methods: {
     close() {
@@ -82,38 +74,41 @@ export default {
       if (validated) {
         this.finalModel = { ...this.finalModel, ...model };
       }
-    }
+    },
+    submitUserEdit() {
+      alert("Updating user...");
+      // update user
+      let payload = {
+        gender: this.model.gender,
+        age: parseInt(this.model.age),
+        favouriteTags: this.model.favouriteTag
+      }
+      // console.log(payload);
+      userService.updateUser(this.userId, payload).then(() => {
+        alert("User updated!");
+        this.$emit("updatedUser");
+      })
+      this.close();
+    },
+    getUserDb(id) {
+      userService.getById(id).then((response) => {
+        this.model.gender = response.data.gender;
+        this.model.age = response.data.age;
+        this.model.favouriteTag = response.data.favouriteTags;
+      })
+    },
   },
-
-  // update user
-  // let payload = {
-  //   gender: "",
-  //   age: "",
-  //   favouriteTags: ""
-  // }
 
   data() {
     return {
       finalModel: {},
       activeTabIndex: 0,
       model: {
-        name: '',
-        surname: '',
         gender: '',
         age: '',
         favouriteTag: ''
       },
       rules: {
-        name: [{
-          required: true,
-          message: 'Name is required',
-          trigger: 'change'
-        }],
-        surname: [{
-          required: true,
-          message: 'Surname is required',
-          trigger: 'change'
-        }],
         gender: [{
           required: true,
           message: 'Gender is required',
@@ -124,7 +119,7 @@ export default {
           message: 'Age is required',
           trigger: 'change'
         }],
-        favTag: [{
+        favouriteTag: [{
           required: true,
           message: 'Favourite tag is required',
           trigger: 'change'
@@ -132,6 +127,10 @@ export default {
       },
     };
   },
+
+  mounted() {
+    this.getUserDb(this.userId);
+  }
 }
 </script>
 

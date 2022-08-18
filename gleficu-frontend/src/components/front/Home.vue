@@ -15,20 +15,20 @@ export default {
     UpcomingMovies,
   },
   mounted() {
-    console.log(
-      "Your process.env.VUE_APP_PUBLIC_URL",
-      process.env.VUE_APP_PUBLIC_URL
-    );
-
-    console.log(
-        "Your process.env.VUE_APP_TMDB_TOKEN",
-        process.env.VUE_APP_TMDB_TOKEN
-    );
-
-    console.log(
-        "Your process.env.VUE_APP_TMDB_READ_TOKEN",
-        process.env.VUE_APP_TMDB_READ_TOKEN
-    );
+    // console.log(
+    //   "Your process.env.VUE_APP_PUBLIC_URL",
+    //   process.env.VUE_APP_PUBLIC_URL
+    // );
+    //
+    // console.log(
+    //     "Your process.env.VUE_APP_TMDB_TOKEN",
+    //     process.env.VUE_APP_TMDB_TOKEN
+    // );
+    //
+    // console.log(
+    //     "Your process.env.VUE_APP_TMDB_READ_TOKEN",
+    //     process.env.VUE_APP_TMDB_READ_TOKEN
+    // );
   },
 };
 </script>
