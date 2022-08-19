@@ -3,6 +3,7 @@ import axios from "axios";
 const API_URL = 'http://localhost:3003/api/comments/'
 const GET_COMMENTS_FOR_MOVIE = API_URL + 'getByMovie'
 const GET_BAD_COMMENTS_FOR_USER = API_URL + 'getBadByUser'
+const GET_FOR_USER = API_URL + 'getByUserAndMovie'
 const ADD_COMMENT = API_URL + "save"
 const DELETE_COMMENT = API_URL + "delete"
 const UPDATE_COMMENT = API_URL + "update"
@@ -19,6 +20,18 @@ class CommentService {
         }});
     }
 
+    // pub struct Comment {
+    //     pub id: i32,
+    //     pub movie_id: String,
+    //     pub user_id: i32,
+    //     pub created_at: String,
+    //     pub updated_at: String,
+    //     pub deleted_at: String,
+    //     pub text: String,
+    //     pub like_stars: i32,
+    //     pub reports_number: i32
+    // }
+
     getBadCommentsByUser(userId) {
         return axios.get(GET_BAD_COMMENTS_FOR_USER + `?user_id=${userId}`, {
             headers: {
@@ -27,7 +40,7 @@ class CommentService {
     }
 
     getCommentByUserAndMovie(userId, movieId) {
-        return axios.get(GET_BAD_COMMENTS_FOR_USER + `?user_id=${userId}&movie_id=${movieId}`, {
+        return axios.get(GET_FOR_USER + `?user_id=${userId}&movie_id=${movieId}`, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("id_token"),
             }});
@@ -38,6 +51,13 @@ class CommentService {
             headers: { Authorization: "Bearer " + localStorage.getItem("id_token") }
         })
     }
+
+    // pub struct CommentCreationDTO {
+    //     pub movie_id: String,
+    //     pub user_id: i32,
+    //     pub text: String,
+    //     pub like_stars: i32
+    // }
 
     deleteComment(commentId) {
         return axios.delete(DELETE_COMMENT + `?comment_id=${commentId}`, {
@@ -51,11 +71,23 @@ class CommentService {
         })
     }
 
+    // pub struct CommentUpdateDTO {
+    //     pub id: i32,
+    //     pub text: String,
+    //     pub like_stars: i32,
+    //     pub reports_number: i32
+    // }
+
     addComplaint(complaint) {
         return axios.post(ADD_COMPLAINT, complaint, {
             headers: { Authorization: "Bearer " + localStorage.getItem("id_token") }
         })
     }
+
+    // pub struct ReportCreateDTO {
+    //     pub comment_id: i32,
+    //     pub user_id: i32
+    // }
 
     getComplaint(userId, commentId) {
         return axios.get(GET_COMPLAINT + `?user_id=${userId}&comment_id=${commentId}`, {
@@ -64,8 +96,16 @@ class CommentService {
             }});
     }
 
-    deleteComplaint(complaintId) {
-        return axios.delete(DELETE_COMPLAINT + `?complaint_id=${complaintId}`, {
+    // pub struct Report {
+    //     pub id: i32,
+    //     pub comment_id: i32,
+    //     pub user_id: i32,
+    //     pub created_at: String,
+    //     pub deleted_at: String
+    // }
+
+    deleteComplaint(complaintId, commentId) {
+        return axios.delete(DELETE_COMPLAINT + `?complaint_id=${complaintId}&comment_id=${commentId}`, {
             headers: { Authorization: "Bearer " + localStorage.getItem("id_token") }
         })
     }

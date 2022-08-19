@@ -36,10 +36,12 @@
     </div>
 
     <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
-      <p style="font-size: x-large">Inappropriate comments (0)</p>
+      <p style="font-size: x-large">Inappropriate comments ({{ this.commentsSizeDb }})</p>
     </div>
-    <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
-      <Comment class="message" />
+    <div v-if="commentsSizeDb > 0">
+      <div class="container mx-auto  border-b border-gray-600 px-4 py-4" :key="comment.id" v-for="comment in commentsDb">
+        <Comment class="message" :comment-db="comment"/>
+      </div>
       <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" v-if="adminPrivileges()">Ban user</button>
     </div>
 
@@ -59,6 +61,7 @@ import EditProfileModal from "@/components/users/EditProfileModal";
 import Comment from "@/components/comments/Comment";
 import {authService} from "@/services/authService";
 import {userService} from "@/services/userService";
+import {commentService} from "@/services/commentService";
 
 export default {
   name: "UserDetail",
@@ -67,13 +70,16 @@ export default {
     return {
       user: {},
       editProfile: false,
-      userId: -1
+      userId: -1,
+      commentsDb: [],
+      commentsSizeDb: 0,
     };
   },
 
   mounted() {
     // console.log("User ID: " + this.$route.params.id);
     this.getUserDb(this.$route.params.id);
+    this.getUserInappropriateComments();
   },
 
   methods: {
@@ -94,12 +100,20 @@ export default {
     },
 
     adminPrivileges() {
-      return this.$store.state.user.authority === "ADMIN" && this.user.canBeBanned;
+      return this.$store.state.user.authority === "ADMIN" && this.commentsSizeDb > 0;
     },
 
     refresh() {
       this.getUserDb(this.$route.params.id);
     },
+
+    getUserInappropriateComments() {
+      commentService.getBadCommentsByUser(this.$route.params.id).then((response) => {
+        this.commentsDb = response.data;
+        this.commentsSizeDb = response.data.length;
+        console.log(response.data);
+      });
+    }
   },
 }
 </script>

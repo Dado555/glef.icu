@@ -61,10 +61,10 @@ pub fn create_complaint(complaint_creation_dto: rocket::serde::json::Json<funcs:
     }).join().unwrap()
 }
 
-#[delete("/deleteComplaint?<complaint_id>")]
-pub fn delete_complaint(complaint_id: i32) -> content::RawJson<String> {
+#[delete("/deleteComplaint?<complaint_id>&<comment_id>")]
+pub fn delete_complaint(complaint_id: i32, comment_id: i32) -> content::RawJson<String> {
     std::thread::spawn(move || {
-        content::RawJson(funcs::delete_report(complaint_id).unwrap())
+        content::RawJson(funcs::delete_report(complaint_id, comment_id).unwrap())
     }).join().unwrap()
 }
 

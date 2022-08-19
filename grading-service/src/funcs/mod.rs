@@ -116,6 +116,7 @@ pub fn create_comment(comment: rocket::serde::json::Json<CommentCreationDTO>) ->
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
     db_client.execute("INSERT INTO comments (movie_id, user_id, created_at, text, like_stars) VALUES ($1, $2, $3, $4, $5)", &[&comment.movie_id, &comment.user_id, &iso_format_date, &comment.text, &comment.like_stars])?;
+    db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Comment created successfully!".to_string(), status_code: 201}).unwrap())
 }
@@ -125,17 +126,16 @@ pub fn update_comment(comment: rocket::serde::json::Json<CommentUpdateDTO>) -> R
     let time_now = std::time::SystemTime::now();
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
-    db_client.execute("UPDATE comments SET updated_at = $1, text = $2, like_stars = $3, reports_number = $4 WHERE id = $5", &[&iso_format_date, &comment.text, &comment.like_stars, &comment.reports_number])?;
+    db_client.execute("UPDATE comments SET updated_at = $1, text = $2, like_stars = $3, reports_number = $4 WHERE id = $5", &[&iso_format_date, &comment.text, &comment.like_stars, &comment.reports_number, &comment.id])?;
+    db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Comment updated successfully!".to_string(), status_code: 201}).unwrap())
 }
 
 pub fn delete_comment(comment_id: i32) -> Result<String, Error> {
     let mut db_client = Client::connect("postgresql://postgres:root@localhost:5432/commentService", NoTls)?;
-    let time_now = std::time::SystemTime::now();
-    let formatter: DateTime<Utc> = time_now.clone().into();
-    let iso_format_date = formatter.format("%+").to_string();
-    db_client.execute("UPDATE comments SET deleted_at = $1 WHERE id = $2", &[&iso_format_date, &comment_id])?;
+    db_client.execute("DELETE FROM comments WHERE id = $1", &[&comment_id])?;
+    db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Comment deleted successfully!".to_string(), status_code: 200}).unwrap())
 }
@@ -146,16 +146,32 @@ pub fn report_comment(report: rocket::serde::json::Json<ReportCreateDTO>) -> Res
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
     db_client.execute("INSERT INTO reports (comment_id, user_id, created_at) VALUES ($1, $2, $3)", &[&report.comment_id, &report.user_id, &iso_format_date])?;
+    
+    for row in db_client.query("SELECT reports_number FROM comments WHERE id = $1", &[&report.comment_id])? {
+        let rep_num: i32 = row.get(0);
+        let new_rep_num: i32 = rep_num + 1;
+        db_client.execute("UPDATE comments SET reports_number = $1 WHERE id = $2", &[&new_rep_num, &report.comment_id])?;
+    }
+    
+    db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Comment reported successfully!".to_string(), status_code: 200}).unwrap())
 }
 
-pub fn delete_report(report_id: i32) -> Result<String, Error> {
+pub fn delete_report(report_id: i32, comment_id: i32) -> Result<String, Error> {
     let mut db_client = Client::connect("postgresql://postgres:root@localhost:5432/commentService", NoTls)?;
     let time_now = std::time::SystemTime::now();
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
     db_client.execute("UPDATE reports SET deleted_at = $1 WHERE id = $2", &[&iso_format_date, &report_id])?;
+
+    for row in db_client.query("SELECT reports_number FROM comments WHERE id = $1", &[&comment_id])? {
+        let rep_num: i32 = row.get(0);
+        let new_rep_num: i32 = rep_num - 1;
+        db_client.execute("UPDATE comments SET reports_number = $1 WHERE id = $2", &[&new_rep_num, &comment_id])?;
+    }
+
+    db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Report deleted successfully!".to_string(), status_code: 200}).unwrap())
 }
@@ -220,7 +236,7 @@ pub fn get_all_comments_for_movie(movie_id_in: String) -> Result<String, Error> 
     let mut db_client = Client::connect("postgresql://postgres:root@localhost:5432/commentService", NoTls)?;
 
     let mut ret: Vec<Comment> = vec![];
-    for row in db_client.query("SELECT * FROM comments WHERE movie_id = $2", &[&movie_id_in])? {
+    for row in db_client.query("SELECT * FROM comments WHERE movie_id = $1", &[&movie_id_in])? {
         let id: i32 = row.get(0);
         let movie_id: String = row.get(1);
         let user_id: i32 = row.get(2);
@@ -252,7 +268,7 @@ pub fn get_bad_comments_for_user(user_id_in: i32) -> Result<String, Error> {
     let mut db_client = Client::connect("postgresql://postgres:root@localhost:5432/commentService", NoTls)?;
 
     let mut ret: Vec<Comment> = vec![];
-    for row in db_client.query("SELECT * FROM comments WHERE user_id = $2 AND reports_number > 0", &[&user_id_in])? {
+    for row in db_client.query("SELECT * FROM comments WHERE user_id = $1 AND reports_number > 0", &[&user_id_in])? {
         let id: i32 = row.get(0);
         let movie_id: String = row.get(1);
         let user_id: i32 = row.get(2);

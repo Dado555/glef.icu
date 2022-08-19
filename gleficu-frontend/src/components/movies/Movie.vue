@@ -93,12 +93,17 @@
     </div>
 
     <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
-      <h2 class="text-3xl font-semibold mb-5">Comments (1)</h2>
+      <h2 class="text-3xl font-semibold mb-5">Comments ({{ this.commentsSizeDb }})</h2>
     </div>
-    <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
-      <comment class="message" />
+    <div v-if="this.commentsSizeDb > 0">
+      <div class="container mx-auto  border-b border-gray-600 px-4 py-4" :key="comment.id" v-for="comment in commentsDb">
+        <comment class="message" :comment-db="comment"/>
+      </div>
     </div>
-    <add-comment v-if="isUser()"/>
+    <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
+      <h2 class="text-3xl font-semibold mb-5">New comment:</h2>
+    </div>
+    <add-comment v-if="canComment()" mode="new"/>
 
     <Cast :casts="movie.credits.cast.slice(0, 30)" />
     <Images
@@ -128,6 +133,7 @@ import EditMovieModal from "@/components/movies/EditMovieModal";
 import {authService} from "@/services/authService";
 import {movieService} from "@/services/movieService";
 import {listsService} from "@/services/listsService";
+import {commentService} from "@/services/commentService";
 
 export default {
   components: {
@@ -155,8 +161,12 @@ export default {
       mediaURL: "",
       userWatched: undefined,
       userWishlisted: undefined,
+      userCommented: false,
       canWatchlist: true,
       canWishlist: true,
+      commentsDb: [],
+      commentsSizeDb: 0,
+      commentsByUserDb: [],
     };
   },
 
@@ -228,8 +238,30 @@ export default {
           this.userWishlisted = true;
       });
     },
-    isUser() {
-      return authService.isUser();
+    canComment() {
+      return authService.isUser() && this.userWatched && !this.userCommented;
+    },
+    getUserComment() {
+      let currMovieId = this.$route.params.id;
+      commentService.getCommentByUserAndMovie(parseInt(this.$store.state.user.id), currMovieId).then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          console.log("1------successfully---------1")
+        }
+        let arr = response.data;
+        this.commentsByUserDb = response.data;
+        if(this.commentsByUserDb.length > 0)
+          this.userCommented = true;
+        console.log(arr);
+      });
+    },
+    getAllCommentsForMovie() {
+      let currMovieId = this.$route.params.id;
+      commentService.getCommentsByMovie(currMovieId).then((response) => {
+        let arr = response.data;
+        this.commentsSizeDb = arr.length;
+        this.commentsDb = response.data;
+        console.log(arr);
+      });
     },
     addToWishlist() {
       this.canWishlist = false;
@@ -317,6 +349,10 @@ export default {
     this.userWatchedFunc();
     this.userWishlistedFunc();
     this.getMovieDb(this.$route.params.id);
+    this.getAllCommentsForMovie();
+    if(authService.isUser()) {
+      this.getUserComment();
+    }
   }
 };
 </script>
