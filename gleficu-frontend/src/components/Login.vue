@@ -118,6 +118,7 @@ export default {
         // console.log(response);
         this.loginAction(response, "/", this);
       }, response => {
+        alert("Error on login! " + "Message ( " + response.statusText + " )");
         this.error = response.statusText
       })
     },
@@ -130,7 +131,8 @@ export default {
         // console.log(response);
         this.loginAction(response, "/", this);
       }, response => {
-        this.error = response.statusText
+        alert("Error on signup! " + "Message ( " + response.statusText + " )");
+        this.error = response.statusText;
       })
     },
     loginAction(response, redirect, context) {

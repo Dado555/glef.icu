@@ -115,7 +115,7 @@ pub fn create_comment(comment: rocket::serde::json::Json<CommentCreationDTO>) ->
     let time_now = std::time::SystemTime::now();
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
-    db_client.execute("INSERT INTO comments (movie_id, user_id, created_at, text, like_stars) VALUES ($1, $2, $3, $4, $5)", &[&comment.movie_id, &comment.user_id, &iso_format_date, &comment.text, &comment.like_stars])?;
+    db_client.execute("INSERT INTO comments (movie_id, user_id, created_at, updated_at, deleted_at, text, like_stars, reports_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", &[&comment.movie_id, &comment.user_id, &iso_format_date, &(""), &(""), &comment.text, &comment.like_stars, &(0)])?;
     db_client.close()?;
 
     Ok(serde_json::to_string(&Response {message: "Comment created successfully!".to_string(), status_code: 201}).unwrap())
@@ -145,7 +145,7 @@ pub fn report_comment(report: rocket::serde::json::Json<ReportCreateDTO>) -> Res
     let time_now = std::time::SystemTime::now();
     let formatter: DateTime<Utc> = time_now.clone().into();
     let iso_format_date = formatter.format("%+").to_string();
-    db_client.execute("INSERT INTO reports (comment_id, user_id, created_at) VALUES ($1, $2, $3)", &[&report.comment_id, &report.user_id, &iso_format_date])?;
+    db_client.execute("INSERT INTO reports (comment_id, user_id, created_at, deleted_at) VALUES ($1, $2, $3, $4)", &[&report.comment_id, &report.user_id, &iso_format_date, &("")])?;
     
     for row in db_client.query("SELECT reports_number FROM comments WHERE id = $1", &[&report.comment_id])? {
         let rep_num: i32 = row.get(0);

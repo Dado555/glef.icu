@@ -40,16 +40,18 @@
     </div>
     <div v-if="commentsSizeDb > 0">
       <div class="container mx-auto  border-b border-gray-600 px-4 py-4" :key="comment.id" v-for="comment in commentsDb">
-        <Comment class="message" :comment-db="comment"/>
+        <Comment @commentUpdated="commentUpdated()" class="message" :comment-db="comment"/>
       </div>
-      <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" v-if="adminPrivileges()">Ban user</button>
+      <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" v-if="adminPrivileges()" @click="banUser()">Ban user</button>
     </div>
 
-    <WatchedMovies :user-id="this.$route.params.id"/>
+    <button v-if="canUnban()" class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" @click="unbanUser()">Unban user</button>
 
-    <WishlistMovies :user-id="this.$route.params.id"/>
+    <WatchedMovies :user-id="parseInt(this.getUserId())"/>
 
-    <EditProfileModal v-model="editProfile" :user-id="this.$route.params.id" v-on:updatedUser="refresh()"/>
+    <WishlistMovies :user-id="parseInt(this.getUserId())"/>
+
+    <EditProfileModal v-model="editProfile" :user-id="parseInt(this.getUserId())" v-on:updatedUser="refresh()"/>
     <!--  -->
   </div>
 </template>
@@ -77,14 +79,18 @@ export default {
   },
 
   mounted() {
-    // console.log("User ID: " + this.$route.params.id);
-    this.getUserDb(this.$route.params.id);
+    // console.log("User ID: " + this.getUserId();
+    this.getUserDb(parseInt(this.getUserId()));
     this.getUserInappropriateComments();
   },
 
   methods: {
     openEditProfile() {
       this.editProfile = true;
+    },
+
+    getUserId() {
+      return authService.getJwtField("userId");
     },
 
     canEditSettings() {
@@ -100,19 +106,39 @@ export default {
     },
 
     adminPrivileges() {
-      return this.$store.state.user.authority === "ADMIN" && this.commentsSizeDb > 0;
+      return authService.getJwtField("authority") === "ADMIN" && this.commentsSizeDb > 0;
     },
 
     refresh() {
-      this.getUserDb(this.$route.params.id);
+      this.getUserDb(parseInt(this.getUserId()));
+    },
+
+    commentUpdated() {
+      this.getUserInappropriateComments();
     },
 
     getUserInappropriateComments() {
-      commentService.getBadCommentsByUser(this.$route.params.id).then((response) => {
+      commentService.getBadCommentsByUser(parseInt(this.getUserId())).then((response) => {
         this.commentsDb = response.data;
         this.commentsSizeDb = response.data.length;
         console.log(response.data);
       });
+    },
+
+    banUser() {
+      userService.banUser(this.user.username, true).then(() => {
+        alert("User " + this.user.username + " banned!");
+      });
+    },
+
+    canUnban() {
+      return this.user.banned && authService.getJwtField("authority") === "ADMIN";
+    },
+
+    unbanUser() {
+      userService.banUser(this.user.username, false).then(() => {
+        alert("User " + this.user.username + " unbanned!")
+      })
     }
   },
 }

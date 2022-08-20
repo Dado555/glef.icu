@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto  border-b border-gray-600 px-4 py-4">
-    <form>
-      <AwesomeVueStarRating
+    <div>
+      <Rating v-if="this.star>0"
           :star="this.star"
           :disabled="!isUser()"
           :maxstars="this.maxStars"
@@ -9,6 +9,7 @@
           :hasresults="this.hasResults"
           :hasdescription="this.hasDescription"
           :ratingdescription="this.ratingDescription"
+          @starsNumberUpdate="updateStarsNumber"
       />
       <div class="form__group">
         <label>Leave a comment</label>
@@ -19,15 +20,15 @@
             cols="50"
             placeholder="type in your comment"
         />
-        <button @click="addComment()" class="rounded bg-yellow-500 text-black cursor-auto" v-if="mode === 'new'">Submit</button>
-        <button @click="editComment()" class="rounded bg-yellow-500 text-black cursor-auto" v-if="mode === 'edit'">Edit</button>
+        <button @click="addComment()" class="rounded bg-yellow-500 text-black cursor-auto" v-if="mode === 'new'">Add comment</button>
+        <button @click="editComment()" class="rounded bg-yellow-500 text-black cursor-auto" v-if="mode === 'edit'">Edit comment</button>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
-import AwesomeVueStarRating from "awesome-vue-star-rating";
+import Rating from "@/components/comments/Rating";
 import {authService} from "@/services/authService";
 import {commentService} from "@/services/commentService";
 
@@ -44,7 +45,7 @@ export default {
   data() {
     return {
       newComment: '',
-      star: 2,
+      star: 0,
       ratingDescription: [
         {
           text: "Poor",
@@ -74,14 +75,14 @@ export default {
     };
   },
   components: {
-    AwesomeVueStarRating
+    Rating
   },
   methods: {
     isUser() {
       return authService.isUser()
     },
     addComment() {
-      let userId = parseInt(this.$store.state.user.id);
+      let userId = parseInt(this.getUserId());
       let movieId = this.$route.params.id;
       let comment = {
         movie_id: movieId,
@@ -89,9 +90,13 @@ export default {
         text: this.newComment,
         like_stars: parseInt(this.star)
       };
-      commentService.addComment(comment).then((response) => {
-        console.log(response.data);
+      commentService.addComment(comment).then(() => {
+        alert("Comment added!");
+        this.$emit("commentAdded");
       })
+    },
+    getUserId() {
+      return authService.getJwtField("userId");
     },
     editComment() {
       let commentUpdate = {
@@ -100,15 +105,21 @@ export default {
         like_stars: parseInt(this.star),
         reports_number: parseInt(this.commentDb.reports_number)
       };
-      commentService.updateComment(commentUpdate).then((response) => {
-        console.log(response.data);
+      commentService.updateComment(commentUpdate).then(() => {
+        alert("Comment edited!");
+        this.$emit("commentUpdated");
       });
+    },
+    updateStarsNumber(stars) {
+      this.star = stars;
     }
   },
   mounted() {
     if(this.mode === "edit") {
       this.star = this.commentDb.like_stars;
       this.newComment = this.commentDb.text;
+    } else {
+      this.star = 2;
     }
   }
 };

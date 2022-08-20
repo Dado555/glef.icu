@@ -70,5 +70,5 @@ func (state *WishlistManager) SaveWishlistItem(watchlistItem *WishlistItemJSON) 
 }
 
 func (state *WishlistManager) DeleteWishlistItem(wishlistItem *WishlistItem) {
-	state.db.Delete(wishlistItem)
+	state.db.Unscoped().Delete(wishlistItem)
 }

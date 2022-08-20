@@ -92,7 +92,7 @@ export default {
       this.$router.push({ name: "login" }).catch(() => {});
     },
     redirectProfile() {
-      this.$router.push('/user/' + this.$store.state.user.id.toString()).catch(() => {});
+      this.$router.push('/user/' + this.getUserId().toString()).catch(() => {});
     },
     redirectLogin() {
       this.$router.push('/login');
@@ -102,7 +102,13 @@ export default {
     },
     isUser() {
       return authService.isUser();
-    }
+    },
+    getUserId() {
+      console.log("USER ID: ");
+      let userId = authService.getJwtField("userId");
+      console.log(userId);
+      return userId;
+    },
   },
 };
 </script>

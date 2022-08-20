@@ -59,7 +59,7 @@
             <span class="ml-3">Add to wishlist</span>
           </a>
 
-          <a href="#" :class="{ isDisabled: !canWishlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWishlisted" @click.prevent="removeFromWishlist()">
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWishlisted" @click.prevent="removeFromWishlist()">
             <img src="@/assets/images/heart-white.png" alt="" />
             <span class="ml-3">Remove from wishlist</span>
           </a>
@@ -69,7 +69,7 @@
             <span class="ml-3">Add to watched</span>
           </a>
 
-          <a href="#" :class="{ isDisabled: !canWatchlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWatched" @click.prevent="removeFromWatchlist()">
+          <a href="#" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="userWatched" @click.prevent="removeFromWatchlist()">
             <img src="@/assets/images/check-mark.png" alt="" />
             <span class="ml-3">Delete from watched</span>
           </a>
@@ -97,13 +97,13 @@
     </div>
     <div v-if="this.commentsSizeDb > 0">
       <div class="container mx-auto  border-b border-gray-600 px-4 py-4" :key="comment.id" v-for="comment in commentsDb">
-        <comment class="message" :comment-db="comment"/>
+        <comment @commentUpdated3="commentUpdated()" @deletedComment="deletedComment()" class="message" :comment-db="comment"/>
       </div>
     </div>
-    <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4">
+    <div class="comment-space container mx-auto  border-b border-gray-600 px-4 py-4" v-if="canComment()">
       <h2 class="text-3xl font-semibold mb-5">New comment:</h2>
+      <add-comment @commentAdded="commentUpdated()"  mode="new"/>
     </div>
-    <add-comment v-if="canComment()" mode="new"/>
 
     <Cast :casts="movie.credits.cast.slice(0, 30)" />
     <Images
@@ -224,35 +224,45 @@ export default {
     },
     userWatchedFunc() {
       let currMovieId = this.$route.params.id;
-      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      let params = {userId: parseInt(this.getUserId()), movieId: currMovieId};
       listsService.getWatchlistItem(params).then((response) => {
-        if(response.data.imdbID === currMovieId && authService.isUser())
+        if(response.data.imdbID === currMovieId && authService.isUser()) {
           this.userWatched = true;
+          this.canWatchlist = false;
+        }
       });
     },
     userWishlistedFunc() {
       let currMovieId = this.$route.params.id;
-      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
+      let params = {userId: parseInt(this.getUserId()), movieId: currMovieId};
       listsService.getWishlistItem(params).then((response) => {
-        if(response.data.imdbID === currMovieId && authService.isUser())
+        if(response.data.imdbID === currMovieId && authService.isUser()) {
           this.userWishlisted = true;
+          this.canWishlist = false;
+        }
       });
     },
     canComment() {
       return authService.isUser() && this.userWatched && !this.userCommented;
     },
+    getUserId() {
+      return authService.getJwtField("userId");
+    },
     getUserComment() {
       let currMovieId = this.$route.params.id;
-      commentService.getCommentByUserAndMovie(parseInt(this.$store.state.user.id), currMovieId).then((response) => {
-        if (response.status === 201 || response.status === 200) {
-          console.log("1------successfully---------1")
-        }
-        let arr = response.data;
+      commentService.getCommentByUserAndMovie(parseInt(this.getUserId()), currMovieId).then((response) => {
         this.commentsByUserDb = response.data;
         if(this.commentsByUserDb.length > 0)
           this.userCommented = true;
-        console.log(arr);
       });
+    },
+    deletedComment() {
+      this.userCommented = false;
+      this.getAllCommentsForMovie();
+    },
+    commentUpdated() {
+      this.userCommented = true;
+      this.getAllCommentsForMovie();
     },
     getAllCommentsForMovie() {
       let currMovieId = this.$route.params.id;
@@ -260,13 +270,12 @@ export default {
         let arr = response.data;
         this.commentsSizeDb = arr.length;
         this.commentsDb = response.data;
-        console.log(arr);
       });
     },
     addToWishlist() {
       this.canWishlist = false;
       let payload = {
-        userId: parseInt(this.$store.state.user.id),
+        userId: parseInt(this.getUserId()),
         title: this.movieDb.title,
         genre: this.movieDb.genre,
         imdbID: this.movieDb.imdbID,
@@ -277,7 +286,7 @@ export default {
       listsService.saveWishlistItem(payload).then((response) => {
         if(response.data.imdbID === payload.imdbID){
           alert("Movie added to wishlist!");
-          this.canWishlist = true;
+          this.canWishlist = false;
           this.userWishlisted = true;
         }
       });
@@ -285,7 +294,7 @@ export default {
     addToWatchlist() {
       this.canWatchlist = false;
       let payload = {
-        userId: parseInt(this.$store.state.user.id),
+        userId: parseInt(this.getUserId()),
         title: this.movieDb.title,
         genre: this.movieDb.genre,
         imdbID: this.movieDb.imdbID,
@@ -296,7 +305,7 @@ export default {
       listsService.saveWatchlistItem(payload).then((response) => {
         if(response.data.imdbID === payload.imdbID){
           alert("Movie added to watchlist!");
-          this.canWatchlist = true;
+          this.canWatchlist = false;
           this.userWatched = true;
         }
       });
@@ -304,23 +313,21 @@ export default {
     removeFromWatchlist() {
       this.canWatchlist = false;
       let currMovieId = this.$route.params.id;
-      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
-      listsService.deleteWatchlistItem(params).then((response) => {
-        if(response.data.imdbID === currMovieId && authService.isUser()) {
-          this.userWatched = false;
-          this.canWatchlist = true;
-        }
+      let params = {userId: parseInt(this.getUserId()), movieId: currMovieId};
+      listsService.deleteWatchlistItem(params).then(() => {
+        alert("Movie removed from watchlist!");
+        this.userWatched = false;
+        this.canWatchlist = true;
       });
     },
     removeFromWishlist() {
       this.canWishlist = false;
       let currMovieId = this.$route.params.id;
-      let params = {userId: parseInt(this.$store.state.user.id), movieId: currMovieId};
-      listsService.deleteWishlistItem(params).then((response) => {
-        if(response.data.imdbID === currMovieId && authService.isUser()) {
-          this.userWishlisted = false;
-          this.canWishlist = true;
-        }
+      let params = {userId: parseInt(this.getUserId()), movieId: currMovieId};
+      listsService.deleteWishlistItem(params).then(() => {
+        alert("Movie removed from wishlist!");
+        this.userWishlisted = false;
+        this.canWishlist = true;
       });
     },
     getMovieDb(imdbId) {

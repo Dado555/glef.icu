@@ -1,5 +1,6 @@
 use rocket::response::{content, status};
 use rocket::http::Status;
+use rocket::{catch, post, get, put, delete};
 use crate::funcs;
 
 #[catch(404)]

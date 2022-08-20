@@ -5,7 +5,9 @@ const SEARCH_USERS = API_URL + 'searchUsers'
 const GET_BY_USERNAME = API_URL + 'username'
 const GET_BY_ID = API_URL + 'id'
 const GET_USERS_PAGE = API_URL + 'getUsersPage'
+const GET_BANNED_USERS_PAGE = API_URL + 'getBannedUsersPage'
 const UPDATE_USER = API_URL + 'updateUser'
+const BAN_USER = API_URL + 'banUser'
 
 class UserService {
     searchUsers(searchTerm) {
@@ -48,8 +50,33 @@ class UserService {
         });
     }
 
+    getBannedUsersPage(params) {
+        let newParams = { ...params };
+
+        for (let key in params) {
+            if (Array.isArray(params[key])) {
+                newParams[key] = params[key].join(",");
+            }
+        }
+
+        return axios.get(GET_BANNED_USERS_PAGE, {
+            params: newParams,
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("id_token"),
+            },
+        });
+    }
+
     updateUser(userId, payload) {
         return axios.put(UPDATE_USER + `/${userId}`, payload, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("id_token"),
+            },
+        });
+    }
+
+    banUser(username, isBanned) {
+        return axios.put(BAN_USER + `/${username}/${isBanned}`, null,  {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("id_token"),
             },

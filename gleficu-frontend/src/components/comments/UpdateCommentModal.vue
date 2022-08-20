@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body px-8 py-8">
           <div class="responsive-container overflow-hidden relative">
-            <add-comment mode="edit" :comment-db="this.commentDb"/>
+            <add-comment @commentUpdated="updatedComment()" mode="edit" :comment-db="this.commentDb"/>
           </div>
         </div>
       </div>
@@ -38,6 +38,9 @@ export default {
     close() {
       this.$emit("input", !this.value);
     },
+    updatedComment() {
+      this.$emit('commentUpdated2');
+    }
   },
 }
 </script>

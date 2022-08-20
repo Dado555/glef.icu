@@ -29,8 +29,13 @@
     </ul>
     <template v-for="(tab, index) in tabList" >
       <div :key="index" v-if="index + 1 === activeTab">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div v-if="activeTab === 1" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           <UserItem :key="user.id" v-for="user in users" :user="user" />
+          <slot :name="`tabPanel-${index + 1}`" />
+        </div>
+
+        <div v-if="activeTab === 2" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <UserItem :key="user.id" v-for="user in bannedUsers" :user="user" />
           <slot :name="`tabPanel-${index + 1}`" />
         </div>
 
@@ -68,9 +73,10 @@ export default {
   data() {
     return {
       activeTab: 1,
-      tabList: ["All users", "Ban user", "Banned users"],
+      tabList: ["All users", "Banned users"], // "Ban user"
       users: [],
-      size: 20
+      size: 20,
+      bannedUsers: []
     };
   },
 
@@ -80,6 +86,7 @@ export default {
 
   mounted() {
     this.getUsers(currentPage);
+    this.getBannedUsers(currentPage);
     // this.fetchUsers(currentPage);
     // this.scroll();
   },
@@ -106,6 +113,19 @@ export default {
         // console.log(response);
         let page = response.data;
         this.users = page.users;
+      });
+    },
+
+    getBannedUsers() {
+      let params = {
+        page: currentPage,
+        size: this.size
+      }
+
+      userService.getBannedUsersPage(params).then((response) => {
+        // console.log(response);
+        let page = response.data;
+        this.bannedUsers = page.users;
       });
     },
 

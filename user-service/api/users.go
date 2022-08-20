@@ -125,6 +125,7 @@ func (api *API) BanUser(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(req)
 	username := params["username"]
+	banStatus, _ := strconv.ParseBool(params["banned"])
 
 	user := api.users.FindUser(username)
 	if user == nil {
@@ -133,7 +134,7 @@ func (api *API) BanUser(w http.ResponseWriter, req *http.Request) {
 		if user.ID == 1 {
 			http.Error(w, "Cannot ban admin", http.StatusBadRequest)
 		} else {
-			user.Banned = true
+			user.Banned = banStatus
 			api.users.UpdateUser(user)
 		}
 	}

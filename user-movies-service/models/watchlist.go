@@ -69,5 +69,5 @@ func (state *WatchlistManager) SaveWatchlistItem(watchlistItem *WatchlistItemJSO
 }
 
 func (state *WatchlistManager) DeleteWatchlistItem(watchlistItem *WatchlistItem) {
-	state.db.Delete(watchlistItem)
+	state.db.Unscoped().Delete(watchlistItem)
 }

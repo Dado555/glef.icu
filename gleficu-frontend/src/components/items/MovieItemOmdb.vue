@@ -61,6 +61,7 @@ export default {
 
         this.movie.Tags = response.data.keywords;
         movieService.saveMovie(this.movie).then(() => {
+          alert("Movie saved successfully!");
           // console.log(response);
           // console.log("MOVIE SAVED");
           this.open();
