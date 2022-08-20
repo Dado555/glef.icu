@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <update-comment-modal @commentUpdated2="updatedComment()" :comment-db="this.commentDb" :value="this.updateCommentVar"/>
+    <update-comment-modal @commentUpdated2="updatedComment()" :comment-db="this.commentDb" @closeEvent="updateCommentVar=false" :value="this.updateCommentVar"/>
 
 <!--    <ReportCommentModal v-model="reportComment"/>-->
   </div>
@@ -137,17 +137,25 @@ export default {
       });
     },
     canEditComment() {
+      if(!authService.isUser())
+        return false;
       let userId = parseInt(this.getUserId());
       return this.commentDb.user_id === userId && authService.isUser();
     },
     adminPrivileges() {
+      if(!authService.isAdmin())
+        return false;
       return authService.getJwtField("authority") === "ADMIN";
     },
     canRemoveComplaint() {
+      if(!authService.isUser())
+        return false;
       let userId = parseInt(this.getUserId());
       return this.commentDb.user_id !== userId && authService.isUser() && this.userComplaintsDb.length > 0;
     },
     canAddComplaint() {
+      if(!authService.isUser())
+        return false;
       let userId = parseInt(this.getUserId());
       return this.commentDb.user_id !== userId && authService.isUser() && this.userComplaintsDb.length === 0;
     },
@@ -169,7 +177,9 @@ export default {
       this.getUserDb(this.commentDb.user_id);
       this.commentText = this.commentDb.text;
     }
-    this.getComplaint();
+    if(authService.isUser()){
+      this.getComplaint();
+    }
   }
 }
 </script>

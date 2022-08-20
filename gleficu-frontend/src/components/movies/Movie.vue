@@ -54,7 +54,7 @@
             <span class="ml-3">Play Trailer</span>
           </a>
 
-          <a href="#" :class="{ isDisabled: !canWishlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="!userWishlisted" @click.prevent="addToWishlist()">
+          <a href="#" :class="{ isDisabled: !canWishlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="canClickWishlist()" @click.prevent="addToWishlist()">
             <img src="@/assets/images/heart-white.png" alt="" />
             <span class="ml-3">Add to wishlist</span>
           </a>
@@ -64,7 +64,7 @@
             <span class="ml-3">Remove from wishlist</span>
           </a>
 
-          <a href="#" :class="{ isDisabled: !canWatchlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="!userWatched" @click.prevent="addToWatchlist()">
+          <a href="#" :class="{ isDisabled: !canWatchlist }" class="rounded bg-yellow-500 px-5 py-3 inline-flex text-black ml-5" v-if="canClickWatchlist()" @click.prevent="addToWatchlist()">
             <img src="@/assets/images/check-mark.png" alt="" />
             <span class="ml-3">Add to watched</span>
           </a>
@@ -222,6 +222,12 @@ export default {
     isAdmin() {
       return authService.isAdmin()
     },
+    canClickWishlist() {
+      return !this.userWishlisted && authService.isUser();
+    },
+    canClickWatchlist() {
+      return !this.userWatched && authService.isUser();
+    },
     userWatchedFunc() {
       let currMovieId = this.$route.params.id;
       let params = {userId: parseInt(this.getUserId()), movieId: currMovieId};
@@ -353,12 +359,12 @@ export default {
   },
   mounted() {
     // console.log("IMDB ID: " + this.$route.params.id);
-    this.userWatchedFunc();
-    this.userWishlistedFunc();
     this.getMovieDb(this.$route.params.id);
     this.getAllCommentsForMovie();
     if(authService.isUser()) {
       this.getUserComment();
+      this.userWatchedFunc();
+      this.userWishlistedFunc();
     }
   }
 };

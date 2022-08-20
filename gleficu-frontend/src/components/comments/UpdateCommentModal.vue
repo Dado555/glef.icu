@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     close() {
-      this.$emit("input", !this.value);
+      this.$emit("closeEvent");
     },
     updatedComment() {
       this.$emit('commentUpdated2');

@@ -36,6 +36,11 @@ func (api *API) UserLogin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if user.Banned == true {
+		http.Error(w, "User banned", http.StatusBadRequest)
+		return
+	}
+
 	role, _ := api.roles.FindRoleById(user.RoleID)
 	jsonToken := auth.GetJSONToken(user, role.Name)
 

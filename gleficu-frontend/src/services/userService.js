@@ -26,11 +26,13 @@ class UserService {
     }
 
     getById(id) {
-        return axios.get(GET_BY_ID + `/${id}`, {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("id_token"),
-            },
-        })
+        return axios.get(GET_BY_ID + `/${id}`,
+            // {
+            //     headers: {
+            //         Authorization: "Bearer " + localStorage.getItem("id_token"),
+            //     },
+            // }
+        );
     }
 
     getUsersPage(params) {
