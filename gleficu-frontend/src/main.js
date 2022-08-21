@@ -14,6 +14,7 @@ import FormWizard from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import locale from 'element-ui/lib/locale/lang/en'
 import store from "./store";
+import {authService} from "@/services/authService";
 
 Vue.prototype.$http = api;
 Vue.config.productionTip = false;
@@ -52,7 +53,7 @@ router.beforeEach((to, from, next) => {
   const { authenticated, authorities } = to.meta;
 
   if (authenticated) {
-    let userAuthority = store.state.user.authority;
+    let userAuthority = authService.getJwtField("authority");
     if (authorities.some((element) => element === userAuthority)) {
       next();
     } else {

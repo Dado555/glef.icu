@@ -160,10 +160,7 @@ pub fn report_comment(report: rocket::serde::json::Json<ReportCreateDTO>) -> Res
 
 pub fn delete_report(report_id: i32, comment_id: i32) -> Result<String, Error> {
     let mut db_client = Client::connect("postgresql://postgres:root@localhost:5432/commentService", NoTls)?;
-    let time_now = std::time::SystemTime::now();
-    let formatter: DateTime<Utc> = time_now.clone().into();
-    let iso_format_date = formatter.format("%+").to_string();
-    db_client.execute("UPDATE reports SET deleted_at = $1 WHERE id = $2", &[&iso_format_date, &report_id])?;
+    db_client.execute("DELETE FROM reports WHERE id = $1", &[&report_id])?;
 
     for row in db_client.query("SELECT reports_number FROM comments WHERE id = $1", &[&comment_id])? {
         let rep_num: i32 = row.get(0);
@@ -185,7 +182,7 @@ pub fn get_report_for_user_and_comment(user_id_in: i32, comment_id_in: i32) -> R
         let comment_id: i32 = row.get(1);
         let user_id: i32 = row.get(2);
         let created_at: &str = row.get(3);
-        let deleted_at: &str = row.get(5);
+        let deleted_at: &str = row.get(4);
 
         ret.push(Report {
             id,

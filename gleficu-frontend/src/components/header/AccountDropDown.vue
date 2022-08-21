@@ -104,10 +104,7 @@ export default {
       return authService.isUser();
     },
     getUserId() {
-      console.log("USER ID: ");
-      let userId = authService.getJwtField("userId");
-      console.log(userId);
-      return userId;
+      return authService.getJwtField("userId");
     },
   },
 };

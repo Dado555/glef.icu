@@ -27,7 +27,7 @@
         </p>
 
         <div class="mt-5" v-if="canEditSettings()">
-          <a href="#" style="margin-left: 0" class="rounded bg-red-500 px-5 py-3 inline-flex text-black ml-5" @click.prevent="openEditProfile">
+          <a href="#" style="margin-left: 0" class="rounded bg-red-500 px-5 py-3 inline-flex text-black ml-5" @click.prevent="openEditProfile()">
             <img src="@/assets/images/Pencil-icon.png" alt=""/>
             <span class="ml-3">Edit Profile Settings</span>
           </a>
@@ -41,17 +41,16 @@
     <div v-if="commentsSizeDb > 0">
       <div class="container mx-auto  border-b border-gray-600 px-4 py-4" :key="comment.id" v-for="comment in commentsDb">
         <Comment @commentUpdated="commentUpdated()" class="message" :comment-db="comment"/>
+        <button class="px-4 py-1.5 rounded bg-red-700 bg-white shadow-xl cursor-pointer" v-if="adminPrivileges()" @click="banUser()">Ban user</button>
+        <button v-if="canUnban()" class="px-4 py-1.5 rounded bg-red-700 bg-white shadow-xl cursor-pointer" @click="unbanUser()">Unban user</button>
       </div>
-      <button class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" v-if="adminPrivileges()" @click="banUser()">Ban user</button>
     </div>
 
-    <button v-if="canUnban()" class="px-4 py-1.5 rounded-lg bg-yellow-500 bg-white shadow-xl" @click="unbanUser()">Unban user</button>
+    <WatchedMovies v-if="this.userId !== -1" :user-id="this.userId"/>
 
-    <WatchedMovies :user-id="parseInt(this.getUserId())"/>
+    <WishlistMovies v-if="this.userId !== -1" :user-id="this.userId"/>
 
-    <WishlistMovies :user-id="parseInt(this.getUserId())"/>
-
-    <EditProfileModal v-model="editProfile" :user-id="parseInt(this.getUserId())" v-on:updatedUser="refresh()"/>
+    <EditProfileModal v-if="this.userId !== -1" v-model="editProfile" :user-id="this.userId" v-on:updatedUser="refresh()"/>
     <!--  -->
   </div>
 </template>
@@ -80,8 +79,9 @@ export default {
 
   mounted() {
     // console.log("User ID: " + this.getUserId();
-    this.getUserDb(parseInt(this.getUserId()));
-    this.getUserInappropriateComments();
+    this.userId = parseInt(this.$route.params.id);
+    this.getUserDb(parseInt(this.$route.params.id)); // parseInt(this.getUserId())
+    this.getUserInappropriateComments(parseInt(this.$route.params.id));
   },
 
   methods: {
@@ -106,28 +106,28 @@ export default {
     },
 
     adminPrivileges() {
-      return authService.getJwtField("authority") === "ADMIN" && this.commentsSizeDb > 0;
+      return authService.getJwtField("authority") === "ADMIN" && this.commentsSizeDb > 0 && !this.user.banned;
     },
 
     refresh() {
-      this.getUserDb(parseInt(this.getUserId()));
+      this.getUserDb(this.userId);
     },
 
     commentUpdated() {
       this.getUserInappropriateComments();
     },
 
-    getUserInappropriateComments() {
-      commentService.getBadCommentsByUser(parseInt(this.getUserId())).then((response) => {
+    getUserInappropriateComments(userId) {
+      commentService.getBadCommentsByUser(userId).then((response) => {
         this.commentsDb = response.data;
         this.commentsSizeDb = response.data.length;
-        console.log(response.data);
       });
     },
 
     banUser() {
       userService.banUser(this.user.username, true).then(() => {
         alert("User " + this.user.username + " banned!");
+        this.refresh();
       });
     },
 
@@ -137,7 +137,8 @@ export default {
 
     unbanUser() {
       userService.banUser(this.user.username, false).then(() => {
-        alert("User " + this.user.username + " unbanned!")
+        alert("User " + this.user.username + " unbanned!");
+        this.refresh();
       })
     }
   },

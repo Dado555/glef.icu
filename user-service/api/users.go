@@ -243,6 +243,31 @@ func (api *API) GetUsersPage(w http.ResponseWriter, request *http.Request) {
 	}
 }
 
+func (api *API) GetBannedUsersPage(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	queryParams := request.URL.Query()
+
+	//fmt.Println(queryParams)
+
+	page := queryParams.Get("page")
+	size := queryParams.Get("size")
+
+	pageParsed, _ := strconv.ParseUint(page, 10, 64)
+	sizeParsed, _ := strconv.ParseUint(size, 10, 64)
+
+	users := api.users.GetBannedUsers(pageParsed, sizeParsed)
+
+	usersPage := models.UsersPage{
+		Users: users,
+	}
+
+	err := json.NewEncoder(w).Encode(usersPage)
+	if err != nil {
+		http.Error(w, "Could not return banned users list", http.StatusBadRequest)
+		return
+	}
+}
+
 func (api *API) UpdateUser(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

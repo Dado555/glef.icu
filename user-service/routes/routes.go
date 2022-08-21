@@ -22,6 +22,7 @@ func CreateRoutes(api *api.API) *mux.Router {
 	u.HandleFunc("/username/{username}", api.GetUserByUsername).Methods("GET")
 	u.HandleFunc("/id/{id}", api.GetUserById).Methods("GET")
 	u.HandleFunc("/getUsersPage", api.GetUsersPage).Methods("GET")
+	u.HandleFunc("/getBannedUsersPage", api.GetBannedUsersPage).Methods("GET")
 	u.HandleFunc("/banUser/{username}/{banned}", api.BanUser).Methods("PUT")
 	u.HandleFunc("/updateUser/{userId}", api.UpdateUser).Methods("PUT")
 	u.Handle("/info", negroni.New(

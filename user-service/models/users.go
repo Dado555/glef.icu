@@ -185,12 +185,18 @@ func (state *UserManager) InitDatabase() {
 
 func (state *UserManager) SearchUsers(name string) *[]UserDTO {
 	var users []User
-	state.db.Where("LOWER(username) LIKE ?", "%"+name+"%").Find(&users)
+	state.db.Where("LOWER(username) LIKE ? AND role_id = 2", "%"+name+"%").Find(&users)
 	return UserListToUserDTOList(&users)
 }
 
 func (state *UserManager) GetUsers(page uint64, size uint64) *[]UserDTO {
 	var users []User
-	state.db.Find(&users).Offset(int(page * size)).Limit(int(size))
+	state.db.Where("role_id = 2 AND banned = false").Find(&users).Offset(int(page * size)).Limit(int(size))
+	return UserListToUserDTOList(&users)
+}
+
+func (state *UserManager) GetBannedUsers(page uint64, size uint64) *[]UserDTO {
+	var users []User
+	state.db.Where("role_id = 2 AND banned = true").Find(&users).Offset(int(page * size)).Limit(int(size))
 	return UserListToUserDTOList(&users)
 }

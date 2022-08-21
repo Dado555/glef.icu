@@ -15,10 +15,10 @@
       />
       <p>{{ this.commentText }}</p>
       <div class="comment__flex-btn">
-        <button @click.prevent="addComplaint()" class="update rounded bg-red-700 text-black cursor-auto" v-if="canAddComplaint()">Report</button>
-        <button @click.prevent="deleteComplaint()" class="update rounded bg-red-700 text-black cursor-auto" v-if="canRemoveComplaint()">Remove report</button>
-        <button @click.prevent="updateCommentVar = true" @input="updateCommentVar=false" class="update rounded bg-yellow-500 text-black cursor-auto" v-if="canEditComment()">Update</button>
-        <button @click.prevent="deleteComment()" class="del rounded bg-yellow-500 text-black cursor-auto" v-if="canEditComment() || adminPrivileges()">Delete</button>
+        <button @click.prevent="addComplaint()" class="update rounded bg-red-700 bg-white cursor-pointer" v-if="canAddComplaint()">Report</button>
+        <button @click.prevent="deleteComplaint()" class="update rounded bg-red-700 bg-white cursor-pointer" v-if="canRemoveComplaint()">Remove report</button>
+        <button @click.prevent="updateCommentVar = true" @input="updateCommentVar=false" class="update rounded bg-yellow-500 bg-white cursor-pointer" v-if="canEditComment()">Update</button>
+        <button @click.prevent="deleteComment()" class="del rounded bg-yellow-500 bg-white cursor-pointer" v-if="canEditComment() || adminPrivileges()">Delete</button>
       </div>
     </div>
 
@@ -112,28 +112,25 @@ export default {
         comment_id: parseInt(commentId),
         user_id: userId
       };
-      commentService.addComplaint(complaint).then((response) => {
+      commentService.addComplaint(complaint).then(() => {
         alert("Complaint added!");
-        console.log("ADD COMPLAINT:");
-        console.log(response.data);
+        this.$emit("reportedComment")
+        this.getComplaint();
       });
     },
     getComplaint() {
       let userId = parseInt(this.getUserId());
       let commentId = parseInt(this.commentDb.id);
       commentService.getComplaint(userId, commentId).then((response) => {
-        console.log("GET COMPLAINTS:");
-        console.log(response.data);
         this.userComplaintsDb = response.data;
       });
     },
     deleteComplaint() {
       let complaintId = parseInt(this.userComplaintsDb[0].id);
       let commentId = parseInt(this.commentDb.id);
-      commentService.deleteComplaint(complaintId, commentId).then((response) => {
+      commentService.deleteComplaint(complaintId, commentId).then(() => {
         alert("Complaint deleted!");
-        console.log("DELETE COMPLAINT:");
-        console.log(response.data);
+        this.getComplaint();
       });
     },
     canEditComment() {
@@ -204,15 +201,15 @@ button {
 }
 .del {
   background: #f93943;
-  color: #000807;
+  /*color: #000807;*/
   height: 40px;
   width: 100px;
 }
 .update {
   background: #7eb2dd;
-  color: #000807;
+  /*color: #000807;*/
   height: 40px;
-  width: 100px;
+  width: 150px;
 }
 textarea {
   width: 100%;
