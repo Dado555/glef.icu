@@ -1,7 +1,6 @@
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 import sys
-from pymkv import MKVFile
 import subprocess
 
 

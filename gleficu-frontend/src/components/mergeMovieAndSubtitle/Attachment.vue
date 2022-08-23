@@ -164,6 +164,7 @@
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import AttachmentList from "./AttachmentList";
+import {mergeService} from "@/services/mergeService";
 
 export default {
   name: "Attachment",
@@ -233,12 +234,30 @@ export default {
       attachment.progress = null;
       attachment.size = file.size;
       this.tempAttachments = [...this.tempAttachments, attachment];
-      console.log(attachment);
+      if(this.tempAttachments.length > 1)
+        this.passForMerge(this.tempAttachments);
       //getAcceptedFiles()[0].dataURL);//your origin image data url
     },
     getUrl(file, dataUrl) {
       console.log(file);
       console.log(dataUrl);
+    },
+    passForMerge(attachments) {
+      let payload = {
+        subtitle: "",
+        movie: ""
+      };
+      for(let att of attachments) {
+        console.log(att.title);
+        if(att.title.includes(".srt")) {
+          payload.subtitle = att.title;
+        } else {
+          payload.movie = att.title;
+        }
+      }
+      mergeService.merge(payload).then((response) => {
+        console.log(response);
+      });
     },
     // a middle layer function where you can change the XHR request properties
     sendingFiles(files, ) { // xhr, formData

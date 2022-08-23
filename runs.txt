@@ -1,0 +1,5 @@
+/home/dado555/Desktop/gleficu/glef.icu/python-merge/venv/bin/python -m flask run -h localhost -p 3004
+
+go run server.go
+
+cargo run --color=always --package grading-service --bin grading-service

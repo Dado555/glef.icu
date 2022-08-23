@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/merge", methods=["GET", "OPTIONS"])
+@app.route("/api/merge", methods=["GET", "OPTIONS"])
 def merge():
     if request.method == "OPTIONS":  # CORS preflight
         return _build_cors_preflight_response()
