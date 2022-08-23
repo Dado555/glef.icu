@@ -1,16 +1,11 @@
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 import sys
+from pymkv import MKVFile
+import subprocess
 
 
 def _python_merge(subtitles_path, movie_path, output_path):
-    try:
-        _fix_subtitles(subtitles_path)
-        print("Subtitles fixed!")
-    except:
-        print("Subtitles not fixed!")
-
-
     generator = lambda txt: TextClip(txt, font='Arial', fontsize=24, color='white')  # font='Georgia-Regular'
 
     sub = SubtitlesClip(subtitles_path, generator)
@@ -22,16 +17,25 @@ def _python_merge(subtitles_path, movie_path, output_path):
     print("Movie and subtitles merged!")
 
 
+def mkv_merge(movie_path, subtitle_path, output_path):
+    mkv_string = ["/usr/bin/mkvmerge", "--ui-language", "en_US", "--output", "{}".format(output_path), "--language",
+                  "0:und", "--language", "1:und", "{}".format(movie_path), "--language", "0:und",
+                  "{}".format(subtitle_path), "--track-order", "0:0,0:1,1:0"]
+    process = subprocess.Popen(mkv_string, stdout=subprocess.PIPE)
+    out, err = process.communicate()
+    print(out)
+    print(err)
+
+
 def _fix_subtitles(subtitles_path):
     with open(subtitles_path, 'r', encoding="iso-8859-1") as file:
         file_data = file.read()
 
-    transTable = file_data.maketrans("ÆÈæèð", "ĆČćčđšŠžŽ")
-    file_data = file_data.translate(transTable)
+    trans_table = file_data.maketrans("ÆÈæèð", "ĆČćčđšŠžŽ")
+    file_data = file_data.translate(trans_table)
 
     with open(subtitles_path, 'w', encoding='utf-8') as file:
         file.write(file_data)
-    print("subtitle fixed")
 
 
 def _get_paths(movie_name, subtitle_name):
@@ -58,5 +62,11 @@ def _get_paths(movie_name, subtitle_name):
 
 
 argv = sys.argv
-movie_path, subtitle_path, output_path = _get_paths(argv[1], argv[2])
-_python_merge(subtitle_path, movie_path, output_path)
+movie_p, subtitle_p, output_p = _get_paths(argv[1], argv[2])
+try:
+    _fix_subtitles(subtitle_p)
+    print("Subtitles fixed!")
+except:
+    print("Subtitles not fixed!")
+# _python_merge(subtitle_p, movie_p, output_p)
+mkv_merge(movie_p, subtitle_p, output_p)
