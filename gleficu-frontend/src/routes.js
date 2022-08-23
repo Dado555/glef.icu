@@ -49,8 +49,8 @@ let router = new VueRouter({
       name: "mergeMovie",
       component: Attachment,
       meta: {
-        authenticated: true,
-        authorities: ["USER"],
+        authenticated: false, // true
+        authorities: [], // "USER"
       }
     },
     {

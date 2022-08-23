@@ -233,7 +233,7 @@ export default {
       attachment.progress = null;
       attachment.size = file.size;
       this.tempAttachments = [...this.tempAttachments, attachment];
-      // console.log(attachment);
+      console.log(attachment);
       //getAcceptedFiles()[0].dataURL);//your origin image data url
     },
     getUrl(file, dataUrl) {

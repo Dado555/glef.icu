@@ -1,0 +1,1 @@
+ImageMagick install and in /etc/ImageMagick../proxy.xml put all policy rights to "read | write"
