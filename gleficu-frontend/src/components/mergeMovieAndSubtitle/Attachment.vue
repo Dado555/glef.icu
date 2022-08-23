@@ -174,22 +174,7 @@ export default {
       tempAttachments: [],
       attachments: [],
       dropzoneOptions: {
-        // The Url Where Dropped or Selected files will be sent
-        //url: `https://httpbin.org/post`,
-        // File Size allowed in MB
-        //maxFilesize: 102400000,
-        // Authentication Headers like Access_Token of your application
-        // headers: {
-        //   Authorization: `Access Token`
-        // },
-        // The way you want to receive the files in the server
-        // paramName: function() {  // n
-        //   return "file[]";
-        // },
-
-        // important : set autoProcessQueue on false
         autoProcessQueue: false,
-        // url
         url: 'http://localhost',
         dictDefaultMessage: "Upload Files Here xD",
         includeStyling: false,
@@ -206,21 +191,7 @@ export default {
     AttachmentList: AttachmentList
   },
   methods: {
-    // function called for every file dropped or selected
     fileAdded(file) {
-      //console.log("File Dropped => ", file);
-
-      //console.log(this.$refs.myVueDropzone.getQueuedFiles());
-      //console.log(this.$refs.myVueDropzone.getAcceptedFiles());
-      // const reader = new FileReader()
-      // reader.readAsDataURL(file)
-      //
-      // reader.onload = function(event) {
-      //   console.log(event.target.result);
-      //   console.log(event);
-      // };
-
-      // Construct your file object to render in the UI
       let attachment = {};
       attachment._id = file.upload.uuid;
       attachment.title = file.name;
@@ -236,7 +207,6 @@ export default {
       this.tempAttachments = [...this.tempAttachments, attachment];
       if(this.tempAttachments.length > 1)
         this.passForMerge(this.tempAttachments);
-      //getAcceptedFiles()[0].dataURL);//your origin image data url
     },
     getUrl(file, dataUrl) {
       console.log(file);
@@ -259,15 +229,11 @@ export default {
         console.log(response);
       });
     },
-    // a middle layer function where you can change the XHR request properties
-    sendingFiles(files, ) { // xhr, formData
-      console.log(
-          "if you want to change the upload time or add data to the formData you can do it here."
-      );
+    sendingFiles(files) {
+      console.log("if you want to change the upload time or add data to the formData you can do it here.");
       console.log("Files sending", files);
     },
-    // function where we get the upload progress
-    uploadProgress(file, progress, ) { // bytesSent
+    uploadProgress(file, progress) {
       console.log("File Upload Progress", progress);
       this.tempAttachments.map(attachment => {
         if (attachment.title === file.name) {
@@ -275,7 +241,6 @@ export default {
         }
       });
     },
-    // called on successful upload of a file
     success(file, response) {
       console.log("File uploaded successfully");
       console.log("Response is ->", response);
@@ -301,7 +266,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #mergeMovie {
   margin-top: 60px;

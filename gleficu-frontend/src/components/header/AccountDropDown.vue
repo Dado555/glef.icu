@@ -1,39 +1,19 @@
 <template>
   <div class="relative" style="margin-right: 50px">
     <button @click="isOpen = !isOpen" class="focus:outline-none">
-      <img
-        src="@/assets/images/avatar.jpg"
-        alt=""
-        class="h-10 rounded-full mr-1"
-      />
+      <img src="@/assets/images/avatar.jpg" alt="" class="h-10 rounded-full mr-1"/>
     </button>
 
-    <button
-      @click="isOpen = false"
-      v-if="isOpen"
-      class="fixed top-0 right-0 bottom-0 w-full h-full cursor-default bg-black opacity-50 "
-    ></button>
+    <button @click="isOpen = false" v-if="isOpen"
+      class="fixed top-0 right-0 bottom-0 w-full h-full cursor-default bg-black opacity-50 "></button>
 
-    <div
-      v-if="isOpen"
-      class="absolute bg-white py-2 rounded-lg w-48 right-0 mr-3 shadow-xl"
-    >
-      <a
-        v-if="isUser()"
+    <div v-if="isOpen" class="absolute bg-white py-2 rounded-lg w-48 right-0 mr-3 shadow-xl">
+      <a v-if="isUser()"
         @click="redirectProfile()"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
         >Account Settings
       </a>
-<!--      Redirect to -->
-<!--      /user/:id   -->
-
-<!--      <a-->
-<!--        v-if="loggedIn === true"-->
-<!--        class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"-->
-<!--        >Support-->
-<!--      </a>-->
-      <a
-        @click.prevent="logout"
+      <a @click.prevent="logout"
         v-if="!isUnauthorized()"
         class="text-gray-500 block px-4 py-2 hover:bg-indigo-500 hover:text-white"
         >Logout
@@ -54,13 +34,7 @@ export default {
   mounted() {
     if(authService.isAuthenticated()) {
       this.loggedIn = true;
-      // this.roles = authService.getRoles();
     }
-
-    // this.$root.$on("loginSuccess", (roles) => {
-    //   this.loggedIn = true;
-    //   this.roles = roles;
-    // })
   },
 
   created() {

@@ -23,18 +23,6 @@ class CommentService {
         );
     }
 
-    // pub struct Comment {
-    //     pub id: i32,
-    //     pub movie_id: String,
-    //     pub user_id: i32,
-    //     pub created_at: String,
-    //     pub updated_at: String,
-    //     pub deleted_at: String,
-    //     pub text: String,
-    //     pub like_stars: i32,
-    //     pub reports_number: i32
-    // }
-
     getBadCommentsByUser(userId) {
         return axios.get(GET_BAD_COMMENTS_FOR_USER + `?user_id=${userId}`,
             {
@@ -65,13 +53,6 @@ class CommentService {
         );
     }
 
-    // pub struct CommentCreationDTO {
-    //     pub movie_id: String,
-    //     pub user_id: i32,
-    //     pub text: String,
-    //     pub like_stars: i32
-    // }
-
     deleteComment(commentId) {
         return axios.delete(DELETE_COMMENT + `?comment_id=${commentId}`,
             {
@@ -92,13 +73,6 @@ class CommentService {
         );
     }
 
-    // pub struct CommentUpdateDTO {
-    //     pub id: i32,
-    //     pub text: String,
-    //     pub like_stars: i32,
-    //     pub reports_number: i32
-    // }
-
     addComplaint(complaint_creation_dto) {
         return axios.post(ADD_COMPLAINT, complaint_creation_dto,
             {
@@ -109,11 +83,6 @@ class CommentService {
         );
     }
 
-    // pub struct ReportCreateDTO {
-    //     pub comment_id: i32,
-    //     pub user_id: i32
-    // }
-
     getComplaint(userId, commentId) {
         return axios.get(GET_COMPLAINT + `?user_id=${userId}&comment_id=${commentId}`,
             {
@@ -123,14 +92,6 @@ class CommentService {
             }
         );
     }
-
-    // pub struct Report {
-    //     pub id: i32,
-    //     pub comment_id: i32,
-    //     pub user_id: i32,
-    //     pub created_at: String,
-    //     pub deleted_at: String
-    // }
 
     deleteComplaint(complaintId, commentId) {
         return axios.delete(DELETE_COMPLAINT + `?complaint_id=${complaintId}&comment_id=${commentId}`,

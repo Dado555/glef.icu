@@ -103,7 +103,6 @@ export default {
         alert("Comment deleted!");
         this.$emit("deletedComment")
       });
-      // emit event to refresh comments
     },
     addComplaint() {
       let userId = parseInt(this.getUserId());
