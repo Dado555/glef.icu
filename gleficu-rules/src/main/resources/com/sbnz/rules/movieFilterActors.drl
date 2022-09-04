@@ -4,27 +4,30 @@ import java.util.List;
 import java.util.Set;
 
 import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.lists.*;
+import com.sbnz.gleficu.model.movie.*;
+import com.sbnz.gleficu.model.user.*;
 import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
 
-rule "Filter filmova po glavnim glumcima"
-    agenda-group "Filter filmova po filmskoj ekipi"
-    no-loop true
-    when
-        $phase: MovieFilterByFilmCrewPhase($actors: actors, $movies: movies)
+// rule "Filter filmova po glavnim glumcima"
+//     agenda-group "Filter filmova po filmskoj ekipi"
+//     no-loop true
+//     when
+//         $phase: MovieFilterByFilmCrewPhase($actors: actors, $movies: movies)
 
-        accumulate (
-            FilmCrew($id: id) from $actors;
-            $actorsIn: collectSet($id)
-        )
+//         accumulate (
+//             FilmCrew($id: id) from $actors;
+//             $actorsIn: collectSet($id)
+//         )
 
-        accumulate (
-            $retMovie: Movie($movieId: id, $movieActors: actors) from $movies 
-            and FilmCrew($id: id, id memberOf $actorsIn) from $movieActors;
-            $retMovies: collectSet($retMovie)
-        )
-    then
-        System.out.println("(glumci) Filtriranje filmova..");
-        insert(new MoviesFilterFilmCrewFact($retMovies));
-end
+//         accumulate (
+//             $retMovie: Movie($movieId: id, $movieActors: actors) from $movies 
+//             and FilmCrew($id: id, id memberOf $actorsIn) from $movieActors;
+//             $retMovies: collectSet($retMovie)
+//         )
+//     then
+//         System.out.println("(glumci) Filtriranje filmova..");
+//         insert(new MoviesFilterFilmCrewFact($retMovies));
+// end

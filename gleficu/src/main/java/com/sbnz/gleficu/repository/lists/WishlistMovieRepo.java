@@ -1,6 +1,6 @@
-package com.sbnz.gleficu.repository;
+package com.sbnz.gleficu.repository.lists;
 
-import com.sbnz.gleficu.model.WishlistMovie;
+import com.sbnz.gleficu.model.lists.WishlistMovie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

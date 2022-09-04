@@ -6,6 +6,9 @@ name
 package com.sbnz.templates;
 
 import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.lists.*;
+import com.sbnz.gleficu.model.movie.*;
+import com.sbnz.gleficu.model.user.*;
 import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
@@ -16,7 +19,7 @@ template "ages"
         agenda-group "Postavljanje starosne dobi"
         no-loop true
         when
-            $user: User(years >= "@{minAge}", years < "@{maxAge}")
+            $user: User(age >= "@{minAge}", age < "@{maxAge}")
         then
             System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.@{name}) };

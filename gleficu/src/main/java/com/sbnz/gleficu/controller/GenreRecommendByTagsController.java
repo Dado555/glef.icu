@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/recommend/genre-by-tags")
+@RequestMapping(value = "/api/recommend/genre-by-tags")
 public class GenreRecommendByTagsController {
     private final GenreRecommendByTagsService genreRecommendByTagsService;
 
@@ -15,8 +15,8 @@ public class GenreRecommendByTagsController {
         this.genreRecommendByTagsService = service;
     }
 
-    @GetMapping(value = "/{requestId}")
-    public int recommendByTags(@PathVariable Integer requestId) {
-        return genreRecommendByTagsService.recommendByInputTags(requestId);
+    @GetMapping()
+    public int recommendByTags(@RequestParam("userId") Integer userId, @RequestParam("tags") String tags) {
+        return genreRecommendByTagsService.recommendByInputTags(userId, tags);
     }
 }

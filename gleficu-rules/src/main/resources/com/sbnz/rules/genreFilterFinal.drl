@@ -5,6 +5,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.lists.*;
+import com.sbnz.gleficu.model.movie.*;
+import com.sbnz.gleficu.model.user.*;
 import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;

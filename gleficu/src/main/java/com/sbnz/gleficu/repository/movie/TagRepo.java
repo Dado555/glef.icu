@@ -1,6 +1,6 @@
-package com.sbnz.gleficu.repository;
+package com.sbnz.gleficu.repository.movie;
 
-import com.sbnz.gleficu.model.Tag;
+import com.sbnz.gleficu.model.movie.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

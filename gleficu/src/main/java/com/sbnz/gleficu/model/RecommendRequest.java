@@ -1,6 +1,7 @@
 package com.sbnz.gleficu.model;
 
 import com.sbnz.gleficu.model.enums.AgeRange;
+import com.sbnz.gleficu.model.movie.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,7 @@
 package com.sbnz.gleficu.model;
 
+import com.sbnz.gleficu.model.movie.Movie;
+import com.sbnz.gleficu.model.user.UserDb;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,7 @@ public class RatedMovie extends BaseEntity{
     public Movie movie;
 
     @ManyToOne
-    public User user;
+    public UserDb user;
 
     @Column(name = "rating", nullable = false)
     public Double rating;

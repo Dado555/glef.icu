@@ -14,6 +14,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/vue-fontawesome": "^2.0.8",
+    "@voerro/vue-tagsinput": "^2.7.1",
     "autoprefixer": "^9.8.6",
     "awesome-vue-star-rating": "^1.0.9",
     "axios": "^0.21.4",

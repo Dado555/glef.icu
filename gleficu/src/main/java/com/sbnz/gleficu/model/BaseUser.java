@@ -14,9 +14,18 @@ import javax.persistence.MappedSuperclass;
 @AllArgsConstructor
 @MappedSuperclass
 public class BaseUser extends BaseEntity{
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "role_id")
+    private Integer roleId;
+
+    @Column(name = "banned")
+    private Boolean banned;
+
+    @Column(name = "can_be_banned")
+    private Boolean canBeBanned;
 }

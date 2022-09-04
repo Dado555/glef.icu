@@ -1,13 +1,20 @@
 package models
 
+import (
+	"fmt"
+	"github.com/jinzhu/gorm"
+	"sort"
+)
+
 type Tag struct {
 	Id   int    `gorm:"not null" json:"id"`
 	Name string `gorm:"not null" json:"name"`
 }
 
 type TagDB struct {
-	MovieId uint   `gorm:"not null" json:"movieId"`
-	Name    string `gorm:"not null" json:"name"`
+	gorm.Model `json:"-"`
+	MovieId    uint   `gorm:"not null" json:"movieId"`
+	Name       string `gorm:"not null" json:"name"`
 }
 
 type TagManager struct {
@@ -54,8 +61,18 @@ func (state *TagManager) AggMovieTags(movieId uint, tags *[]Tag) {
 	}
 }
 
-func (state *TagManager) SearchTags(name string) *[]TagDB {
+func (state *TagManager) SearchTags(name string) *[]string {
 	var tags []TagDB
-	state.db.Where("LOWER(name) LIKE ?", "%"+name+"%").Find(&tags)
-	return &tags
+	state.db.Where("LOWER(name) LIKE ?", "%"+name+"%").Find(&tags).Offset(20).Limit(20)
+	var finalTags []string
+	for _, tag := range tags {
+		sort.Strings(finalTags)
+		i := sort.Search(len(finalTags), func(i int) bool { return finalTags[i] >= tag.Name })
+		if i < len(finalTags) && finalTags[i] == tag.Name {
+			fmt.Printf("found \"%s\" at finalTags[%d]\n", finalTags[i], i)
+		} else {
+			finalTags = append(finalTags, tag.Name)
+		}
+	}
+	return &finalTags
 }

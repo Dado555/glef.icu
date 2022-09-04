@@ -4,22 +4,25 @@ import java.util.List;
 import java.util.Set;
 
 import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.lists.*;
+import com.sbnz.gleficu.model.movie.*;
+import com.sbnz.gleficu.model.user.*;
 import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
 
-rule "Filter filmova po ocjeni sa imdb"
-    agenda-group "Filter filmova godine i ocjena"
-    no-loop true
-    when
-        $phase: MovieFilterByYearRatingPhase($movies: movies, $ratingLimit: ratingLimit)
+// rule "Filter filmova po ocjeni sa imdb"
+//     agenda-group "Filter filmova godine i ocjena"
+//     no-loop true
+//     when
+//         $phase: MovieFilterByYearRatingPhase($movies: movies, $ratingLimit: ratingLimit)
 
-        accumulate (
-            $retMovie: Movie($movieId: id, $rating: criticsRating, criticsRating >= $ratingLimit) from $movies;
-            $retMovies: collectSet($retMovie)
-        )
-    then
-        System.out.println("(rejting) Filtriranje filmova..");
-        insert(new MoviesFilterYearRatingFact($retMovies));
+//         accumulate (
+//             $retMovie: Movie($movieId: id, $rating: criticsRating, criticsRating >= $ratingLimit) from $movies;
+//             $retMovies: collectSet($retMovie)
+//         )
+//     then
+//         System.out.println("(rejting) Filtriranje filmova..");
+//         insert(new MoviesFilterYearRatingFact($retMovies));
 
-end
+// end

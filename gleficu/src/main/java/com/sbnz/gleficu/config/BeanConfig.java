@@ -18,8 +18,8 @@ public class BeanConfig {
                 registry
                         .addMapping("/**")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                        .allowedOrigins("http://localhost:8080")
-                        .allowCredentials(true);
+                        .allowedOrigins("*")
+                        .allowCredentials(false);
             }
         };
     }

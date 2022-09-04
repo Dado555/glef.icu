@@ -9,6 +9,7 @@ const GET_MOVIE_BY_IMDB_ID = API_URL + "getByImdbId"
 const WATCH_MAGNET = API_URL + "watchMagnet"
 const SEARCH_MOVIES = API_URL + "searchMovies"
 const UPDATE_MOVIE = API_URL + "updateMovie"
+const SEARCH_TAGS = API_URL + "searchTags"
 
 class MovieService {
     getByTitle(movie) {
@@ -79,6 +80,14 @@ class MovieService {
                 Authorization: "Bearer " + localStorage.getItem("id_token"),
             },
         });
+    }
+
+    searchTags(tagName) {
+        return axios.get(SEARCH_TAGS + `/${tagName}`, {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("id_token"),
+            },
+        })
     }
 }
 

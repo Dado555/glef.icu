@@ -1,5 +1,8 @@
 package com.sbnz.templates;
 import com.sbnz.gleficu.model.facts.*;
+import com.sbnz.gleficu.model.lists.*;
+import com.sbnz.gleficu.model.movie.*;
+import com.sbnz.gleficu.model.user.*;
 import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
@@ -8,7 +11,7 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Postavljanje starosne dobi"
         no-loop true
         when
-            $user: User(years >= "50", years < "100")
+            $user: User(age >= "50", age < "100")
         then
             System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.OLDER) };
@@ -18,7 +21,7 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Postavljanje starosne dobi"
         no-loop true
         when
-            $user: User(years >= "25", years < "50")
+            $user: User(age >= "25", age < "50")
         then
             System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.MIDDLE) };
@@ -28,7 +31,7 @@ import com.sbnz.gleficu.model.enums.*;
         agenda-group "Postavljanje starosne dobi"
         no-loop true
         when
-            $user: User(years >= "17", years < "25")
+            $user: User(age >= "17", age < "25")
         then
             System.out.println("Postavljanje starosne dobi za korisnika");
             modify ($user) { setAgeRange(AgeRange.YOUNG) };

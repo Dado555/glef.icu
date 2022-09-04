@@ -78,10 +78,10 @@ let router = new VueRouter({
       path: "/recommend-movie",
       name: "recommendMovie",
       component: RecommendMeMovie,
-      meta: {
-        authenticated: true,
-        authorities: ["USER"],
-      }
+      // meta: {
+      //   authenticated: true,
+      //   authorities: ["USER"],
+      // }
     },
     {
       path: '/login',

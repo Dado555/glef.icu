@@ -1,6 +1,6 @@
 package com.sbnz.gleficu.model.phases;
 
-import com.sbnz.gleficu.model.Movie;
+import com.sbnz.gleficu.model.movie.Movie;
 import com.sbnz.gleficu.model.enums.AgeRange;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

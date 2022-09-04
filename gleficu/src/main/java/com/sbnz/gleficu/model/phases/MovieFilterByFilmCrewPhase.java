@@ -1,7 +1,7 @@
 package com.sbnz.gleficu.model.phases;
 
 import com.sbnz.gleficu.model.FilmCrew;
-import com.sbnz.gleficu.model.Movie;
+import com.sbnz.gleficu.model.movie.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
