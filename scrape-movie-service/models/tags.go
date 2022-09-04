@@ -15,6 +15,7 @@ type TagDB struct {
 	gorm.Model `json:"-"`
 	MovieId    uint   `gorm:"not null" json:"movieId"`
 	Name       string `gorm:"not null" json:"name"`
+	Genre      string `gorm:"not null" json:"genre"`
 }
 
 type TagManager struct {
@@ -55,9 +56,9 @@ func (state *TagManager) AddTag(tag TagDB) {
 	state.db.Create(&tag)
 }
 
-func (state *TagManager) AggMovieTags(movieId uint, tags *[]Tag) {
+func (state *TagManager) AggMovieTags(movieId uint, tags *[]Tag, genre string) {
 	for _, tag := range *tags {
-		state.AddTag(TagDB{MovieId: movieId, Name: tag.Name})
+		state.AddTag(TagDB{MovieId: movieId, Name: tag.Name, Genre: genre})
 	}
 }
 

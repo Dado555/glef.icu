@@ -16,4 +16,5 @@ import java.util.List;
 public class Genre extends BaseEntity{
     public MovieGenre genre;
     public List<Tag> tags;
+    public String name;
 }

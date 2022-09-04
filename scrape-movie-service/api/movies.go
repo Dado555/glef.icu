@@ -58,7 +58,7 @@ func (api *API) SaveMovie(w http.ResponseWriter, req *http.Request) {
 	}
 
 	movie := api.movies.AddMovie(jsonData)
-	api.tags.AggMovieTags(movie.ID, &jsonData.Tags)
+	api.tags.AggMovieTags(movie.ID, &jsonData.Tags, jsonData.Genre)
 
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(movie)

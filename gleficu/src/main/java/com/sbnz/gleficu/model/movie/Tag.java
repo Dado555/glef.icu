@@ -33,4 +33,7 @@ public class Tag extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     public String name;
+
+    @Column(name = "genre", nullable = false)
+    public String genre;
 }
