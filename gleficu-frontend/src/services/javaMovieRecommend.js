@@ -5,7 +5,7 @@ const GET_GENRES = API_URL + "genre-by-tags"
 
 class JavaMovieRecommend {
     getMovieRecommends(payload) {
-        return axios.get(GET_GENRES + `?user_id=${payload.userId}&tags=${payload.tags}`,
+        return axios.get(GET_GENRES + `?userId=${payload.userId}&tags=${payload.tags}`,
             {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("id_token"),

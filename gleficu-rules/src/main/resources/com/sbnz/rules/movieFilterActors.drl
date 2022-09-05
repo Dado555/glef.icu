@@ -11,23 +11,23 @@ import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
 
-// rule "Filter filmova po glavnim glumcima"
-//     agenda-group "Filter filmova po filmskoj ekipi"
-//     no-loop true
-//     when
-//         $phase: MovieFilterByFilmCrewPhase($actors: actors, $movies: movies)
+rule "Filter filmova po glavnim glumcima"
+    agenda-group "Filter filmova po filmskoj ekipi"
+    no-loop true
+    when
+        $phase: MovieFilterByFilmCrewPhase($actors: actors, $movies: movies)
 
-//         accumulate (
-//             FilmCrew($id: id) from $actors;
-//             $actorsIn: collectSet($id)
-//         )
+        accumulate (
+            FilmCrew($id: id, $fullName: fullName) from $actors;
+            $actorsIn: collectSet($fullName)
+        )
 
-//         accumulate (
-//             $retMovie: Movie($movieId: id, $movieActors: actors) from $movies 
-//             and FilmCrew($id: id, id memberOf $actorsIn) from $movieActors;
-//             $retMovies: collectSet($retMovie)
-//         )
-//     then
-//         System.out.println("(glumci) Filtriranje filmova..");
-//         insert(new MoviesFilterFilmCrewFact($retMovies));
-// end
+        accumulate (
+            $retMovie: MovieDrools($movieId: id, $movieActors: actors) from $movies 
+            and FilmCrew($fullName: fullName, fullName memberOf $actorsIn) from $movieActors;
+            $retMovies: collectSet($retMovie)
+        )
+    then
+        System.out.println("(glumci) Filtriranje filmova..");
+        insert(new MoviesFilterFilmCrewFact($retMovies));
+end

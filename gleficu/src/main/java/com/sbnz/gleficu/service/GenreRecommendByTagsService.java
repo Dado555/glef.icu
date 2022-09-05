@@ -1,16 +1,19 @@
 package com.sbnz.gleficu.service;
 
+import com.sbnz.gleficu.model.FilmCrew;
 import com.sbnz.gleficu.model.Genre;
 import com.sbnz.gleficu.model.RecommendRequest;
 import com.sbnz.gleficu.model.enums.AgeRange;
+import com.sbnz.gleficu.model.enums.Gender;
 import com.sbnz.gleficu.model.enums.MovieGenre;
-import com.sbnz.gleficu.model.facts.GenresFilterByFavTagsFact;
-import com.sbnz.gleficu.model.facts.GenresFilterByInputTagsFact;
+import com.sbnz.gleficu.model.facts.*;
 import com.sbnz.gleficu.model.lists.WatchedMovie;
 import com.sbnz.gleficu.model.lists.WishlistMovie;
 import com.sbnz.gleficu.model.movie.Movie;
+import com.sbnz.gleficu.model.movie.MovieDrools;
 import com.sbnz.gleficu.model.movie.Tag;
-import com.sbnz.gleficu.model.phases.GenresFilterByTagsPhase;
+import com.sbnz.gleficu.model.phases.*;
+import com.sbnz.gleficu.model.user.User;
 import com.sbnz.gleficu.model.user.UserDb;
 import com.sbnz.gleficu.repository.lists.WatchedMovieRepo;
 import com.sbnz.gleficu.repository.lists.WishlistMovieRepo;
@@ -23,10 +26,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GenreRecommendByTagsService {
@@ -55,37 +55,29 @@ public class GenreRecommendByTagsService {
         this.tagRepo = tagRepo;
     }
 
-    public int recommendByInputTags(Integer userId, String tags) {
-//        System.out.println(userId);
-//        System.out.println(tags);
-//        // System.out.println(String.join(",", ", tags));
-//        for(UserDb u : userRepo.findAll()) {
-//            System.out.println(u.getUsername());
-//        }
-//        for(WatchedMovie wm: watchedMovieRepo.findAll()){
-//            System.out.println(wm.getId());
-//        }
-//        for(WishlistMovie wm : wishlistMovieRepo.findAll()) {
-//            System.out.println(wm.getId());
-//        }
-//        for(Movie m : movieRepo.findAll()) {
-//            System.out.println(m.getId());
-//        }
-
+    public List<Movie> recommendByInputTags(Integer userId, String tags) {
         // 1. inputTag & favTag
         Optional<UserDb> currentUser = userRepo.findById(userId);
+        List<Genre> genres = prepareGenres();
+
+        User user = new User(
+                currentUser.get().getAge(),
+                currentUser.get().getGender().equals("female") ? Gender.FEMALE : Gender.MALE,
+                AgeRange.YOUNG,
+                currentUser.get().getFavouriteTags()
+        );
 
         RecommendRequest request = new RecommendRequest();
         request.setUserId(userId);
         request.setId(userId);
-        request.setAgeRange(prepareAgeRange(currentUser.get().getAge()));
+        request.setAgeRange(prepareAgeRange(user.getAge()));
         request.setInputTags(prepareTags(tags));
 
         GenresFilterByTagsPhase phase = new GenresFilterByTagsPhase();
         phase.setTags(request.getInputTags());
         phase.setRecommendId(userId);
         phase.setUserId(userId);
-        phase.setGenres(prepareGenres());
+        phase.setGenres(genres);
 
         kieSession.insert(request);
         FactHandle factHandle = kieSession.insert(phase);
@@ -107,7 +99,7 @@ public class GenreRecommendByTagsService {
         }
 
         GenresFilterByTagsPhase phase2 = new GenresFilterByTagsPhase();
-        phase2.setTags(prepareTags(currentUser.get().getFavouriteTags()));
+        phase2.setTags(prepareTags(user.getFavouriteTags()));
         phase2.setRecommendId(request.getId());
         phase2.setGenres(phase2Genres);
 
@@ -119,7 +111,6 @@ public class GenreRecommendByTagsService {
                 kieSession.getObjects(new ClassObjectFilter(GenresFilterByFavTagsFact.class));
 
         kieSession.delete(factHandle2);
-        kieSession.dispose();
 
         List<Genre> phase3Genres = new ArrayList<>();
         for (GenresFilterByFavTagsFact fact : facts2) {
@@ -129,108 +120,183 @@ public class GenreRecommendByTagsService {
             }
             System.out.println(fact.getPossibleGenres().size());
         }
-//
-//        // Postavljanje AgeRange
-//        // kieSession = KieContainer.newKieSession();
-//        kieSession.insert(user);
-//        kieSession.getAgenda().getAgendaGroup("Postavljanje starosne dobi").setFocus();
-//        kieSession.fireAllRules();
-//
-//        System.out.println(user.getAgeRange());
-//
-//        kieSession.dispose();
-//
-//        // 2. age & gender
-//
-//        GenresFilterAgeGenderPhase phase3 = new GenresFilterAgeGenderPhase();
-//        phase3.setGenres(genres);
-//        phase3.setGender(user.getGender());
-//        if(user.getAgeRange() == null) {
-//            System.out.println("AGE RANGE not set!");
-//            phase3.setAgeRange(AgeRange.YOUNG);
-//        } else
-//            phase3.setAgeRange(user.getAgeRange());
-//
-//        // kieSession = kieContainer.newKieSession();
-//        kieSession.insert(user);
-//        FactHandle factHandle3 = kieSession.insert(phase3);
-//        kieSession.getAgenda().getAgendaGroup("Filter zanrova po polu i godinama").setFocus();
-//        kieSession.fireAllRules();
-//
-//        Collection<GenresFilterByAgeAndGenderFact> facts3 = (Collection<GenresFilterByAgeAndGenderFact>)
-//                kieSession.getObjects(new ClassObjectFilter(GenresFilterByAgeAndGenderFact.class));
-//
-//        kieSession.delete(factHandle3);
-//        kieSession.dispose();
-//
-//        List<Genre> phase4Genres = new ArrayList<>();
-//        for (GenresFilterByAgeAndGenderFact fact : facts3) {
-//            for (Genre g : fact.getPossibleGenres()) {
-//                phase4Genres.add(g);
-//                System.out.println(g.getGenre().toString());
-//            }
-//            System.out.println(fact.getPossibleGenres().size());
-//        }
-//
-//        // 3. rated, watched & wishlist
-//
-//        GenresFilterRatedWatchedWishlistPhase phase4 = new GenresFilterRatedWatchedWishlistPhase();
-//        phase4.setGenres(genres);
-//        phase4.setGenresRated(ratedMovieRepo.getRatedMovieByUserId(user.getId()));
-//        phase4.setGenresWatched(watchedMovieRepo.findAllByUserId(user.getId()));
-//        phase4.setGenresWishlist(wishlistMovieRepo.findAllByUserId(user.getId()));
-//
-//        // kieSession = kieContainer.newKieSession();
-//        FactHandle factHandle4 = kieSession.insert(phase4);
-//        kieSession.getAgenda().getAgendaGroup("Filter zanrova liste korisnickih filmova").setFocus();
-//        kieSession.fireAllRules();
-//
-//        Collection<GenresFilterByRatedWatchedWishlist> facts4 = (Collection<GenresFilterByRatedWatchedWishlist>)
-//                kieSession.getObjects(new ClassObjectFilter(GenresFilterByRatedWatchedWishlist.class));
-//
-//        kieSession.delete(factHandle4);
-//        kieSession.dispose();
-//
-//        List<Genre> phase5Genres = new ArrayList<>();
-//        for (GenresFilterByRatedWatchedWishlist fact : facts4) {
-//            for (Genre g : fact.getPossibleGenres()) {
-//                phase4Genres.add(g);
-//                System.out.println(g.getGenre().toString());
-//            }
-//            System.out.println(fact.getPossibleGenres().size());
-//        }
-//
-//        // 4. all combined -> final list of genres
-//        // kieSession = kieContainer.newKieSession();
-//        GenresFilterByAgeAndGenderFact agFact = facts3.stream().findFirst().orElseThrow(() ->
-//                new RuntimeException("Fact not found"));
-//        kieSession.insert(agFact);
+
+        // Postavljanje AgeRange
+        kieSession.insert(user);
+        kieSession.getAgenda().getAgendaGroup("Postavljanje starosne dobi").setFocus();
+        kieSession.fireAllRules();
+        System.out.println(user.getAgeRange());
+
+        // 2. age & gender
+
+        GenresFilterAgeGenderPhase phase3 = new GenresFilterAgeGenderPhase();
+        phase3.setGenres(genres);
+        phase3.setGender(user.getGender());
+        if(user.getAgeRange() == null) {
+            System.out.println("AGE RANGE not set!");
+            phase3.setAgeRange(AgeRange.YOUNG);
+        } else
+            phase3.setAgeRange(user.getAgeRange());
+
+        kieSession.insert(user);
+        FactHandle factHandle3 = kieSession.insert(phase3);
+        kieSession.getAgenda().getAgendaGroup("Filter zanrova po polu i godinama").setFocus();
+        kieSession.fireAllRules();
+
+        Collection<GenresFilterByAgeAndGenderFact> facts3 = (Collection<GenresFilterByAgeAndGenderFact>)
+                kieSession.getObjects(new ClassObjectFilter(GenresFilterByAgeAndGenderFact.class));
+
+        kieSession.delete(factHandle3);
+
+        List<Genre> phase4Genres = new ArrayList<>();
+        for (GenresFilterByAgeAndGenderFact fact : facts3) {
+            for (Genre g : fact.getPossibleGenres()) {
+                phase4Genres.add(g);
+                System.out.println(g.getGenre().toString());
+            }
+            System.out.println(fact.getPossibleGenres().size());
+        }
+
+        // 3. watched & wishlist
+        List<WatchedMovie> userWatchedMovies = watchedMovieRepo.findAllByUserId(currentUser.get().getId());
+        List<WishlistMovie> userWishlistMovies = wishlistMovieRepo.findAllByUserId(currentUser.get().getId());
+
+        GenresFilterRatedWatchedWishlistPhase phase4 = new GenresFilterRatedWatchedWishlistPhase();
+        phase4.setGenres(genres);
+        phase4.setGenresWatched(userWatchedMovies);
+        phase4.setGenresWishlist(userWishlistMovies);
+
+        // kieSession = kieContainer.newKieSession();
+        FactHandle factHandle4 = kieSession.insert(phase4);
+        kieSession.getAgenda().getAgendaGroup("Filter zanrova liste korisnickih filmova").setFocus();
+        kieSession.fireAllRules();
+
+        Collection<GenresFilterByRatedWatchedWishlist> facts4 = (Collection<GenresFilterByRatedWatchedWishlist>)
+                kieSession.getObjects(new ClassObjectFilter(GenresFilterByRatedWatchedWishlist.class));
+
+        kieSession.delete(factHandle4);
+
+        Set<Genre> phase5Genres = new HashSet<>();
+        List<Integer> addedLists = new ArrayList<>();
+        for (GenresFilterByRatedWatchedWishlist fact : facts4) {
+            for (Genre g : fact.getPossibleGenres()) {
+                if(!addedLists.contains(g.getId())) {
+                    addedLists.add(g.getId());
+                    phase5Genres.add(g);
+                }
+                System.out.println(g.getGenre().toString());
+            }
+            System.out.println(fact.getPossibleGenres().size());
+        }
+
+        // 4. all combined -> final list of genres
+        GenresFilterByAgeAndGenderFact agFact = facts3.stream().findFirst().orElseThrow(() ->
+                new RuntimeException("Fact not found"));
 //        GenresFilterByRatedWatchedWishlist rwwFact = facts4.stream().findFirst().orElseThrow(() ->
 //                new RuntimeException("Fact not found"));
-//        kieSession.insert(rwwFact);
-//        GenresFilterByFavTagsFact favTagsFact = facts2.stream().findFirst().orElseThrow(() ->
-//                new RuntimeException("Fact not found"));
-//        kieSession.insert(favTagsFact);
-//
-//        kieSession.getAgenda().getAgendaGroup("Finalno zanrovi").setFocus();
-//        kieSession.fireAllRules();
-//
-//        Collection<GenresFilterFinalFact> facts5 = (Collection<GenresFilterFinalFact>)
-//                kieSession.getObjects(new ClassObjectFilter(GenresFilterFinalFact.class));
-//
-//        List<Genre> phase6Genres = new ArrayList<>();
-//        for (GenresFilterFinalFact fact : facts5) {
-//            System.out.println(fact.getPercentage().toString() + "% preporuka");
-//            for (Genre g : fact.getGenres()) {
-//                phase4Genres.add(g);
-//                System.out.println(g.getGenre().toString());
-//            }
-//            System.out.println(fact.getGenres().size());
-//        }
-//
-//        kieSession.dispose();
-//        return facts.size();
-        return 0;
+        GenresFilterByFavTagsFact favTagsFact = facts2.stream().findFirst().orElseThrow(() ->
+                new RuntimeException("Fact not found"));
+
+        GenresFinalPhase genresFinalPhase = new GenresFinalPhase();
+        genresFinalPhase.setAgeGenres(agFact.getPossibleGenres());
+        genresFinalPhase.setListsGenres(phase5Genres);
+        genresFinalPhase.setTagsGenres(favTagsFact.getPossibleGenres());
+
+        FactHandle factHandle5 =  kieSession.insert(genresFinalPhase);
+        kieSession.getAgenda().getAgendaGroup("Finalno zanrovi").setFocus();
+        kieSession.fireAllRules();
+
+        Collection<GenresFilterFinalFact> facts5 = (Collection<GenresFilterFinalFact>)
+                kieSession.getObjects(new ClassObjectFilter(GenresFilterFinalFact.class));
+
+        kieSession.delete(factHandle5);
+
+        List<Genre> phase6Genres = new ArrayList<>();
+        for (GenresFilterFinalFact fact : facts5) {
+            System.out.println(fact.getPercentage().toString() + "% preporuka");
+            for (Genre g : fact.getGenres()) {
+                phase6Genres.add(g);
+                System.out.println(g.getGenre().toString());
+            }
+            System.out.println(fact.getGenres().size());
+        }
+
+        System.out.println("GENRES FINAL: ");
+        System.out.println(phase6Genres.size());
+        for(Genre g: phase6Genres) {
+            System.out.println(g.getName());
+        }
+
+        List<Movie> finalMovieList = new ArrayList<>();
+        if(userWatchedMovies.size() > 0 || userWishlistMovies.size() > 0) {
+            List<MovieDrools> moviesDrools = prepareMovies(phase6Genres);
+            MovieFilterByFilmCrewPhase moviePhase1 = new MovieFilterByFilmCrewPhase();
+            moviePhase1.setMovies(moviesDrools);
+            List<FilmCrew> actors = new ArrayList<>();
+            List<FilmCrew> directors = new ArrayList<>();
+            List<FilmCrew> writers = new ArrayList<>();
+            for(WatchedMovie movie: userWatchedMovies) {
+                Movie temp = movieRepo.getByImdbID(movie.getImdbId());
+                actors.addAll(getFilmCrew(temp.getActors()));
+                directors.addAll(getFilmCrew(temp.getDirector()));
+                writers.addAll(getFilmCrew(temp.getWriter()));
+            }
+            for(WishlistMovie movie: userWishlistMovies) {
+                Movie temp = movieRepo.getByImdbID(movie.getImdbId());
+                actors.addAll(getFilmCrew(temp.getActors()));
+                directors.addAll(getFilmCrew(temp.getDirector()));
+                writers.addAll(getFilmCrew(temp.getWriter()));
+            }
+            moviePhase1.setActors(actors);
+            moviePhase1.setDirectors(directors);
+            moviePhase1.setWriters(writers);
+
+            FactHandle movieFactHandle1 = kieSession.insert(moviePhase1);
+            kieSession.getAgenda().getAgendaGroup("Filter filmova po filmskoj ekipi").setFocus();
+            kieSession.fireAllRules();
+
+            Collection<MoviesFilterFilmCrewFact> movieFact1 = (Collection<MoviesFilterFilmCrewFact>)
+                    kieSession.getObjects(new ClassObjectFilter(MoviesFilterFilmCrewFact.class));
+
+            kieSession.delete(movieFactHandle1);
+
+            List<MovieDrools> moviePhase1List = new ArrayList<>();
+            for (MoviesFilterFilmCrewFact fact : movieFact1) {
+                for (MovieDrools m : fact.getMovies()) {
+                    moviePhase1List.add(m);
+                    System.out.println(m.getReleaseYear());
+                }
+                System.out.println(fact.getMovies().size());
+            }
+
+            MovieFilterByYearRatingPhase moviePhase2 = new MovieFilterByYearRatingPhase();
+            moviePhase2.setMovies(moviePhase1List);
+            moviePhase2.setUserAge(request.getAgeRange());
+            moviePhase2.setYearLimit(2020);
+
+            FactHandle movieFactHandle2 = kieSession.insert(moviePhase2);
+            kieSession.getAgenda().getAgendaGroup("Filter filmova godine i ocjena").setFocus();
+            kieSession.fireAllRules();
+
+            Collection<MoviesFilterYearRatingFact> movieFact2 = (Collection<MoviesFilterYearRatingFact>)
+                    kieSession.getObjects(new ClassObjectFilter(MoviesFilterYearRatingFact.class));
+
+            kieSession.delete(movieFactHandle2);
+
+            List<MovieDrools> moviePhase2List = new ArrayList<>();
+            for (MoviesFilterYearRatingFact fact : movieFact2) {
+                for (MovieDrools m : fact.getMovies()) {
+                    moviePhase2List.add(m);
+                    System.out.println(m.getReleaseYear());
+                }
+                System.out.println(fact.getMovies().size());
+            }
+        } else {
+            finalMovieList = getMoviesByGenres(phase6Genres);
+        }
+
+        // kieSession.dispose();
+        return finalMovieList;
     }
 
     private List<Tag> prepareTags(String tags) {
@@ -242,6 +308,45 @@ public class GenreRecommendByTagsService {
             }
         }
         return tagList;
+    }
+
+    private List<Movie> getMoviesByGenres(List<Genre> genres) {
+        List<Movie> retMovies = new ArrayList<>();
+        List<Integer> added = new ArrayList<>();
+        for(Genre g: genres) {
+            List<Movie> dbMovies = movieRepo.getAllByGenreSimilarTo("%"+g.getName()+"%");
+            for(Movie m: dbMovies) {
+                if(!added.contains(m.getId())) {
+                    added.add(m.getId());
+                    retMovies.add(m);
+                }
+            }
+        }
+        return retMovies;
+    }
+
+    private List<MovieDrools> prepareMovies(List<Genre> genres) {
+        List<MovieDrools> retMovies = new ArrayList<>();
+        List<Integer> added = new ArrayList<>();
+        for(Genre g: genres) {
+            List<Movie> dbMovies = movieRepo.getAllByGenreSimilarTo("%"+g.getName()+"%");
+            for(Movie m: dbMovies) {
+                if(!added.contains(m.getId())) {
+                    added.add(m.getId());
+                    retMovies.add(new MovieDrools(m.getId(), getFilmCrew(m.getActors()), getFilmCrew(m.getDirector()),
+                            getFilmCrew(m.getWriter()), Integer.parseInt(m.getYear()), Double.parseDouble(m.getImdbRating())));
+                }
+            }
+        }
+        return retMovies;
+    }
+
+    private List<FilmCrew> getFilmCrew(String filmCrew) {
+        List<FilmCrew> filmCrewList = new ArrayList<>();
+        for(String crew: filmCrew.split(",")) {
+            filmCrewList.add(new FilmCrew(crew.trim(), ""));
+        }
+        return filmCrewList;
     }
 
     private AgeRange prepareAgeRange(Integer age) {

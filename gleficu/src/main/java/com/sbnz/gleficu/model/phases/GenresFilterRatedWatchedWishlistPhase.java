@@ -1,5 +1,6 @@
 package com.sbnz.gleficu.model.phases;
 
+import com.sbnz.gleficu.model.FilmCrew;
 import com.sbnz.gleficu.model.Genre;
 import com.sbnz.gleficu.model.RatedMovie;
 import com.sbnz.gleficu.model.lists.WatchedMovie;
@@ -33,7 +34,11 @@ public class GenresFilterRatedWatchedWishlistPhase {
     public void setGenresWatched(List<WatchedMovie> watchedMovies) {
         List<WatchedMoviePhase> watchedMoviePhases = new ArrayList<>();
         for(WatchedMovie rm : watchedMovies) {
-            watchedMoviePhases.add(new WatchedMoviePhase(rm.getId(), rm.getCreatedAt().toEpochSecond()));
+            List<String> genres = new ArrayList<>();
+            for(String gen: rm.getGenre().split(",")) {
+                genres.add(gen.trim());
+            }
+            watchedMoviePhases.add(new WatchedMoviePhase(genres));
         }
         this.genresWatched = watchedMoviePhases;
     }
@@ -41,7 +46,11 @@ public class GenresFilterRatedWatchedWishlistPhase {
     public void setGenresWishlist(List<WishlistMovie> wishlistMovies) {
         List<WishlistMoviePhase> wishlistMoviePhases = new ArrayList<>();
         for(WishlistMovie wm: wishlistMovies) {
-            wishlistMoviePhases.add(new WishlistMoviePhase(wm.getId(), wm.getCreatedAt().toEpochSecond()));
+            List<String> genres = new ArrayList<>();
+            for(String gen: wm.getGenre().split(",")) {
+                genres.add(gen.trim());
+            }
+            wishlistMoviePhases.add(new WishlistMoviePhase(genres));
         }
         this.genresWishlist = wishlistMoviePhases;
     }

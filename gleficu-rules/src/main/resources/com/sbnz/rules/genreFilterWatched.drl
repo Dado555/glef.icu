@@ -19,8 +19,8 @@ agenda-group "Filter zanrova liste korisnickih filmova"
         $g: GenresFilterRatedWatchedWishlistPhase($genres: genres, $genresWatched: genresWatched)
 
         accumulate (
-                $genre: Genre($id: id) from $genres
-                and WatchedMoviePhase(genreId == $id) from $genresWatched;  // dateWatched <= 30 dana
+                $genre: Genre($name: name) from $genres
+                and WatchedMoviePhase($names: names, $name memberOf names) from $genresWatched;  // dateWatched <= 30 dana
                 $possibleGenres: collectSet($genre)
         )
 

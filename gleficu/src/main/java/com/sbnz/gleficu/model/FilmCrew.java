@@ -12,15 +12,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "crew")
 public class FilmCrew extends BaseEntity{
-    @Column(name = "fullName", nullable = false)
     public String fullName;
-
-    @Column(name="biography", nullable = false)
     public String biography;
-
-    @Column(name = "type", nullable = false)
-    public CrewType crewType;
 }

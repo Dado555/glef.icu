@@ -13,7 +13,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.OLDER, gender == Gender.FEMALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 8, 20, 27, 26];
                 $byAgeList: collectSet($byAgeItem)
@@ -36,7 +36,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.OLDER, gender == Gender.MALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 8, 20, 27, 26];
                 $byAgeList: collectSet($byAgeItem)
@@ -59,7 +59,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.MIDDLE, gender == Gender.FEMALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 25, 17, 6, 5, 9, 3];
                 $byAgeList: collectSet($byAgeItem)
@@ -82,7 +82,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.MIDDLE, gender == Gender.MALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 25, 17, 6, 5, 9, 3];
                 $byAgeList: collectSet($byAgeItem)
@@ -105,7 +105,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.YOUNG, gender == Gender.FEMALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 3, 10, 21, 14, 25, 17, 6];
                 $byAgeList: collectSet($byAgeItem)
@@ -128,7 +128,7 @@ import com.sbnz.gleficu.model.enums.*;
         no-loop true
         when
             $user: User($ageRange: ageRange, $gender: gender) and
-            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == $ageRange, gender == $gender)
+            $g: GenresFilterAgeGenderPhase($genres: genres, ageRange == AgeRange.YOUNG, gender == Gender.MALE)
             accumulate (
                 $byAgeItem: Integer() from [0, 2, 3, 10, 21, 14, 25, 17, 6];
                 $byAgeList: collectSet($byAgeItem)

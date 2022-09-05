@@ -11,24 +11,24 @@ import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
 
-// rule "Filter filmova po direktoru"
-//     agenda-group "Filter filmova po filmskoj ekipi"
-//     no-loop true
-//     when
-//         $phase: MovieFilterByFilmCrewPhase($directors: directors, $movies: movies)
+rule "Filter filmova po direktoru"
+    agenda-group "Filter filmova po filmskoj ekipi"
+    no-loop true
+    when
+        $phase: MovieFilterByFilmCrewPhase($directors: directors, $movies: movies)
 
-//         accumulate (
-//             FilmCrew($id: id) from $directors;
-//             $directorsIn: collectSet($id)
-//         )
+        accumulate (
+            FilmCrew($id: id, $fullName: fullName) from $directors;
+            $directorsIn: collectSet($fullName)
+        )
 
-//         accumulate (
-//             $retMovie: Movie($movieId: id, $movieDirector: director) from $movies 
-//             and FilmCrew(id == $movieDirector.getId(), id memberOf $directorsIn);
-//             $retMovies: collectSet($retMovie)
-//         )
-//     then
-//         System.out.println("(direktori) Filtriranje filmova..");
-//         insert(new MoviesFilterFilmCrewFact($retMovies));
+        accumulate (
+            $retMovie: MovieDrools($movieId: id, $movieDirector: director) from $movies 
+            and FilmCrew($fullName: fullName, fullName memberOf $directorsIn) from $movieDirector;
+            $retMovies: collectSet($retMovie)
+        )
+    then
+        System.out.println("(direktori) Filtriranje filmova..");
+        insert(new MoviesFilterFilmCrewFact($retMovies));
 
-// end
+end

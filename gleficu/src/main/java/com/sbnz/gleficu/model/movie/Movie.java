@@ -74,7 +74,7 @@ public class Movie extends BaseEntity {
     private String imdbVotes;
 
     @Column(name="imdb_id")
-    private String imdbId;
+    private String imdbID;
 
     @Column(name="torrent_links")
     private String torrentLinks;

@@ -7,35 +7,25 @@
     <br/> <br/>
 
     <div class="container mx-auto border-b border-gray-600 px-4 py-4">
-      <popular-movies/>
-<!--      <h2 class="uppercase mt-5 text-yellow-500 text-lg font-semibold">-->
-<!--        Recommended Movies-->
-<!--      </h2>-->
+      <div class="mx-5">
+        <h2 class="uppercase mt-5 text-yellow-500 text-lg font-semibold">
+          Recommended Movies
+        </h2>
 
-<!--      <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-7 gap-8">-->
-<!--        <MovieItem-->
-<!--            :key="movie.id"-->
-<!--            v-for="movie in movies"-->
-<!--            :movie="movie"-->
-<!--            :genres="genres"-->
-<!--        />-->
-<!--      </div>-->
-
-<!--      <div class="text-center mt-5">-->
-<!--        <a href="" v-on:click.prevent="previous()">-->
-<!--          Previous-->
-<!--        </a>-->
-<!--        <a href="" v-on:click.prevent="next()" class="ml-5">-->
-<!--          Next-->
-<!--        </a>-->
-<!--      </div>-->
+        <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          <MovieItem
+              :key="movie.id"
+              v-for="movie in movies"
+              :movie="movie"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import MovieItem from "../items/MovieItem";
-import PopularMovies from "@/components/front/PopularMovies";
+import MovieItem from "../items/MovieItem";
 import {movieService} from "@/services/movieService";
 import VoerroTagsInput from "@voerro/vue-tagsinput";
 import {authService} from "@/services/authService";
@@ -46,9 +36,8 @@ let currentPage = 1;
 export default {
   name: "RecommendMeMovie",
   components: {
-    PopularMovies,
-    VoerroTagsInput
-    // MovieItem,
+    VoerroTagsInput,
+    MovieItem,
   },
 
   data: function() {
@@ -59,16 +48,8 @@ export default {
       showSearchResult: false,
       searchResultType: "none",
       selectedTags: [],
-      existingTags: [
-        { key: 'web-development', value: 'Web Development' },
-        { key: 'php', value: 'PHP' },
-        { key: 'javascript', value: 'JavaScript' },
-      ],
+      existingTags: [],
     };
-  },
-
-  mounted() {
-    this.keyboardEvents();
   },
 
   methods: {
@@ -77,9 +58,14 @@ export default {
       if(this.selectedTags.length < 1 || userId === null) {
         alert("Input some tags!")
       } else {
-        let tempTags = [];
-        for(let t of this.selectedTags) {
-          tempTags.push(t.key);
+        console.log(this.selectedTags);
+        console.log(this.selectedTags[0].key);
+        let tempTags = "";
+        for(let i = 0; i < this.selectedTags.length; i++) {
+          if(i === this.selectedTags.length-1)
+            tempTags += this.selectedTags[i].key
+          else
+            tempTags += this.selectedTags[i].key + ","
         }
         let payload = {
           tags: tempTags,
@@ -88,6 +74,7 @@ export default {
         console.log(payload);
         javaMovieRecommend.getMovieRecommends(payload).then((response) => {
           console.log(response.data);
+          this.movies = response.data;
         });
       }
     },

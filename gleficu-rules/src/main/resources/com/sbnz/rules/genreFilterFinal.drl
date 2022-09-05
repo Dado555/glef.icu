@@ -17,9 +17,7 @@ rule "Presjek zanrova na osnovu prethodno filtriranih - sva 3"
     no-loop true
     salience (($agNum + $rwwNum + $tagsNum) + ($allThree.size() * 10000))
     when 
-        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
-        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
-        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+        $ag: GenresFinalPhase($agGenres: ageGenres, $rwwGenres: listsGenres, $tagsGenres: tagsGenres)
 
         // Number($agNum: intValue) from accumulate (
         accumulate (
@@ -68,9 +66,7 @@ rule "Presjek zanrova na osnovu prethodno filtriranih - 2 od 3"
     no-loop true
     salience (($agNum + $rwwNum + $tagsNum) + (($fromTwo1.size() + $fromTwo2.size() + $fromTwo3.size())  * 100))
     when 
-        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
-        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
-        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+        $ag: GenresFinalPhase($agGenres: ageGenres, $rwwGenres: listsGenres, $tagsGenres: tagsGenres)
 
         // Number($agNum: intValue) from accumulate (
         accumulate (
@@ -133,9 +129,7 @@ rule "Presjek zanrova na osnovu prethodno filtriranih - 1 od 3"
     no-loop true
     salience (($agNum + $rwwNum + $tagsNum) + ($fromOne1.size() + $fromOne2.size() + $fromOne3.size()))
     when 
-        $ag: GenresFilterByAgeAndGenderFact($agGenres: possibleGenres) and
-        $rww: GenresFilterByRatedWatchedWishlist($rwwGenres: possibleGenres) and
-        $tags: GenresFilterByFavTagsFact($tagsGenres: possibleGenres)
+        $ag: GenresFinalPhase($agGenres: ageGenres, $rwwGenres: listsGenres, $tagsGenres: tagsGenres)
 
         // Number($agNum: intValue) from accumulate (
         accumulate (

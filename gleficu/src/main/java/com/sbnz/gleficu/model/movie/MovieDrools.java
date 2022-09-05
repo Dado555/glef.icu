@@ -1,7 +1,6 @@
-package com.sbnz.gleficu.model.phases;
+package com.sbnz.gleficu.model.movie;
 
 import com.sbnz.gleficu.model.FilmCrew;
-import com.sbnz.gleficu.model.movie.MovieDrools;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +12,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieFilterByFilmCrewPhase {
+public class MovieDrools {
+    Integer id;
     List<FilmCrew> actors;
-    List<FilmCrew> directors;
-    List<FilmCrew> writers;
-    List<MovieDrools> movies;
+    List<FilmCrew> director;
+    List<FilmCrew> writer;
+    Integer releaseYear;
+    Double criticsRating;
 }

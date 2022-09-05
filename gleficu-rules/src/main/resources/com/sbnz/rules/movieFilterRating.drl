@@ -18,7 +18,7 @@ import com.sbnz.gleficu.model.enums.*;
 //         $phase: MovieFilterByYearRatingPhase($movies: movies, $ratingLimit: ratingLimit)
 
 //         accumulate (
-//             $retMovie: Movie($movieId: id, $rating: criticsRating, criticsRating >= $ratingLimit) from $movies;
+//             $retMovie: MovieDrools($movieId: id, $rating: criticsRating, criticsRating >= $ratingLimit) from $movies;
 //             $retMovies: collectSet($retMovie)
 //         )
 //     then

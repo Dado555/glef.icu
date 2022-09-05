@@ -11,50 +11,50 @@ import com.sbnz.gleficu.model.phases.*;
 import com.sbnz.gleficu.model.*;
 import com.sbnz.gleficu.model.enums.*;
 
-// rule "Filter filmova po starosti filma na osnovu godina korisnika - YOUNG"
-//     agenda-group "Filter filmova godine i ocjena"
-//     no-loop true
-//     when
-//         $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.YOUNG)
+rule "Filter filmova po starosti filma na osnovu godina korisnika - YOUNG"
+    agenda-group "Filter filmova godine i ocjena"
+    no-loop true
+    when
+        $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.YOUNG)
 
-//         accumulate (
-//             $retMovie: Movie($movieId: id, $releaseYear: releaseYear, releaseYear >= ($yearLimit - 20)) from $movies;
-//             $retMovies: collectSet($retMovie)
-//         )
-//     then
-//         System.out.println("(starosna dob) Filtriranje filmova..");
-//         insert(new MoviesFilterYearRatingFact($retMovies));
+        accumulate (
+            $retMovie: MovieDrools($movieId: id, $releaseYear: releaseYear, releaseYear >= ($yearLimit - 20)) from $movies;
+            $retMovies: collectSet($retMovie)
+        )
+    then
+        System.out.println("(starosna dob) Filtriranje filmova..");
+        insert(new MoviesFilterYearRatingFact($retMovies));
 
-// end
+end
 
-// rule "Filter filmova po starosti filma na osnovu godina korisnika - MIDDLE"
-//     agenda-group "Filter filmova godine i ocjena"
-//     no-loop true
-//     when
-//         $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.MIDDLE)
+rule "Filter filmova po starosti filma na osnovu godina korisnika - MIDDLE"
+    agenda-group "Filter filmova godine i ocjena"
+    no-loop true
+    when
+        $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.MIDDLE)
 
-//         accumulate (
-//             $retMovie: Movie($movieId: id, $releaseYear: releaseYear, releaseYear >= ($yearLimit-40)) from $movies;
-//             $retMovies: collectSet($retMovie)
-//         )
-//     then
-//         System.out.println("(starosna dob) Filtriranje filmova..");
-//         insert(new MoviesFilterYearRatingFact($retMovies));
+        accumulate (
+            $retMovie: MovieDrools($movieId: id, $releaseYear: releaseYear, releaseYear >= ($yearLimit-40)) from $movies;
+            $retMovies: collectSet($retMovie)
+        )
+    then
+        System.out.println("(starosna dob) Filtriranje filmova..");
+        insert(new MoviesFilterYearRatingFact($retMovies));
 
-// end
+end
 
-// rule "Filter filmova po starosti filma na osnovu godina korisnika - OLDER"
-//     agenda-group "Filter filmova godine i ocjena"
-//     no-loop true
-//     when
-//         $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.OLDER)
+rule "Filter filmova po starosti filma na osnovu godina korisnika - OLDER"
+    agenda-group "Filter filmova godine i ocjena"
+    no-loop true
+    when
+        $phase: MovieFilterByYearRatingPhase($movies: movies, $yearLimit: yearLimit, $userAge: userAge, userAge == AgeRange.OLDER)
 
-//         accumulate (
-//             $retMovie: Movie($movieId: id, $releaseYear: releaseYear, releaseYear <= ($yearLimit-10)) from $movies;
-//             $retMovies: collectSet($retMovie)
-//         )
-//     then
-//         System.out.println("(starosna dob) Filtriranje filmova..");
-//         insert(new MoviesFilterYearRatingFact($retMovies));
+        accumulate (
+            $retMovie: MovieDrools($movieId: id, $releaseYear: releaseYear, releaseYear <= ($yearLimit-10)) from $movies;
+            $retMovies: collectSet($retMovie)
+        )
+    then
+        System.out.println("(starosna dob) Filtriranje filmova..");
+        insert(new MoviesFilterYearRatingFact($retMovies));
 
-// end
+end

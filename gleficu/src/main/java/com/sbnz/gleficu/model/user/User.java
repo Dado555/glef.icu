@@ -14,4 +14,5 @@ public class User {
     private Integer age;
     private Gender gender;
     private AgeRange ageRange;
+    private String favouriteTags;
 }
