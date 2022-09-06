@@ -261,10 +261,14 @@ public class GenreRecommendByTagsService {
             kieSession.delete(movieFactHandle1);
 
             List<MovieDrools> moviePhase1List = new ArrayList<>();
+            List<Integer> added1 = new ArrayList<>();
             for (MoviesFilterFilmCrewFact fact : movieFact1) {
                 for (MovieDrools m : fact.getMovies()) {
-                    moviePhase1List.add(m);
-                    System.out.println(m.getReleaseYear());
+                    if(!added1.contains(m.getId())) {
+                        added1.add(m.getId());
+                        moviePhase1List.add(m);
+                        System.out.println(m.getReleaseYear());
+                    }
                 }
                 System.out.println(fact.getMovies().size());
             }
@@ -284,12 +288,21 @@ public class GenreRecommendByTagsService {
             kieSession.delete(movieFactHandle2);
 
             List<MovieDrools> moviePhase2List = new ArrayList<>();
+            List<Integer> added2 = new ArrayList<>();
             for (MoviesFilterYearRatingFact fact : movieFact2) {
                 for (MovieDrools m : fact.getMovies()) {
-                    moviePhase2List.add(m);
-                    System.out.println(m.getReleaseYear());
+                    if(!added2.contains(m.getId())) {
+                        added2.add(m.getId());
+                        moviePhase2List.add(m);
+                        System.out.println(m.getReleaseYear());
+                    }
                 }
                 System.out.println(fact.getMovies().size());
+            }
+
+            for(MovieDrools md: moviePhase2List) {
+                Movie m = movieRepo.getById(md.getId());
+                finalMovieList.add(m);
             }
         } else {
             finalMovieList = getMoviesByGenres(phase6Genres);

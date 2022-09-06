@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -12,6 +13,7 @@ import java.time.OffsetDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Table(name = "movie_dbs")
 @Entity
+@Proxy(lazy = false)
 public class Movie extends BaseEntity {
     @Column(name = "created_at", nullable = true)
     private OffsetDateTime createdAt;
